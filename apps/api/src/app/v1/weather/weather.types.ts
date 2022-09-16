@@ -12,26 +12,12 @@ export class WeatherLocationDto {
 
 export class WeatherCurrentDto {
   @ApiProperty({
-    name: 'cwa',
+    name: 'wx',
     description: 'Weather office',
     example: 'KWAK',
     required: true,
   })
-  cwa: string;
-  @ApiProperty({
-    name: 'gridX',
-    description: 'Grid X',
-    example: '0',
-    required: true,
-  })
-  gridX: string;
-  @ApiProperty({
-    name: 'gridY',
-    description: 'Grid Y',
-    example: '0',
-    required: true,
-  })
-  gridY: string;
+  wx: string;
 }
 
 export class WeatherZoneDto {

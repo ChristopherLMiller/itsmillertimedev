@@ -3,10 +3,12 @@ import {
   Controller,
   Get,
   Param,
+  Req,
   UseGuards,
   UseInterceptors,
 } from '@nestjs/common';
 import { ApiResponse, ApiSecurity, ApiTags } from '@nestjs/swagger';
+import { Request } from 'express';
 import { DataResponse } from '../../../../DataResponse';
 import { BasicAuthGuard } from '../../../guards/basicAuth.guard';
 import { ResponseTransformInterceptor } from '../../../interceptors/responseTransform.interceptor';
@@ -22,8 +24,7 @@ import {
 @ApiTags('Weather')
 @ApiSecurity('x-api-key')
 @UseGuards(BasicAuthGuard)
-// @TODO ClientUUIDinterceptor needs implmeneted fully for caching
-@UseInterceptors(ResponseTransformInterceptor) //, ClientUUIDInterceptor)
+@UseInterceptors(ResponseTransformInterceptor)
 export class WeatherController {
   constructor(private weather: WeatherService) {}
 
@@ -40,9 +41,11 @@ export class WeatherController {
     description: 'Forbidden, invalid api key supplied or unauthorized',
   })
   async getLocation(
-    @Param() params: WeatherLocationDto
+    @Param() params: WeatherLocationDto,
+    @Req() request: Request
   ): Promise<DataResponse<WeatherLocationDto>> {
-    if (params.position) return await this.weather.getLocation(params.position);
+    if (params.position)
+      return await this.weather.getLocation(params.position, request);
 
     throw new BadRequestException(
       'Must provide location in format of "lat,lon"'
@@ -63,10 +66,14 @@ export class WeatherController {
     description: 'Forbidden, invalid api key supplied or unauthorized',
   })
   async getWeatherFromCoords(
-    @Param() params: WeatherLocationDto
+    @Param() params: WeatherLocationDto,
+    @Req() request: Request
   ): Promise<DataResponse<WeatherCurrentDto>> {
     if (params.position)
-      return await this.weather.getCurrentWeatherFromCoords(params.position);
+      return await this.weather.getCurrentWeatherFromCoords(
+        params.position,
+        request
+      );
 
     throw new BadRequestException(
       'Must provide location in format of "lat,lon"'
@@ -75,7 +82,7 @@ export class WeatherController {
   //#endregion
 
   //#region Get Weather Using WX Office
-  @Get('current/office/:cwa/:gridx/:gridy')
+  @Get('current/office/:wx')
   @ApiResponse({ status: 200, description: 'Success' })
   @ApiResponse({ status: 400, description: 'Bad Request' })
   @ApiResponse({
@@ -83,14 +90,15 @@ export class WeatherController {
     description: 'Forbidden, invalid api key supplied or unauthorized',
   })
   async getWeatherFromOffice(
-    @Param() params: WeatherCurrentDto
+    @Param() params: WeatherCurrentDto,
+    @Req() request: Request
   ): Promise<DataResponse<WeatherCurrentDto>> {
-    const { cwa, gridX, gridY } = params;
+    const { wx } = params;
+    if (wx) return await this.weather.getWeather(wx, request);
 
-    if (cwa && gridX && gridY)
-      return await this.weather.getWeather(cwa, gridX, gridY);
-
-    throw new BadRequestException('Must provide cwa, gridX, and gridY');
+    throw new BadRequestException(
+      'Must provide the weather office in form of "[office],[gridX],[gridY]'
+    );
   }
   //#endregion
 
@@ -103,10 +111,11 @@ export class WeatherController {
     description: 'Forbidden, invalid api key supplied or unauthorized',
   })
   async getWeatherZone(
-    @Param() params: WeatherLocationDto
+    @Param() params: WeatherLocationDto,
+    @Req() request: Request
   ): Promise<DataResponse<WeatherZoneDto>> {
     if (params.position)
-      return await this.weather.getWeatherZone(params.position);
+      return await this.weather.getWeatherZone(params.position, request);
 
     throw new BadRequestException('Must provide position');
   }
@@ -121,9 +130,10 @@ export class WeatherController {
     description: 'Forbidden, invalid api key supplied or unauthorized',
   })
   async getAlertsFromCoords(
-    @Param() params: WeatherLocationDto
+    @Param() params: WeatherLocationDto,
+    @Req() request: Request
   ): Promise<DataResponse<WeatherAlertDto>> {
-    return await this.weather.getAlertsFromCoords(params.position);
+    return await this.weather.getAlertsFromCoords(params.position, request);
   }
   //#endregion
 
@@ -136,9 +146,10 @@ export class WeatherController {
     description: 'Forbidden, invalid api key supplied or unauthorized',
   })
   async getAlertsFromZone(
-    @Param() params: WeatherZoneDto
+    @Param() params: WeatherZoneDto,
+    @Req() request: Request
   ): Promise<DataResponse<WeatherAlertDto>> {
-    if (params.zone) return await this.weather.getAlerts(params.zone);
+    if (params.zone) return await this.weather.getAlerts(params.zone, request);
 
     throw new BadRequestException('Must provide zone');
   }

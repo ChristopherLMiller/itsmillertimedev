@@ -1,49 +1,128 @@
-// This is your Prisma schema file,
-// learn more about it in the docs: https://pris.ly/d/prisma-schema
+generator client {
+  provider = "prisma-client-js"
+}
 
-// connection to supabase
 datasource db {
   provider = "postgresql"
   url      = env("DATABASE_URL")
 }
 
-// Generates the client that we use for the REST API
-generator client {
-  provider = "prisma-client-js"
+enum PublicationStatus {
+  PUBLISHED
+  DRAFT
 }
 
-// Generator for the controllers
-//generator nestjsDto {
-//  provider                        = "prisma-generator-nestjs-dto"
-//  output                          = "../src/generated/nestjs-dto"
-//  outputToNestJsResourceStructure = "false"
-//  exportRelationModifierClasses   = "true"
-//  reExport                        = "true"
-//  createDtoPrefix                 = "Create"
-//  updateDtoPrefix                 = "Update"
-//  dtoSuffix                       = "Dto"
-//  entityPrefix                    = ""
-//  entitySuffix                    = ""
-//  fileNamingStyle                 = "camel"
-//}
+enum Visibility {
+  PUBLIC
+  PROTECTED
+  PRIVATE
+}
 
-// Generates the Graphql counterparts
-//generator nestgraphql {
-//  provider = "node node_modules/prisma-nestjs-graphql"
-//  output   = "../src/prisma/graphql"
-//}
+model ArticleTag {
+  id       Int       @id @default(autoincrement())
+  title    String
+  slug     String    @unique
+  articles Article[]
+
+  @@index([id, slug])
+}
+
+model Article {
+  id             Int               @id @default(autoincrement())
+  createdAt      DateTime          @default(now())
+  updatedAt      DateTime          @updatedAt
+  title          String
+  slug           String            @unique
+  content        String            @db.Text
+  tags           ArticleTag[]
+  seo_title      String
+  seo_excerpt    String            @db.Text
+  featured_image String
+  published      PublicationStatus @default(DRAFT)
+  publishedAt    DateTime?
+}
 
 model ClockifyTimer {
-  id        Int    @id @default(autoincrement())
   projectId String @unique
   startTime String
+  id        Int    @id @default(autoincrement())
+
+  @@index([id])
 }
 
-model MinecraftRuleCategory {
-  id             Int             @id @default(autoincrement())
-  name           String          @unique
-  icon           String
-  MinecraftRules MinecraftRule[]
+model Gallery {
+  id          Int               @id @default(autoincrement())
+  createdAt   DateTime          @default(now())
+  updatedAt   DateTime          @updatedAt
+  title       String
+  slug        String            @unique
+  meta        String            @db.Text
+  description String            @db.Text
+  visibility  Visibility        @default(PUBLIC)
+  isNsfw      Boolean           @default(false)
+  image       String
+  categories  GalleryCategory[]
+  tags        GalleryTag[]
+  images      GalleryImage[]
+
+  @@index([id, slug])
+}
+
+model GalleryCategory {
+  id        Int      @id @default(autoincrement())
+  title     String
+  slug      String   @unique
+  Gallery   Gallery? @relation(fields: [galleryId], references: [id])
+  galleryId Int?
+
+  @@index([id, slug])
+}
+
+model GalleryImage {
+  id          Int               @id @default(autoincrement())
+  createdAt   DateTime          @default(now())
+  updatedAt   DateTime          @updatedAt
+  title       String
+  slug        String            @unique
+  galleries   Gallery[]
+  published   PublicationStatus
+  publishedAt DateTime
+  visibility  Visibility?
+  url         String
+
+  @@index([id, slug])
+}
+
+model GalleryTag {
+  id        Int      @id @default(autoincrement())
+  title     String
+  slug      String   @unique
+  Gallery   Gallery? @relation(fields: [galleryId], references: [id])
+  galleryId Int?
+
+  @@index([id, slug])
+}
+
+model ImageExif {
+  id   Int    @id @default(autoincrement())
+  url  String @unique
+  exif Json
+
+  @@index([id])
+}
+
+model Marker {
+  id         Int     @id @default(autoincrement())
+  lat        Decimal
+  lon        Decimal
+  siteURL    String?
+  galleryURL String?
+  title      String
+  rating     Int     @default(0)
+  visited    Boolean @default(false)
+  visits     Int     @default(0)
+
+  @@index([id])
 }
 
 model MinecraftRule {
@@ -54,22 +133,15 @@ model MinecraftRule {
   updatedAt   DateTime              @updatedAt
   categoryId  Int
   category    MinecraftRuleCategory @relation(fields: [categoryId], references: [id])
+
+  @@index([id])
 }
 
-model ImageExif {
-  id   Int    @id @default(autoincrement())
-  url  String @unique
-  exif Json
-}
+model MinecraftRuleCategory {
+  id             Int             @id @default(autoincrement())
+  name           String          @unique
+  icon           String
+  MinecraftRules MinecraftRule[]
 
-model Marker {
-  id         Int     @id @default(autoincrement())
-  lat        Decimal
-  lon        Decimal
-  title      String
-  siteURL    String
-  galleryURL String
-  visited    Boolean @default(false)
-  visits     Int     @default(0)
-  rating     Int     @default(0)
+  @@index([id])
 }

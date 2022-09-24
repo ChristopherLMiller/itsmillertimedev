@@ -1,0 +1,148 @@
+{
+  "0 debug pnpm:scope": {
+    "selected": 1
+  },
+  "1 debug pnpm:package-manifest": {
+    "initial": {},
+    "prefix": "/Users/chris/Library/pnpm/store/v3/tmp/dlx-49484"
+  },
+  "2 debug pnpm:context": {
+    "currentLockfileExists": false,
+    "storeDir": "/Users/chris/Library/pnpm/store/v3",
+    "virtualStoreDir": "/Users/chris/Library/pnpm/store/v3/tmp/dlx-49484/node_modules/.pnpm"
+  },
+  "3 debug pnpm:stage": {
+    "prefix": "/Users/chris/Library/pnpm/store/v3/tmp/dlx-49484",
+    "stage": "resolution_started"
+  },
+  "4 debug pnpm:_dependency_resolved": {
+    "resolution": "registry.npmjs.org/prisma/4.3.1",
+    "wanted": {
+      "dependentId": ".",
+      "name": "prisma",
+      "rawSpec": "latest"
+    }
+  },
+  "5 debug pnpm:progress": {
+    "packageId": "registry.npmjs.org/prisma/4.3.1",
+    "requester": "/Users/chris/Library/pnpm/store/v3/tmp/dlx-49484",
+    "status": "resolved"
+  },
+  "6 debug pnpm:_dependency_resolved": {
+    "resolution": "registry.npmjs.org/@prisma/engines/4.3.1",
+    "wanted": {
+      "dependentId": "/prisma/4.3.1",
+      "name": "@prisma/engines",
+      "rawSpec": "4.3.1"
+    }
+  },
+  "7 debug pnpm:progress": {
+    "packageId": "registry.npmjs.org/@prisma/engines/4.3.1",
+    "requester": "/Users/chris/Library/pnpm/store/v3/tmp/dlx-49484",
+    "status": "resolved"
+  },
+  "8 debug pnpm:package-manifest": {
+    "prefix": "/Users/chris/Library/pnpm/store/v3/tmp/dlx-49484",
+    "updated": {
+      "dependencies": {
+        "prisma": "^4.3.1"
+      }
+    }
+  },
+  "9 debug pnpm:package-manifest": {
+    "prefix": "/Users/chris/Library/pnpm/store/v3/tmp/dlx-49484",
+    "updated": {
+      "dependencies": {
+        "prisma": "^4.3.1"
+      }
+    }
+  },
+  "10 debug pnpm:stage": {
+    "prefix": "/Users/chris/Library/pnpm/store/v3/tmp/dlx-49484",
+    "stage": "resolution_done"
+  },
+  "11 debug pnpm:stats": {
+    "prefix": "/Users/chris/Library/pnpm/store/v3/tmp/dlx-49484",
+    "removed": 0
+  },
+  "12 debug pnpm:progress": {
+    "packageId": "registry.npmjs.org/prisma/4.3.1",
+    "requester": "/Users/chris/Library/pnpm/store/v3/tmp/dlx-49484",
+    "status": "found_in_store"
+  },
+  "13 debug pnpm:stage": {
+    "prefix": "/Users/chris/Library/pnpm/store/v3/tmp/dlx-49484",
+    "stage": "importing_started"
+  },
+  "14 debug pnpm:stats": {
+    "added": 2,
+    "prefix": "/Users/chris/Library/pnpm/store/v3/tmp/dlx-49484"
+  },
+  "15 debug pnpm:link": {
+    "target": "/Users/chris/Library/pnpm/store/v3/tmp/dlx-49484/node_modules/.pnpm/@prisma+engines@4.3.1/node_modules/@prisma/engines",
+    "link": "/Users/chris/Library/pnpm/store/v3/tmp/dlx-49484/node_modules/.pnpm/prisma@4.3.1/node_modules/@prisma/engines"
+  },
+  "16 debug pnpm:progress": {
+    "packageId": "registry.npmjs.org/@prisma/engines/4.3.1",
+    "requester": "/Users/chris/Library/pnpm/store/v3/tmp/dlx-49484",
+    "status": "found_in_store"
+  },
+  "17 debug pnpm:package-import-method": {
+    "method": "hardlink"
+  },
+  "18 debug pnpm:progress": {
+    "method": "hardlink",
+    "requester": "/Users/chris/Library/pnpm/store/v3/tmp/dlx-49484",
+    "status": "imported",
+    "to": "/Users/chris/Library/pnpm/store/v3/tmp/dlx-49484/node_modules/.pnpm/@prisma+engines@4.3.1/node_modules/@prisma/engines"
+  },
+  "19 debug pnpm:package-import-method": {
+    "method": "hardlink"
+  },
+  "20 debug pnpm:progress": {
+    "method": "hardlink",
+    "requester": "/Users/chris/Library/pnpm/store/v3/tmp/dlx-49484",
+    "status": "imported",
+    "to": "/Users/chris/Library/pnpm/store/v3/tmp/dlx-49484/node_modules/.pnpm/prisma@4.3.1/node_modules/prisma"
+  },
+  "21 debug pnpm:stage": {
+    "prefix": "/Users/chris/Library/pnpm/store/v3/tmp/dlx-49484",
+    "stage": "importing_done"
+  },
+  "22 debug pnpm:link": {
+    "target": "/Users/chris/Library/pnpm/store/v3/tmp/dlx-49484/node_modules/.pnpm/prisma@4.3.1/node_modules/prisma",
+    "link": "/Users/chris/Library/pnpm/store/v3/tmp/dlx-49484/node_modules/prisma"
+  },
+  "23 debug pnpm:root": {
+    "added": {
+      "dependencyType": "prod",
+      "id": "registry.npmjs.org/prisma/4.3.1",
+      "name": "prisma",
+      "realName": "prisma",
+      "version": "4.3.1"
+    },
+    "prefix": "/Users/chris/Library/pnpm/store/v3/tmp/dlx-49484"
+  },
+  "24 debug pnpm:link": {
+    "target": "/Users/chris/Library/pnpm/store/v3/tmp/dlx-49484/node_modules/.pnpm/@prisma+engines@4.3.1/node_modules/@prisma/engines",
+    "link": "/Users/chris/Library/pnpm/store/v3/tmp/dlx-49484/node_modules/.pnpm/node_modules/@prisma/engines"
+  },
+  "25 debug pnpm:summary": {
+    "prefix": "/Users/chris/Library/pnpm/store/v3/tmp/dlx-49484"
+  },
+  "26 error pnpm": {
+    "shortMessage": "Command failed with exit code 130: /Users/chris/Library/pnpm/store/v3/tmp/dlx-49484/node_modules/.bin/prisma migrate reset",
+    "command": "/Users/chris/Library/pnpm/store/v3/tmp/dlx-49484/node_modules/.bin/prisma migrate reset",
+    "escapedCommand": "\"/Users/chris/Library/pnpm/store/v3/tmp/dlx-49484/node_modules/.bin/prisma\" migrate reset",
+    "exitCode": 130,
+    "failed": true,
+    "timedOut": false,
+    "isCanceled": false,
+    "killed": false,
+    "err": {
+      "name": "pnpm",
+      "message": "Command failed with exit code 130: /Users/chris/Library/pnpm/store/v3/tmp/dlx-49484/node_modules/.bin/prisma migrate reset",
+      "stack": "pnpm: Command failed with exit code 130: /Users/chris/Library/pnpm/store/v3/tmp/dlx-49484/node_modules/.bin/prisma migrate reset\n    at makeError (/Users/chris/.nvm/versions/node/v16.10.0/pnpm-global/5/node_modules/.pnpm/pnpm@7.1.6/node_modules/pnpm/dist/pnpx.cjs:36987:17)\n    at handlePromise (/Users/chris/.nvm/versions/node/v16.10.0/pnpm-global/5/node_modules/.pnpm/pnpm@7.1.6/node_modules/pnpm/dist/pnpx.cjs:37558:33)\n    at processTicksAndRejections (node:internal/process/task_queues:96:5)\n    at async Object.handler [as dlx] (/Users/chris/.nvm/versions/node/v16.10.0/pnpm-global/5/node_modules/.pnpm/pnpm@7.1.6/node_modules/pnpm/dist/pnpx.cjs:177155:7)\n    at async /Users/chris/.nvm/versions/node/v16.10.0/pnpm-global/5/node_modules/.pnpm/pnpm@7.1.6/node_modules/pnpm/dist/pnpx.cjs:182687:21\n    at async run (/Users/chris/.nvm/versions/node/v16.10.0/pnpm-global/5/node_modules/.pnpm/pnpm@7.1.6/node_modules/pnpm/dist/pnpx.cjs:182661:34)\n    at async /Users/chris/.nvm/versions/node/v16.10.0/pnpm-global/5/node_modules/.pnpm/pnpm@7.1.6/node_modules/pnpm/dist/pnpx.cjs:182733:5"
+    }
+  }
+}

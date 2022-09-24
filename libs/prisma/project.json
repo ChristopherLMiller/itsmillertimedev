@@ -10,6 +10,15 @@
         "parallel": false,
         "commands": ["prisma generate --schema schema.prisma"]
       }
+    },
+    "migration": {
+      "executor": "nx:run-commands",
+      "options": {
+        "cwd": "libs/prisma",
+        "parallel": false,
+        "commands": ["prisma migrate dev --name {args.name}"]
+      }
+
     }
   },
   "tags": []

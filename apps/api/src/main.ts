@@ -1,4 +1,4 @@
-import { Logger, VersioningType } from '@nestjs/common';
+import { Logger, ValidationPipe, VersioningType } from '@nestjs/common';
 import { NestFactory } from '@nestjs/core';
 import {
   FastifyAdapter,
@@ -8,6 +8,7 @@ import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 import * as Sentry from '@sentry/node';
 import { V1Module } from './app/v1/v1.module';
 import { SentryInterceptor } from './interceptors/sentry.interceptor';
+import { logger } from './middleware/logging.middleware';
 
 // eslint-disable-next-line @typescript-eslint/no-var-requires
 const packageData = require('../../../package.json');
@@ -45,12 +46,17 @@ async function bootstrap() {
     release: packageData.version,
     environment: process.env.NODE_ENV,
     ignoreErrors: [
-      'UnsupportedMediaTypeException: No Exiff segment found in the given image.',
+      'UnsupportedMediaTypeException: No Exif segment found in the given image.',
     ],
   });
-  app.useGlobalInterceptors(new SentryInterceptor());
 
+  //Register global pieces
+  app.useGlobalInterceptors(new SentryInterceptor());
+  app.useGlobalPipes(new ValidationPipe());
+  app.use(logger);
   app.setGlobalPrefix('api');
+
+  // Start the application
   const port = process.env.PORT || 3333;
   await app.listen(port, '0.0.0.0');
   Logger.log(`🚀 Application is running on: http://localhost:${port}`);

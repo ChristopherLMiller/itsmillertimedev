@@ -11,7 +11,8 @@ import { ImagesModule } from './images/images.module';
 import { MapModule } from './maps/maps.module';
 import { MinecraftModule } from './minecraft/minecraft.module';
 import { V1Controller } from './v1.controller';
-import { WeatherModule } from './weather/weather.module';
+import { NWSWeatherModule } from './weather/nws/nws.module';
+import { WeatherModule } from './weather/owm/openweathermap.module';
 import { WebhooksModule } from './webhooks/webhooks.module';
 @Module({
   imports: [
@@ -39,6 +40,7 @@ import { WebhooksModule } from './webhooks/webhooks.module';
     WebhooksModule,
     GraphqlModule,
     WeatherModule,
+    NWSWeatherModule,
   ],
   controllers: [V1Controller],
   providers: [

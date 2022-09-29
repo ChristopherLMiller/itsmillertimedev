@@ -1,16 +1,16 @@
 import { HttpModule } from '@nestjs/axios';
 import { CacheModule, Module } from '@nestjs/common';
-import { WeatherController } from './weather.controller';
-import { WeatherService } from './weather.service';
+import { NWSWeatherController } from './nws.controller';
+import { NWSWeatherService } from './nws.service';
 
 @Module({
-  controllers: [WeatherController],
+  controllers: [NWSWeatherController],
   imports: [
     CacheModule.register(),
     HttpModule.register({
       baseURL: 'https://api.weather.gov',
     }),
   ],
-  providers: [WeatherService],
+  providers: [NWSWeatherService],
 })
-export class WeatherModule {}
+export class NWSWeatherModule {}

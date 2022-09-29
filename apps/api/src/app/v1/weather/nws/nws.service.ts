@@ -1,19 +1,19 @@
 import { HttpService } from '@nestjs/axios';
 import {
   BadRequestException,
+  HttpException,
   HttpStatus,
   Injectable,
   InternalServerErrorException,
-  NotFoundException,
   UnauthorizedException,
 } from '@nestjs/common';
 import { Request } from 'express';
 import { catchError, firstValueFrom, throwError } from 'rxjs';
-import { DataResponse } from '../../../../DataResponse';
-import { GPSLocationDto, WeatherOffice } from './weather.types';
+import { DataResponse } from '../../../../../DataResponse';
+import { GPSLocationDto, WeatherOffice } from '../weather.types';
 
 @Injectable()
-export class WeatherService {
+export class NWSWeatherService {
   constructor(private http: HttpService) {}
 
   async getWeatherInfoFromGPSCoordinates(
@@ -79,8 +79,18 @@ export class WeatherService {
       case HttpStatus.INTERNAL_SERVER_ERROR:
         return throwError(() => new InternalServerErrorException(error));
       case HttpStatus.NOT_FOUND:
+        // This one is an exception for NWS as a GPS position not in the US will return a 404
+        // This allows it to basically handle gracefully so it doesn't appear as an error as its not really
         return throwError(
-          () => new NotFoundException(error.response.data.detail)
+          () =>
+            new HttpException(
+              {
+                data: [],
+                error: { message: error.response.data.detail },
+                statusCode: 200,
+              },
+              200
+            )
         );
       default:
         return throwError(() => new Error(error));

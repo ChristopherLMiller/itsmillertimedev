@@ -7,7 +7,6 @@ import { PrismaService } from '../../prisma/prisma.service';
 import { ClockifyModule } from './clockify/clockify.module';
 import { DiscordModule } from './discord/discord.module';
 import { GithubModule } from './github/github.module';
-import { GraphqlModule } from './graphql/graphql.module';
 import { ImagesModule } from './images/images.module';
 import { MapModule } from './maps/maps.module';
 import { MinecraftModule } from './minecraft/minecraft.module';
@@ -39,7 +38,6 @@ import { WebhooksModule } from './webhooks/webhooks.module';
     MinecraftModule,
     MapModule,
     WebhooksModule,
-    GraphqlModule,
     WeatherModule,
     NWSWeatherModule,
     DiscordModule,

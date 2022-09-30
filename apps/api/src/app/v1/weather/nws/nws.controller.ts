@@ -1,3 +1,4 @@
+import { WeatherOffice } from '@itsmillertimedev/data';
 import {
   BadRequestException,
   CacheTTL,
@@ -13,13 +14,8 @@ import { Request } from 'express';
 import { DataResponse } from '../../../../../DataResponse';
 import { BasicAuthGuard } from '../../../../guards/basicAuth.guard';
 import { ResponseTransformInterceptor } from '../../../../interceptors/responseTransform.interceptor';
-import {
-  GPSLocationDto,
-  WeatherAlert,
-  WeatherOffice,
-  WeatherZoneDto,
-} from '../weather.types';
 import { NWSWeatherService } from './nws.service';
+import { GPSLocationDto, WeatherAlert, WeatherZoneDto } from './nws.types';
 
 @Controller({ version: '1', path: 'weather/nws' })
 @ApiTags('Weather', 'NationalWeatherService')

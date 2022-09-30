@@ -1,4 +1,10 @@
 import {
+  CurrentWeather,
+  DailyForecast,
+  HourlyForecast,
+  MinutelyForecast,
+} from '@itsmillertimedev/data';
+import {
   CacheTTL,
   Controller,
   Get,
@@ -37,7 +43,7 @@ export class OpenWeatherMapController {
   async getCurrentWeather(
     @Query('lat') lat: string,
     @Query('lon') lon: string
-  ): Promise<DataResponse<any>> {
+  ): Promise<DataResponse<CurrentWeather>> {
     return await this.owm.getCurrentWeather({ lat, lon });
   }
 
@@ -56,7 +62,7 @@ export class OpenWeatherMapController {
   async getMinutelyForecast(
     @Query('lat') lat: string,
     @Query('lon') lon: string
-  ): Promise<DataResponse<any>> {
+  ): Promise<DataResponse<MinutelyForecast>> {
     return await this.owm.getMinutelyForecast({ lat, lon });
   }
 
@@ -75,7 +81,7 @@ export class OpenWeatherMapController {
   async getHourlyForecast(
     @Query('lat') lat: string,
     @Query('lon') lon: string
-  ): Promise<DataResponse<any>> {
+  ): Promise<DataResponse<HourlyForecast>> {
     return await this.owm.getHourlyForecast({ lat, lon });
   }
 
@@ -94,7 +100,7 @@ export class OpenWeatherMapController {
   async getDailyForecast(
     @Query('lat') lat: string,
     @Query('lon') lon: string
-  ): Promise<DataResponse<any>> {
+  ): Promise<DataResponse<DailyForecast>> {
     return await this.owm.getDailyForecast({ lat, lon });
   }
 }

@@ -1,3 +1,4 @@
+import { WeatherOffice } from '@itsmillertimedev/data';
 import { HttpService } from '@nestjs/axios';
 import {
   BadRequestException,
@@ -7,10 +8,11 @@ import {
   InternalServerErrorException,
   UnauthorizedException,
 } from '@nestjs/common';
+import { AxiosError } from 'axios';
 import { Request } from 'express';
 import { catchError, firstValueFrom, throwError } from 'rxjs';
 import { DataResponse } from '../../../../../DataResponse';
-import { GPSLocationDto, WeatherOffice } from '../weather.types';
+import { GPSLocationDto } from './nws.types';
 
 @Injectable()
 export class NWSWeatherService {
@@ -70,7 +72,7 @@ export class NWSWeatherService {
     return data;
   }
 
-  weatherServiceErrorHandler(error: any) {
+  weatherServiceErrorHandler(error: AxiosError) {
     switch (error.response.status) {
       case HttpStatus.BAD_REQUEST:
         return throwError(() => new BadRequestException(error));
@@ -86,14 +88,14 @@ export class NWSWeatherService {
             new HttpException(
               {
                 data: [],
-                error: { message: error.response.data.detail },
+                error: { message: error.response.data['detail'] },
                 statusCode: 200,
               },
               200
             )
         );
       default:
-        return throwError(() => new Error(error));
+        return throwError(() => new Error('Unhandled Exception'));
     }
   }
 }

@@ -5,13 +5,14 @@ import * as redisStore from 'cache-manager-redis-store';
 import type { ClientOpts } from 'redis';
 import { PrismaService } from '../../prisma/prisma.service';
 import { ClockifyModule } from './clockify/clockify.module';
+import { DiscordModule } from './discord/discord.module';
 import { GithubModule } from './github/github.module';
-import { GraphqlModule } from './graphql/graphql.module';
 import { ImagesModule } from './images/images.module';
 import { MapModule } from './maps/maps.module';
 import { MinecraftModule } from './minecraft/minecraft.module';
 import { V1Controller } from './v1.controller';
-import { WeatherModule } from './weather/weather.module';
+import { NWSWeatherModule } from './weather/nws/nws.module';
+import { WeatherModule } from './weather/owm/openweathermap.module';
 import { WebhooksModule } from './webhooks/webhooks.module';
 @Module({
   imports: [
@@ -37,8 +38,9 @@ import { WebhooksModule } from './webhooks/webhooks.module';
     MinecraftModule,
     MapModule,
     WebhooksModule,
-    GraphqlModule,
     WeatherModule,
+    NWSWeatherModule,
+    DiscordModule,
   ],
   controllers: [V1Controller],
   providers: [

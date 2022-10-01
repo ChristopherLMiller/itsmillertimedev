@@ -11,6 +11,8 @@ import { ApiSecurity, ApiTags } from '@nestjs/swagger';
 import { ClockifyTimer } from '@prisma/client';
 import { formatDistanceStrict, parseISO } from 'date-fns';
 import { ClockifyService } from '../clockify/clockify.service';
+import { DiscordService } from '../discord/discord.service';
+import { DiscordChannels } from '../discord/discord.types';
 import { WebhooksService } from './webhooks.service';
 
 @Controller({ version: '1', path: 'webhooks' })
@@ -18,7 +20,8 @@ import { WebhooksService } from './webhooks.service';
 export class WebhooksController {
   constructor(
     private clockify: ClockifyService,
-    private webhooks: WebhooksService
+    private webhooks: WebhooksService,
+    private discord: DiscordService
   ) {}
 
   @Post('clockify/start')
@@ -45,8 +48,9 @@ export class WebhooksController {
       throw new BadRequestException('Must provide projectId');
     }
     // send a message to discord
-    this.webhooks.sendDiscordMessage(
-      `Clockify timer started - ${project.name}`
+    this.discord.sendMessage(
+      `Clockify timer started - ${project.name}`,
+      DiscordChannels.DISCORD_BOT_SPAM_CHANNEL
     );
 
     // return the started timer
@@ -80,8 +84,9 @@ export class WebhooksController {
     );
 
     // Send a message to discord
-    this.webhooks.sendDiscordMessage(
-      `Clockify timer stopped - ${project.name}; Elapsed Time: ${timeElapsed}`
+    this.discord.sendMessage(
+      `Clockify timer stopped - ${project.name}; Elapsed Time: ${timeElapsed}`,
+      DiscordChannels.DISCORD_BOT_SPAM_CHANNEL
     );
     return this.clockify.removeClockifyTimer(project.id);
   }
@@ -107,8 +112,9 @@ export class WebhooksController {
     }
 
     // Send a message to discord
-    this.webhooks.sendDiscordMessage(
-      `Clockify timer deleted - ${project.name}`
+    this.discord.sendMessage(
+      `Clockify timer deleted - ${project.name}`,
+      DiscordChannels.DISCORD_BOT_SPAM_CHANNEL
     );
     return this.clockify.removeClockifyTimer(project.id);
   }

@@ -2,7 +2,8 @@ import { HttpService } from '@nestjs/axios';
 import { BadRequestException, Injectable } from '@nestjs/common';
 import { catchError, firstValueFrom, Observable } from 'rxjs';
 import { handleAxiosError } from '../../handleAxiosError';
-import { WebhooksService } from '../webhooks/webhooks.service';
+import { DiscordService } from '../discord/discord.service';
+import { DiscordChannels } from '../discord/discord.types';
 import { PrismaService } from './../../../prisma/prisma.service';
 import { ClockifyWorkspaceDto, StartTimerDto } from './dto';
 
@@ -11,7 +12,7 @@ export class ClockifyService {
   constructor(
     private prisma: PrismaService,
     private http: HttpService,
-    private webhooks: WebhooksService
+    private discord: DiscordService
   ) {}
 
   // Start new timer for projectID
@@ -71,7 +72,10 @@ export class ClockifyService {
 
   // Function to run when timers are stopped
   stopTimer(projectId: string): Observable<any> {
-    this.webhooks.sendDiscordMessage(`Clockify Project Stopped - ${projectId}`);
+    this.discord.sendMessage(
+      `Clockify Project Stopped - ${projectId}`,
+      DiscordChannels.DISCORD_BOT_SPAM_CHANNEL
+    );
     return this.http.patch(
       `/workspaces/${process.env.CLOCKIFY_WORKSPACE_ID}/user/${process.env.CLOCKIFY_USER_ID}/time-entries`,
       {

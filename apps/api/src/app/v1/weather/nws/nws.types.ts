@@ -12,15 +12,6 @@ export class GPSLocationDto {
   //@Validate(GPSLocation)
   position: string;
 }
-
-export interface WeatherOffice {
-  weatherOffice: string;
-  gridX: number;
-  gridY: number;
-  locationName?: string;
-  alertZone?: string;
-}
-
 export class WeatherZoneDto {
   @ApiProperty({
     name: 'zone',
@@ -36,5 +27,5 @@ export class WeatherAlert {
     name: 'alert',
     description: 'Array of active alerts',
   })
-  alerts: Array<object>;
+  alerts: Array<any>;
 }

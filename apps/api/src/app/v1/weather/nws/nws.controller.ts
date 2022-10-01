@@ -1,3 +1,4 @@
+import { WeatherOffice } from '@itsmillertimedev/data';
 import {
   BadRequestException,
   CacheTTL,
@@ -10,28 +11,24 @@ import {
 } from '@nestjs/common';
 import { ApiResponse, ApiSecurity, ApiTags } from '@nestjs/swagger';
 import { Request } from 'express';
-import { DataResponse } from '../../../../DataResponse';
-import { BasicAuthGuard } from '../../../guards/basicAuth.guard';
-import { ResponseTransformInterceptor } from '../../../interceptors/responseTransform.interceptor';
-import { WeatherService } from './weather.service';
-import {
-  GPSLocationDto,
-  WeatherAlert,
-  WeatherOffice,
-  WeatherZoneDto,
-} from './weather.types';
+import { DataResponse } from '../../../../../DataResponse';
+import { BasicAuthGuard } from '../../../../guards/basicAuth.guard';
+import { ResponseTransformInterceptor } from '../../../../interceptors/responseTransform.interceptor';
+import { NWSWeatherService } from './nws.service';
+import { GPSLocationDto, WeatherAlert, WeatherZoneDto } from './nws.types';
 
-@Controller({ version: '1', path: 'weather' })
-@ApiTags('Weather')
+@Controller({ version: '1', path: 'weather/nws' })
+@ApiTags('Weather', 'NationalWeatherService')
 @ApiSecurity('x-api-key')
 @UseGuards(BasicAuthGuard)
 @UseInterceptors(ResponseTransformInterceptor)
 @CacheTTL(5000)
-export class WeatherController {
-  constructor(private weather: WeatherService) {}
+export class NWSWeatherController {
+  constructor(private weather: NWSWeatherService) {}
 
   //#region National Weather Service API endpoints
-  @Get('nws/info/:position')
+  @Get('info/:position')
+  @CacheTTL(86400)
   @ApiResponse({ status: 200, description: 'Success' })
   @ApiResponse({
     status: 400,
@@ -51,7 +48,8 @@ export class WeatherController {
       request
     );
   }
-  @Get('nws/alerts/:zone')
+  @Get('alerts/:zone')
+  @CacheTTL(60 * 5)
   @ApiResponse({ status: 200, description: 'Success' })
   @ApiResponse({
     status: 400,
@@ -69,9 +67,4 @@ export class WeatherController {
 
     throw new BadRequestException('Must provide zone');
   }
-  //#endregion
-
-  //#region OpenWeatherMapAPI
-
-  //#endregion
 }

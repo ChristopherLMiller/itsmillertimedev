@@ -1,5 +1,6 @@
 import { HttpService } from '@nestjs/axios';
-import { BadRequestException, Injectable } from '@nestjs/common';
+import { BadRequestException, Injectable, Logger } from '@nestjs/common';
+import { ConfigService } from '@nestjs/config';
 import { catchError, firstValueFrom, Observable } from 'rxjs';
 import { handleAxiosError } from '../../handleAxiosError';
 import { DiscordService } from '../discord/discord.service';
@@ -9,10 +10,13 @@ import { ClockifyWorkspaceDto, StartTimerDto } from './dto';
 
 @Injectable()
 export class ClockifyService {
+  logger = new Logger(ClockifyService.name);
+
   constructor(
     private prisma: PrismaService,
     private http: HttpService,
-    private discord: DiscordService
+    private discord: DiscordService,
+    private readonly config: ConfigService
   ) {}
 
   // Start new timer for projectID
@@ -39,9 +43,9 @@ export class ClockifyService {
     pageSize = 25,
     page = 1,
   }): Observable<any> {
-    console.log(archived, pageSize, page, name);
+    this.logger.log(archived, pageSize, page, name);
     return this.http.get(
-      `/workspaces/${process.env.CLOCKIFY_WORKSPACE_ID}/projects`,
+      `/workspaces/${this.config.get('CLOCKIFY_WORKSPACE_ID')}/projects`,
       {
         params: {
           archived,
@@ -60,12 +64,18 @@ export class ClockifyService {
     }
 
     // kick off the webhook for the timer start
-    //this.webhooks.sendDiscordMessage(`Clockify Project Started - ${projectId}`);
+    this.discord.sendMessage(
+      `Clockify Project Started - ${projectId}`,
+      DiscordChannels.DISCORD_BOT_SPAM_CHANNEL
+    );
 
     const response = this.http
-      .post(`/workspaces/${process.env.CLOCKIFY_WORKSPACE_ID}/time-entries`, {
-        projectId,
-      })
+      .post(
+        `/workspaces/${this.config.get('CLOCKIFY_WORKSPACE_ID')}/time-entries`,
+        {
+          projectId,
+        }
+      )
       .pipe(catchError(handleAxiosError));
     return firstValueFrom(response);
   }
@@ -77,7 +87,9 @@ export class ClockifyService {
       DiscordChannels.DISCORD_BOT_SPAM_CHANNEL
     );
     return this.http.patch(
-      `/workspaces/${process.env.CLOCKIFY_WORKSPACE_ID}/user/${process.env.CLOCKIFY_USER_ID}/time-entries`,
+      `/workspaces/${this.config.get(
+        'CLOCKIFY_WORKSPACE_ID'
+      )}/user/${this.config.get('CLOCKIFY_USER_ID')}/time-entries`,
       {
         end: new Date().toISOString(),
       }
@@ -91,7 +103,9 @@ export class ClockifyService {
     }
 
     return this.http.get(
-      `workspaces/${process.env.CLOCKIFY_WORKSPACE_ID}/projects/${projectId}`
+      `workspaces/${this.config.get(
+        'CLOCKIFY_WORKSPACE_ID'
+      )}/projects/${projectId}`
     );
   }
 }

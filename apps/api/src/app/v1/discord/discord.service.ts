@@ -1,12 +1,16 @@
 import { HttpService } from '@nestjs/axios';
 import { Injectable } from '@nestjs/common';
+import { ConfigService } from '@nestjs/config';
 import { catchError, firstValueFrom } from 'rxjs';
 import { handleAxiosError } from '../../handleAxiosError';
 import { DiscordChannels } from './discord.types';
 
 @Injectable()
 export class DiscordService {
-  constructor(private httpService: HttpService) {}
+  constructor(
+    private httpService: HttpService,
+    private readonly config: ConfigService
+  ) {}
 
   async sendMessage(message: string, channel: DiscordChannels) {
     const response = this.httpService

@@ -8,7 +8,6 @@ import {
 import { throwError } from 'rxjs';
 
 export function handleAxiosError(error: any) {
-  console.log(error.response.data);
   switch (error.response.status) {
     case HttpStatus.BAD_REQUEST:
       return throwError(() => new BadRequestException(error));

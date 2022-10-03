@@ -8,6 +8,7 @@ import { ClockifyModule } from './clockify/clockify.module';
 import { DiscordModule } from './discord/discord.module';
 import { GithubModule } from './github/github.module';
 import { ImagesModule } from './images/images.module';
+import { LastFMModule } from './lastfm/lastfm.module';
 import { MapModule } from './maps/maps.module';
 import { MinecraftModule } from './minecraft/minecraft.module';
 import { V1Controller } from './v1.controller';
@@ -41,6 +42,7 @@ import { WebhooksModule } from './webhooks/webhooks.module';
     WeatherModule,
     NWSWeatherModule,
     DiscordModule,
+    LastFMModule,
   ],
   controllers: [V1Controller],
   providers: [

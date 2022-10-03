@@ -7,6 +7,7 @@ import {
   Headers,
   Post,
 } from '@nestjs/common';
+import { ConfigService } from '@nestjs/config';
 import { ApiSecurity, ApiTags } from '@nestjs/swagger';
 import { ClockifyTimer } from '@prisma/client';
 import { formatDistanceStrict, parseISO } from 'date-fns';
@@ -21,7 +22,8 @@ export class WebhooksController {
   constructor(
     private clockify: ClockifyService,
     private webhooks: WebhooksService,
-    private discord: DiscordService
+    private discord: DiscordService,
+    private readonly config: ConfigService
   ) {}
 
   @Post('clockify/start')
@@ -31,14 +33,12 @@ export class WebhooksController {
     @Body() body: ClockifyResponse
   ): Promise<ClockifyTimer> {
     // if the signatures don't match we need to eject with a 403 error
-    if (clockifySignature != process.env.CLOCKIFY_SIGNATURE_START) {
+    if (clockifySignature != this.config.get('CLOCKIFY_SIGNATURE_START')) {
       console.error('Invalid Clockify Webhook Signature provided');
       throw new ForbiddenException(
         'Invalid Clockify Webhook Signature provided'
       );
     }
-
-    console.log(body);
 
     const { project, timeInterval } = body;
 
@@ -63,7 +63,7 @@ export class WebhooksController {
     @Body() body: ClockifyResponse
   ): Promise<ClockifyTimer> {
     // if the signatures don't match we need to eject with a 403 error
-    if (clockifySignature != process.env.CLOCKIFY_SIGNATURE_STOP) {
+    if (clockifySignature != this.config.get('CLOCKIFY_SIGNATURE_STOP')) {
       console.error('Invalid Clockify Webhook Signature provided');
       throw new ForbiddenException(
         'Invalid Clockify Webhook Signature provided'
@@ -97,7 +97,7 @@ export class WebhooksController {
     @Body() body: ClockifyResponse
   ): Promise<ClockifyTimer> {
     // if the signatures don't match we need to eject with a 403 error
-    if (clockifySignature != process.env.CLOCKIFY_SIGNATURE_STOP) {
+    if (clockifySignature != this.config.get('CLOCKIFY_SIGNATURE_STOP')) {
       console.error('Invalid Clockify Webhook Signature provided');
       throw new ForbiddenException(
         'Invalid Clockify Webhook Signature provided'

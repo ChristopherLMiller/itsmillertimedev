@@ -6,7 +6,7 @@ import { ImagesService } from './images.service';
 
 @Module({
   controllers: [ImagesController],
-  imports: [HttpModule, CacheModule],
+  imports: [HttpModule, CacheModule.register()],
   providers: [ImagesService, PrismaService],
 })
 export class ImagesModule {}

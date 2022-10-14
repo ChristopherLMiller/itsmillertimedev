@@ -9,7 +9,7 @@ export class BotGateway {
   constructor(@InjectDiscordClient() private readonly client: Client) {}
 
   @Once('ready')
-  onReady() {
+  async onReady() {
     this.logger.log(`Bot ${this.client.user.tag} was started!`);
   }
 }

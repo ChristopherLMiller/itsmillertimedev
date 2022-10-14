@@ -1,6 +1,7 @@
 import { HttpModule } from '@nestjs/axios';
 import { Module } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
+import { PrismaService } from '../../../prisma/prisma.service';
 import { DiscordService } from '../discord/discord.service';
 import { LastFMController } from './lastfm.controller';
 import { LastFMService } from './lastfm.service';
@@ -15,6 +16,6 @@ import { LastFMService } from './lastfm.service';
       },
     }),
   ],
-  providers: [DiscordService, ConfigService, LastFMService],
+  providers: [DiscordService, ConfigService, LastFMService, PrismaService],
 })
 export class LastFMModule {}

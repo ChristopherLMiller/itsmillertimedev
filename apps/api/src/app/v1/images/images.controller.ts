@@ -1,5 +1,6 @@
 import {
   BadRequestException,
+  CacheTTL,
   Controller,
   Get,
   HttpCode,
@@ -25,6 +26,7 @@ import { ImagesService } from './images.service';
 @ApiSecurity('x-api-key')
 @UseGuards(BasicAuthGuard)
 @UseInterceptors(ResponseTransformInterceptor)
+@CacheTTL(86400)
 export class ImagesController {
   constructor(private imagesService: ImagesService) {}
 

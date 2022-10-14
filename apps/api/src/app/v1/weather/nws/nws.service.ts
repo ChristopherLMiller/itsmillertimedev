@@ -20,9 +20,9 @@ export class NWSWeatherService {
 
   async getWeatherInfoFromGPSCoordinates(
     position: GPSLocationDto,
-    request: Request
+    userAgent: Request | string
   ): Promise<DataResponse<WeatherOffice>> {
-    const data = await this.fetchDataNWS(`/points/${position}`, request);
+    const data = await this.fetchDataNWS(`/points/${position}`, userAgent);
 
     const weatherOffice = data?.properties?.gridId;
     const gridX = data?.properties?.gridX;
@@ -44,10 +44,13 @@ export class NWSWeatherService {
     };
   }
 
-  async getAlerts(zone: string, request: Request): Promise<DataResponse<any>> {
+  async getAlerts(
+    zone: string,
+    userAgent: Request | string
+  ): Promise<DataResponse<any>> {
     const data = await this.fetchDataNWS(
       `/alerts/active/zone/${zone}`,
-      request
+      userAgent
     );
 
     return {
@@ -56,16 +59,25 @@ export class NWSWeatherService {
     };
   }
 
-  weatherUserAgentString(request: Request): string {
-    const userHost =
-      request.headers['x-forwarded-for'] || request.socket.remoteAddress;
+  weatherUserAgentString(userAgent: Request | string): string {
+    // setup the variable as blank to begin with
+    let userHost = '';
+
+    // check the type of the userAgent provided, if its string then we use that, otherwise its the request
+    if (typeof userAgent === 'string') {
+      userHost = userAgent;
+    } else {
+      userHost =
+        (userAgent.headers['x-forwarded-for'] as string) ||
+        userAgent.socket.remoteAddress;
+    }
     return `(${userHost}-api.itsmillertime.dev admin@itsmillertime.dev)`;
   }
 
-  async fetchDataNWS(url: string, request: Request): Promise<any> {
+  async fetchDataNWS(url: string, userAgent: Request | string): Promise<any> {
     const response = this.http
       .get(url, {
-        headers: { 'User-Agent': this.weatherUserAgentString(request) },
+        headers: { 'User-Agent': this.weatherUserAgentString(userAgent) },
       })
       .pipe(catchError(this.weatherServiceErrorHandler));
     const { data } = await firstValueFrom(response);
@@ -73,7 +85,8 @@ export class NWSWeatherService {
   }
 
   weatherServiceErrorHandler(error: AxiosError) {
-    switch (error.response.status) {
+    console.log(error);
+    switch (error.response.request) {
       case HttpStatus.BAD_REQUEST:
         return throwError(() => new BadRequestException(error));
       case HttpStatus.UNAUTHORIZED:

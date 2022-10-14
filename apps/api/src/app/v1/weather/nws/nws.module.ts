@@ -12,5 +12,6 @@ import { NWSWeatherService } from './nws.service';
     }),
   ],
   providers: [NWSWeatherService],
+  exports: [NWSWeatherService],
 })
 export class NWSWeatherModule {}

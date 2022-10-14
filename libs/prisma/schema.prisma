@@ -50,6 +50,11 @@ model ClockifyTimer {
   @@index([id])
 }
 
+model DiscordUserSetting {
+  userId String @id @unique
+  meta   Json
+}
+
 model Gallery {
   id          Int               @id @default(autoincrement())
   createdAt   DateTime          @default(now())

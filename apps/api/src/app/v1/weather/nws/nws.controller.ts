@@ -12,6 +12,7 @@ import {
 import { ApiResponse, ApiSecurity, ApiTags } from '@nestjs/swagger';
 import { Request } from 'express';
 import { DataResponse } from '../../../../../DataResponse';
+import { CountriesBlacklist } from '../../../../decorators/countries.decorator';
 import { BasicAuthGuard } from '../../../../guards/basicAuth.guard';
 import { ResponseTransformInterceptor } from '../../../../interceptors/responseTransform.interceptor';
 import { NWSWeatherService } from './nws.service';
@@ -20,9 +21,10 @@ import { GPSLocationDto, WeatherAlert, WeatherZoneDto } from './nws.types';
 @Controller({ version: '1', path: 'weather/nws' })
 @ApiTags('Weather', 'NationalWeatherService')
 @ApiSecurity('x-api-key')
-@UseGuards(BasicAuthGuard)
+@UseGuards(BasicAuthGuard) //, CountryOfOriginGuard)
 @UseInterceptors(ResponseTransformInterceptor)
 @CacheTTL(5000)
+@CountriesBlacklist('RU')
 export class NWSWeatherController {
   constructor(private weather: NWSWeatherService) {}
 

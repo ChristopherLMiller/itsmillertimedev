@@ -1,7 +1,8 @@
 import { HttpService } from '@nestjs/axios';
 import { Injectable } from '@nestjs/common';
-import { ConfigService } from '@nestjs/config';
+import { DiscordUserSetting } from '@prisma/client';
 import { catchError, firstValueFrom } from 'rxjs';
+import { PrismaService } from '../../../prisma/prisma.service';
 import { handleAxiosError } from '../../handleAxiosError';
 import { DiscordChannels } from './discord.types';
 
@@ -9,7 +10,7 @@ import { DiscordChannels } from './discord.types';
 export class DiscordService {
   constructor(
     private httpService: HttpService,
-    private readonly config: ConfigService
+    private prisma: PrismaService
   ) {}
 
   async sendMessage(message: string, channel: DiscordChannels) {
@@ -33,5 +34,39 @@ export class DiscordService {
 
     const { data } = await firstValueFrom(response);
     return data;
+  }
+
+  async getUserMeta(userId: string): Promise<DiscordUserSetting> {
+    return this.prisma.discordUserSetting.findUnique({
+      where: {
+        userId,
+      },
+    });
+  }
+
+  async updateUserMeta(
+    userId: string,
+    key: string,
+    value: string
+  ): Promise<DiscordUserSetting> {
+    // first get the user meta
+    const userData = await this.getUserMeta(userId);
+    const meta = userData ? userData.meta : {};
+
+    // update the field
+    meta[key] = value;
+
+    // Upsert the data to the database and then return it
+    return this.prisma.discordUserSetting.upsert({
+      where: { userId },
+      create: {
+        userId,
+        meta,
+      },
+      update: {
+        userId,
+        meta,
+      },
+    });
   }
 }

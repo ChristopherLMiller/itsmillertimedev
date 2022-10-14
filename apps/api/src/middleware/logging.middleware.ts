@@ -5,6 +5,5 @@ export function logger(req: Request, res: Response, next: NextFunction) {
   Logger.log(
     `Request: ${req.hostname}, URL: ${req.originalUrl}; HTTP Code: ${res.statusCode}`
   );
-  Logger.log(req.headers);
   next();
 }

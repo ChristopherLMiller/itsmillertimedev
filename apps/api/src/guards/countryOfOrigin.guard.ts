@@ -38,7 +38,10 @@ export class CountryOfOriginGuard implements CanActivate {
     }
 
     // 3)  If we made it this far, lets extract out the whitelist and blacklist properties to evaluate further
-    const whitelist = this.reflector.get('whitelistedCountries', handler);
+    const whitelist = this.reflector.get<string[]>(
+      'whitelistedCountries',
+      handler
+    );
     const blacklist = this.reflector.get<string[]>(
       'blacklistedCountries',
       handler
@@ -47,26 +50,21 @@ export class CountryOfOriginGuard implements CanActivate {
     // 4) Extract out the country that Cloudflare has associated with the user
     const userCountry = request.headers['cf-ipcountry'];
 
-    // 5)  Compare user country with the blacklist array
+    // 5) Check against blacklist
     if (blacklist && blacklist.includes(userCountry)) {
-      this.logger.log(
-        `Request blocked, user country of origin was on blacklist: ${userCountry}`
-      );
-      // Not allowed, reject them with a 401
       throw new UnauthorizedException(
-        'Your country has been blacklisted from this resource'
+        'Your country has been blacklisted from accessing this resource'
       );
     }
 
-    // 6) Compare user country to the whitelist array, if its present they are allowed
-    if (whitelist && whitelist.includes(userCountry)) {
-      return true;
+    // 6) Compare against the whitelist next
+    if (whitelist && !whitelist.includes(userCountry)) {
+      throw new UnauthorizedException(
+        "Your country isn't on the whitelist to access this resource"
+      );
     }
 
-    // 7) Lastly if the person wasn't filtered by any of the above then allow it,
-    // just means their country wasn't affected at all.
-    throw new UnauthorizedException(
-      "You aren't permitted to access this resource"
-    );
+    // 7)  Return true otherwise, means they weren't filtered out by white or black list
+    return true;
   }
 }

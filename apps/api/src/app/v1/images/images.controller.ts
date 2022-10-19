@@ -60,4 +60,9 @@ export class ImagesController {
       throw new UnsupportedMediaTypeException(error.message);
     }
   }
+  @Get('encode')
+  async getBlurredImage(@Query() query): Promise<any> {
+    const { url } = query;
+    return { data: await this.imagesService.base64encode(url), meta: url };
+  }
 }

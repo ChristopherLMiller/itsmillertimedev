@@ -14,6 +14,13 @@ export class ImagesService {
     private prisma: PrismaService
   ) {}
 
+  async base64encode(url: string): Promise<any> {
+    const imageData = await firstValueFrom(
+      this.httpService.get(url, { responseType: 'arraybuffer' })
+    );
+    return Buffer.from(imageData.data, 'binary').toString('base64');
+  }
+
   async getExifData(image: string, cache = true): Promise<any> {
     //DataResponse<ImageExif | PrismaClient.InputJsonObject>> {
     // we take different paths depending on if the user wants cached data or not

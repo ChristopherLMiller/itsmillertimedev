@@ -16,7 +16,7 @@ import {
   ApiSecurity,
   ApiTags,
 } from '@nestjs/swagger';
-import { ImageBase64 } from '@prisma/client';
+import { ImageBase64, ImageExif } from '@prisma/client';
 import * as Yup from 'yup';
 import { DataResponse } from '../../../../DataResponse';
 import { BasicAuthGuard } from '../../../guards/basicAuth.guard';
@@ -40,7 +40,7 @@ export class ImagesController {
   @ApiResponse({ status: 200, description: 'Success' })
   @ApiResponse({ status: 415, description: 'Unsupported Media Type' })
   @ApiResponse({ status: 403, description: 'Forbidden' })
-  async getExifData(@Query() query): Promise<any> {
+  async getExifData(@Query() query): Promise<DataResponse<ImageExif>> {
     const { url, cache } = query;
 
     const ImageValidationScema = Yup.string()

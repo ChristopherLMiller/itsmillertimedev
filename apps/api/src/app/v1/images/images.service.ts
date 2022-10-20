@@ -15,10 +15,21 @@ export class ImagesService {
   ) {}
 
   async base64encode(url: string): Promise<any> {
-    const imageData = await firstValueFrom(
-      this.httpService.get(url, { responseType: 'arraybuffer' })
-    );
-    return Buffer.from(imageData.data, 'binary').toString('base64');
+    const data = await this.prisma.imageBase64.findUnique({
+      where: { public_id: url },
+    });
+
+    if (data) {
+      return data;
+    } else {
+      const imageData = await firstValueFrom(
+        this.httpService.get(url, { responseType: 'arraybuffer' })
+      );
+      const base64 = Buffer.from(imageData.data, 'binary').toString('base64');
+      return this.prisma.imageBase64.create({
+        data: { public_id: url, encoded: base64 },
+      });
+    }
   }
 
   async getExifData(image: string, cache = true): Promise<any> {

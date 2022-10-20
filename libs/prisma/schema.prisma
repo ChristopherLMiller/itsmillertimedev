@@ -2,6 +2,12 @@ generator client {
   provider = "prisma-client-js"
 }
 
+//generator trpc {
+//  provider      = "prisma-trpc-generator"
+//  withMiddlware = false
+//  withShield    = false
+//}
+
 datasource db {
   provider = "postgresql"
   url      = env("DATABASE_URL")
@@ -114,6 +120,11 @@ model ImageExif {
   exif Json
 
   @@index([id])
+}
+
+model ImageBase64 {
+  public_id String @id
+  encoded   String
 }
 
 model Marker {

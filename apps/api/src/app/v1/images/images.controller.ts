@@ -16,7 +16,9 @@ import {
   ApiSecurity,
   ApiTags,
 } from '@nestjs/swagger';
+import { ImageBase64, ImageExif } from '@prisma/client';
 import * as Yup from 'yup';
+import { DataResponse } from '../../../../DataResponse';
 import { BasicAuthGuard } from '../../../guards/basicAuth.guard';
 import { ResponseTransformInterceptor } from '../../../interceptors/responseTransform.interceptor';
 import { ImagesService } from './images.service';
@@ -38,7 +40,7 @@ export class ImagesController {
   @ApiResponse({ status: 200, description: 'Success' })
   @ApiResponse({ status: 415, description: 'Unsupported Media Type' })
   @ApiResponse({ status: 403, description: 'Forbidden' })
-  async getExifData(@Query() query): Promise<any> {
+  async getExifData(@Query() query): Promise<DataResponse<ImageExif>> {
     const { url, cache } = query;
 
     const ImageValidationScema = Yup.string()
@@ -61,7 +63,13 @@ export class ImagesController {
     }
   }
   @Get('encode')
-  async getBlurredImage(@Query() query): Promise<any> {
+  @HttpCode(200)
+  @ApiOperation({ summary: 'Base64 encode the provided image' })
+  @ApiQuery({ name: 'url', description: 'The URL to encode' })
+  @ApiResponse({ status: 200, description: 'Success' })
+  @ApiResponse({ status: 415, description: 'Unsupported Media Type' })
+  @ApiResponse({ status: 403, description: 'Forbidden' })
+  async getBlurredImage(@Query() query): Promise<DataResponse<ImageBase64>> {
     const { url } = query;
     return { data: await this.imagesService.base64encode(url), meta: url };
   }

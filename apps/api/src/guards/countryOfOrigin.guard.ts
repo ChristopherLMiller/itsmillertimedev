@@ -5,16 +5,12 @@ import {
   Logger,
   UnauthorizedException,
 } from '@nestjs/common';
-import { ConfigService } from '@nestjs/config';
 import { Reflector } from '@nestjs/core';
 import { Observable } from 'rxjs';
 
 @Injectable()
 export class CountryOfOriginGuard implements CanActivate {
-  constructor(
-    private reflector: Reflector,
-    private readonly config: ConfigService
-  ) {}
+  constructor(private reflector: Reflector) {}
 
   logger = new Logger(CountryOfOriginGuard.name);
 
@@ -27,7 +23,7 @@ export class CountryOfOriginGuard implements CanActivate {
     // The proecess to determine if person is able to access the resource is as follows:
 
     // 1) Check if dev, we auto allow this
-    // if (process.env.NODE_ENV === 'development') return true;
+    if (process.env.NODE_ENV === 'development') return true;
 
     // 2) If we are in production, check that the 'cf-ipcountry' header is present from Cloudflare
     if (!request.headers['cf-ipcountry']) {

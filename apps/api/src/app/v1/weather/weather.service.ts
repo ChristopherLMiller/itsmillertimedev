@@ -11,7 +11,7 @@ import { ConfigService } from '@nestjs/config';
 import { catchError, firstValueFrom, throwError } from 'rxjs';
 
 @Injectable()
-export class OpenWeatherMapService {
+export class WeatherService {
   constructor(private http: HttpService, private config: ConfigService) {}
 
   async getCurrentWeather({ lat, lon }) {
@@ -23,21 +23,28 @@ export class OpenWeatherMapService {
 
   async getMinutelyForecast({ lat, lon }) {
     const data = await this.fetchData(
-      `onecall?lat=${lat}&lon=${lon}&exclude=current,hourly,daily`
+      `onecall?lat=${lat}&lon=${lon}&exclude=current,hourly,daily,alerts`
     );
     return { data, meta: { lat, lon } };
   }
 
   async getHourlyForecast({ lat, lon }) {
     const data = await this.fetchData(
-      `onecall?lat=${lat}&lon=${lon}&exclude=current,minutely,daily`
+      `onecall?lat=${lat}&lon=${lon}&exclude=current,minutely,daily,alerts`
     );
     return { data, meta: { lat, lon } };
   }
 
   async getDailyForecast({ lat, lon }) {
     const data = await this.fetchData(
-      `onecall?lat=${lat}&lon=${lon}&exclude=current,minutely,hourly`
+      `onecall?lat=${lat}&lon=${lon}&exclude=current,minutely,hourly,alerts`
+    );
+    return { data, meta: { lat, lon } };
+  }
+
+  async getAlerts({ lat, lon }) {
+    const data = await this.fetchData(
+      `onecall?lat=${lat}&lon=${lon}&exclude=current,minutely,hourly,daily`
     );
     return { data, meta: { lat, lon } };
   }

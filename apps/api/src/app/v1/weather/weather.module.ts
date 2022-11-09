@@ -1,17 +1,18 @@
 import { HttpModule } from '@nestjs/axios';
 import { CacheModule, Module } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
-import { OpenWeatherMapController } from './openweathermap.controller';
-import { OpenWeatherMapService } from './openweathermap.service';
+import { WeatherController } from './weather.controller.ts';
+import { WeatherService } from './weather.service';
 
 @Module({
-  controllers: [OpenWeatherMapController],
+  controllers: [WeatherController],
   imports: [
     CacheModule.register(),
     HttpModule.register({
       baseURL: 'https://api.openweathermap.org/data/3.0/',
     }),
   ],
-  providers: [OpenWeatherMapService, ConfigService],
+  providers: [WeatherService, ConfigService],
+  exports: [WeatherService],
 })
 export class WeatherModule {}

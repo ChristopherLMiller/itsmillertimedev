@@ -11,21 +11,23 @@ import { ConfigService } from '@nestjs/config';
 import { ApiSecurity, ApiTags } from '@nestjs/swagger';
 import { ClockifyTimer } from '@prisma/client';
 import { formatDistanceStrict, parseISO } from 'date-fns';
+import { DataResponse } from '../../../../DataResponse';
 import { ClockifyService } from '../clockify/clockify.service';
 import { DiscordService } from '../discord/discord.service';
 import { DiscordChannels } from '../discord/discord.types';
-import { WebhooksService } from './webhooks.service';
+import { ImageService } from '../image/image.service';
 
 @Controller({ version: '1', path: 'webhooks' })
 @ApiTags('webhooks')
 export class WebhooksController {
   constructor(
     private clockify: ClockifyService,
-    private webhooks: WebhooksService,
     private discord: DiscordService,
+    private image: ImageService,
     private readonly config: ConfigService
   ) {}
 
+  //#region Clockify
   @Post('clockify/start')
   @ApiSecurity('clockify-signature')
   webhookClockifyStart(
@@ -118,4 +120,23 @@ export class WebhooksController {
     );
     return this.clockify.removeClockifyTimer(project.id);
   }
+  //#endregion
+
+  //#region Cloudinary
+  @Post('cloudinary/notify')
+  async webhookCloudinaryNotify(
+    @Body() body: any
+  ): Promise<DataResponse<unknown>> {
+    await this.image.createImage(body);
+
+    return {
+      data: {
+        message: 'Image created successfully',
+      },
+      meta: {
+        public_id: body.public_id,
+      },
+    };
+  }
+  //#endregion
 }

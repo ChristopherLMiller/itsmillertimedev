@@ -114,19 +114,6 @@ model GalleryTag {
   @@index([id, slug])
 }
 
-model ImageExif {
-  id   Int    @id @default(autoincrement())
-  url  String @unique
-  exif Json
-
-  @@index([id])
-}
-
-model ImageBase64 {
-  public_id String @id
-  encoded   String
-}
-
 model Marker {
   id         Int     @id @default(autoincrement())
   lat        Decimal
@@ -160,4 +147,60 @@ model MinecraftRuleCategory {
   MinecraftRules MinecraftRule[]
 
   @@index([id])
+}
+
+model Post {
+  id             Int          @id @default(autoincrement())
+  title          String
+  metaTitle      String
+  slug           String       @unique
+  summary        String
+  published      Boolean
+  createdAt      DateTime     @default(now())
+  updatedAt      DateTime     @default(now())
+  publishedAt    DateTime
+  content        String
+  featuredImage  Image        @relation(fields: [imagePublic_id], references: [public_id])
+  imagePublic_id String
+  category       PostCategory @relation(fields: [postCategoryId], references: [id])
+  postCategoryId Int
+  tags           PostTag[]
+
+  @@index([id])
+}
+
+model PostCategory {
+  id    Int    @id @default(autoincrement())
+  Post  Post[]
+  title String @unique
+  slug  String
+}
+
+model PostTag {
+  id     Int    @id @default(autoincrement())
+  Post   Post?  @relation(fields: [postId], references: [id])
+  postId Int?
+  title  String @unique
+  slug   String
+}
+
+model Image {
+  public_id String   @id @unique
+  version   Int?
+  format    String?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  bytes     Int?
+  url       String?
+  secureUrl String?
+  base64    String?
+  thumbnail String?
+  Post      Post[]
+  alt       String?
+  caption   String?
+  width     Int?
+  height    Int?
+  exif      Json?
+
+  @@index([public_id])
 }

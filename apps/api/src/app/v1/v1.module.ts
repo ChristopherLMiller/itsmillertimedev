@@ -7,13 +7,12 @@ import { PrismaService } from '../../prisma/prisma.service';
 import { ClockifyModule } from './clockify/clockify.module';
 import { DiscordModule } from './discord/discord.module';
 import { GithubModule } from './github/github.module';
-import { ImagesModule } from './images/images.module';
+import { ImageModule } from './image/image.module';
 import { LastFMModule } from './lastfm/lastfm.module';
 import { MapModule } from './maps/maps.module';
 import { MinecraftModule } from './minecraft/minecraft.module';
 import { V1Controller } from './v1.controller';
-import { NWSWeatherModule } from './weather/nws/nws.module';
-import { WeatherModule } from './weather/owm/openweathermap.module';
+import { WeatherModule } from './weather/weather.module';
 import { WebhooksModule } from './webhooks/webhooks.module';
 @Module({
   imports: [
@@ -35,12 +34,11 @@ import { WebhooksModule } from './webhooks/webhooks.module';
     }),
     GithubModule,
     ClockifyModule,
-    ImagesModule,
+    ImageModule,
     MinecraftModule,
     MapModule,
     WebhooksModule,
     WeatherModule,
-    NWSWeatherModule,
     DiscordModule,
     LastFMModule,
   ],

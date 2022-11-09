@@ -2,8 +2,7 @@ import { TransformPipe } from '@discord-nestjs/common';
 import { Command, DiscordCommand, UsePipes } from '@discord-nestjs/core';
 import { Injectable } from '@nestjs/common';
 import { ContextMenuCommandInteraction } from 'discord.js';
-import { NWSWeatherService } from '../../../weather/nws/nws.service';
-
+import { WeatherService } from '../../../weather/weather.service';
 import { DiscordService } from '../../discord.service';
 
 @Injectable()
@@ -15,7 +14,7 @@ import { DiscordService } from '../../discord.service';
 export class WeatherAlertsCommand implements DiscordCommand {
   constructor(
     private discord: DiscordService,
-    private nws: NWSWeatherService
+    private weatherService: WeatherService
   ) {}
 
   async handler(interaction: ContextMenuCommandInteraction): Promise<string> {
@@ -27,10 +26,10 @@ export class WeatherAlertsCommand implements DiscordCommand {
       return 'You need to setup your weather zone to be able to use this command';
     }
 
-    const data = await this.nws.getAlerts(
-      userSettings.meta['zone'],
-      'DiscordBot'
-    );
+    const data = await this.weatherService.getAlerts({
+      lat: userSettings.meta['lat'],
+      lon: userSettings.meta['lon'],
+    });
 
     // extract out the alerts
     const alerts = data.data.features;

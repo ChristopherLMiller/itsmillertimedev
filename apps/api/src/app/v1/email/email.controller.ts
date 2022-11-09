@@ -12,9 +12,9 @@ export class EmailController {
     // Nothing to see here
   }
 
-  /***
-   * @Todo Implement Email Sending
-   * @Body Sending of emails isn't implemented and needs to be */
+  // TODO: Implement email sending
+  // Right now send an email does absolutely nothing, need to use sendgrid
+  // to handle the sending of emails
   @Post('send')
   sendEmail(): any {
     return true;

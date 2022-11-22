@@ -94,6 +94,7 @@ specifiers:
   regenerator-runtime: 0.13.10
   rimraf: ^3.0.2
   rxjs: ^7.5.7
+  slugify: ^1.6.5
   source-map-support: ^0.5.21
   styled-components: 5.3.6
   supertest: ^6.3.1
@@ -153,6 +154,7 @@ dependencies:
   regenerator-runtime: 0.13.10
   rimraf: 3.0.2
   rxjs: 7.5.6
+  slugify: 1.6.5
   styled-components: 5.3.5_7i5myeigehqah43i5u7wbekgba
   tslib: 2.4.1
   yup: 0.32.11
@@ -12160,6 +12162,11 @@ packages:
       ansi-styles: 4.3.0
       astral-regex: 2.0.0
       is-fullwidth-code-point: 3.0.0
+
+  /slugify/1.6.5:
+    resolution: {integrity: sha512-8mo9bslnBO3tr5PEVFzMPIWwWnipGS0xVbYf65zxDqfNwmzYn1LpiKNrR6DlClusuvo+hDHd1zKpmfAe83NQSQ==}
+    engines: {node: '>=8.0.0'}
+    dev: false
 
   /socket.io-adapter/2.4.0:
     resolution: {integrity: sha512-W4N+o69rkMEGVuk2D/cvca3uYsvGlMwsySWV447y99gUPghxq42BxqLNMndb+a1mm/5/7NeXVQS7RLa2XyXvYg==}

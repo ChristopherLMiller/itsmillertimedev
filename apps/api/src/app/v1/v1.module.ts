@@ -11,6 +11,8 @@ import { ImageModule } from './image/image.module';
 import { LastFMModule } from './lastfm/lastfm.module';
 import { MapModule } from './maps/maps.module';
 import { MinecraftModule } from './minecraft/minecraft.module';
+import { PostCategoryModule } from './post-category/post-category.module';
+import { PostTagModule } from './post-tag/post-tag.module';
 import { V1Controller } from './v1.controller';
 import { WeatherModule } from './weather/weather.module';
 import { WebhooksModule } from './webhooks/webhooks.module';
@@ -41,6 +43,8 @@ import { WebhooksModule } from './webhooks/webhooks.module';
     WeatherModule,
     DiscordModule,
     LastFMModule,
+    PostCategoryModule,
+    PostTagModule,
   ],
   controllers: [V1Controller],
   providers: [

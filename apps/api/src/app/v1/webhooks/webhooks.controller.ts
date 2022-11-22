@@ -127,16 +127,56 @@ export class WebhooksController {
   async webhookCloudinaryNotify(
     @Body() body: any
   ): Promise<DataResponse<unknown>> {
-    await this.image.createImage(body);
+    console.log(body);
 
-    return {
-      data: {
-        message: 'Image created successfully',
-      },
-      meta: {
-        public_id: body.public_id,
-      },
-    };
+    // the type of notication means we need to call different services, handle appropriately
+    switch (body.notification_type) {
+      case 'upload': {
+        // Resource was uploaded
+        if (await this.image.createImage(body)) {
+          return {
+            data: {
+              message: 'Image created successfully',
+            },
+            meta: {
+              public_id: body.public_id,
+            },
+          };
+        }
+        break;
+      }
+      case 'delete': {
+        // Resource was deleted
+        if (await this.image.deleteImage(body.resources.public_id)) {
+          return {
+            data: {
+              message: 'Resource was successfully deleted',
+            },
+            meta: {
+              public_id: body.resources.public_id,
+            },
+          };
+        }
+        break;
+      }
+      case 'resource_context_changed':
+        // Resource meta was updated
+        // Todo
+        if (await this.image.updateMetadata('public_id')) {
+          return {
+            data: {
+              message: 'Resource meta updated successfully',
+            },
+            meta: {
+              public_id: 'public_id',
+            },
+          };
+        }
+        break;
+      default:
+        console.log(body.notification_type);
+        break;
+    }
   }
   //#endregion
 }

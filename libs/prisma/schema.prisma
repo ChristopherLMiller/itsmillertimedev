@@ -2,50 +2,9 @@ generator client {
   provider = "prisma-client-js"
 }
 
-//generator trpc {
-//  provider      = "prisma-trpc-generator"
-//  withMiddlware = false
-//  withShield    = false
-//}
-
 datasource db {
   provider = "postgresql"
   url      = env("DATABASE_URL")
-}
-
-enum PublicationStatus {
-  PUBLISHED
-  DRAFT
-}
-
-enum Visibility {
-  PUBLIC
-  PROTECTED
-  PRIVATE
-}
-
-model ArticleTag {
-  id       Int       @id @default(autoincrement())
-  title    String
-  slug     String    @unique
-  articles Article[]
-
-  @@index([id, slug])
-}
-
-model Article {
-  id             Int               @id @default(autoincrement())
-  createdAt      DateTime          @default(now())
-  updatedAt      DateTime          @updatedAt
-  title          String
-  slug           String            @unique
-  content        String            @db.Text
-  tags           ArticleTag[]
-  seo_title      String
-  seo_excerpt    String            @db.Text
-  featured_image String
-  published      PublicationStatus @default(DRAFT)
-  publishedAt    DateTime?
 }
 
 model ClockifyTimer {
@@ -67,8 +26,8 @@ model Gallery {
   updatedAt   DateTime          @updatedAt
   title       String
   slug        String            @unique
-  meta        String            @db.Text
-  description String            @db.Text
+  meta        String
+  description String
   visibility  Visibility        @default(PUBLIC)
   isNsfw      Boolean           @default(false)
   image       String
@@ -83,8 +42,8 @@ model GalleryCategory {
   id        Int      @id @default(autoincrement())
   title     String
   slug      String   @unique
-  Gallery   Gallery? @relation(fields: [galleryId], references: [id])
   galleryId Int?
+  Gallery   Gallery? @relation(fields: [galleryId], references: [id])
 
   @@index([id, slug])
 }
@@ -95,11 +54,11 @@ model GalleryImage {
   updatedAt   DateTime          @updatedAt
   title       String
   slug        String            @unique
-  galleries   Gallery[]
   published   PublicationStatus
   publishedAt DateTime
   visibility  Visibility?
   url         String
+  galleries   Gallery[]
 
   @@index([id, slug])
 }
@@ -108,8 +67,8 @@ model GalleryTag {
   id        Int      @id @default(autoincrement())
   title     String
   slug      String   @unique
-  Gallery   Gallery? @relation(fields: [galleryId], references: [id])
   galleryId Int?
+  Gallery   Gallery? @relation(fields: [galleryId], references: [id])
 
   @@index([id, slug])
 }
@@ -157,13 +116,13 @@ model Post {
   summary        String
   published      Boolean
   createdAt      DateTime     @default(now())
-  updatedAt      DateTime     @default(now())
-  publishedAt    DateTime
+  updatedAt      DateTime     @updatedAt
+  publishedAt    DateTime?
   content        String
-  featuredImage  Image        @relation(fields: [imagePublic_id], references: [public_id])
-  imagePublic_id String
-  category       PostCategory @relation(fields: [postCategoryId], references: [id])
+  imagePublic_id String?
   postCategoryId Int
+  featuredImage  Image?       @relation(fields: [imagePublic_id], references: [public_id])
+  category       PostCategory @relation(fields: [postCategoryId], references: [id])
   tags           PostTag[]
 
   @@index([id])
@@ -171,36 +130,47 @@ model Post {
 
 model PostCategory {
   id    Int    @id @default(autoincrement())
+  slug  String @unique
+  title String
   Post  Post[]
-  title String @unique
-  slug  String
 }
 
 model PostTag {
   id     Int    @id @default(autoincrement())
-  Post   Post?  @relation(fields: [postId], references: [id])
   postId Int?
-  title  String @unique
-  slug   String
+  slug   String @unique
+  title  String
+  Post   Post?  @relation(fields: [postId], references: [id])
 }
 
 model Image {
   public_id String   @id @unique
   version   Int?
   format    String?
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-  bytes     Int?
   url       String?
   secureUrl String?
   base64    String?
-  thumbnail String?
-  Post      Post[]
   alt       String?
   caption   String?
   width     Int?
   height    Int?
+  bytes     Int?
+  createdAt DateTime @default(now())
+  thumbnail String?
   exif      Json?
+  updatedAt DateTime @updatedAt
+  Post      Post[]
 
   @@index([public_id])
+}
+
+enum PublicationStatus {
+  PUBLISHED
+  DRAFT
+}
+
+enum Visibility {
+  PUBLIC
+  PROTECTED
+  PRIVATE
 }

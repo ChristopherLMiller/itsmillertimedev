@@ -56,6 +56,10 @@ export class ImageService {
     return result;
   }
 
+  async deleteImage(public_id: string): Promise<Image> {
+    return this.prisma.image.delete({ where: { public_id: public_id } });
+  }
+
   async createBase64(
     public_id: string,
     width: number | 'auto'
@@ -183,5 +187,9 @@ export class ImageService {
       update: { public_id, exif },
     });
     return result.exif;
+  }
+
+  async updateMetadata(public_id: string) {
+    return null;
   }
 }

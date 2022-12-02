@@ -14,7 +14,6 @@ export class PostCategoryService {
   ): Promise<PostCategory | Prisma.BatchPayload> {
     // check if a singular item or an array
     if (Array.isArray(newData)) {
-      console.log('array items');
       // handle as an array
       const insertableItems = await Promise.all(
         newData.flatMap(async (item) => {
@@ -23,10 +22,7 @@ export class PostCategoryService {
             'postCategory'
           );
 
-          return {
-            title: item.title,
-            slug,
-          };
+          return { ...item, slug };
         })
       );
 

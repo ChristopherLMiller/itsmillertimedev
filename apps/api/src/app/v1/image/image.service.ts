@@ -1,9 +1,11 @@
 import { HttpService } from '@nestjs/axios';
 import { Injectable } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
-import { Image } from '@prisma/client';
+import { Image, Prisma } from '@prisma/client';
+import { v2 as cloudinary } from 'cloudinary';
 import { firstValueFrom } from 'rxjs';
 import { PrismaService } from '../../../prisma/prisma.service';
+import streamifier = require('streamifier');
 
 // eslint-disable-next-line @typescript-eslint/no-var-requires
 const ExifImage = require('exif').ExifImage;
@@ -17,7 +19,7 @@ export class ImageService {
   ) {}
 
   async createImage(params): Promise<Image> {
-    console.log(params);
+    // TODO: try/catch, key might exist and if so just exit
     // Extract out the data necessary
     const {
       public_id,
@@ -56,8 +58,21 @@ export class ImageService {
     return result;
   }
 
-  async deleteImage(public_id: string): Promise<Image> {
-    return this.prisma.image.delete({ where: { public_id: public_id } });
+  async deleteImage(public_id: string): Promise<string> {
+    try {
+      await this.prisma.image.delete({
+        where: { public_id: public_id },
+      });
+      return 'Record deleted Successfully';
+    } catch (error) {
+      if (error instanceof Prisma.PrismaClientKnownRequestError) {
+        console.log(error);
+        // Prisma error code for record doesn't exist
+        if (error.code === 'P2025') {
+          return error.meta['cause'] as string;
+        }
+      }
+    }
   }
 
   async createBase64(
@@ -187,6 +202,44 @@ export class ImageService {
       update: { public_id, exif },
     });
     return result.exif;
+  }
+
+  async uploadImage(file: Express.Multer.File): Promise<any> {
+    cloudinary.config({
+      api_key: this.config.get('CLOUDINARY_API_KEY'),
+      api_secret: this.config.get('CLOUDINARY_API_SECRET'),
+      cloud_name: this.config.get('CLOUDINARY_CLOUD'),
+    });
+
+    try {
+      const date = new Date();
+
+      const uploadStream = cloudinary.uploader.upload_stream(
+        {
+          upload_preset: this.config.get('CLOUDINARY_UPLOAD_PRESET'),
+          use_filename: true,
+          filename_override: file.originalname,
+          folder: `${this.config.get('CLOUDINARY_FOLDER')}/${date
+            .getFullYear()
+            .toString()}/${date.getMonth().toString()}`,
+        },
+        (error, result) => {
+          if (error) {
+            console.log(error);
+            throw new Error(error.message);
+          }
+
+          return result;
+        }
+      );
+
+      // create the stream, upload to cloudinary
+      streamifier.createReadStream(file.buffer).pipe(uploadStream);
+
+      return 'File uploaded successfully';
+    } catch (error) {
+      console.log(error);
+    }
   }
 
   async updateMetadata(public_id: string) {

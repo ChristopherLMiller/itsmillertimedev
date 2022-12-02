@@ -1,9 +1,5 @@
 import { Logger, ValidationPipe, VersioningType } from '@nestjs/common';
 import { NestFactory } from '@nestjs/core';
-import {
-  FastifyAdapter,
-  NestFastifyApplication,
-} from '@nestjs/platform-fastify';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 import * as Sentry from '@sentry/node';
 import { V1Module } from './app/v1/v1.module';
@@ -14,11 +10,9 @@ import { logger } from './middleware/logging.middleware';
 const packageData = require('../../../package.json');
 
 async function bootstrap() {
-  const app = await NestFactory.create<NestFastifyApplication>(
-    V1Module,
-    new FastifyAdapter(),
-    { bufferLogs: true }
-  );
+  const app = await NestFactory.create(V1Module, {
+    bufferLogs: true,
+  });
 
   // Enable versioning
   app.enableVersioning({

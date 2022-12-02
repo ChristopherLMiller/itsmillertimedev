@@ -13,6 +13,7 @@ import { MapModule } from './maps/maps.module';
 import { MinecraftModule } from './minecraft/minecraft.module';
 import { PostCategoryModule } from './post-category/post-category.module';
 import { PostTagModule } from './post-tag/post-tag.module';
+import { PostModule } from './post/post.module';
 import { V1Controller } from './v1.controller';
 import { WeatherModule } from './weather/weather.module';
 import { WebhooksModule } from './webhooks/webhooks.module';
@@ -29,8 +30,8 @@ import { WebhooksModule } from './webhooks/webhooks.module';
         store: redisStore,
         host: configService.get('REDIS_HOST'),
         port: configService.get('REDIS_PORT'),
-        ttl: configService.get('CACHE_TTL'),
-        max: configService.get('MAX_ITEM_IN_CACHE'),
+        ttl: parseInt(configService.get('CACHE_TTL')) || 5,
+        max: parseInt(configService.get('MAX_ITEM_IN_CACHE')) || 100,
         no_ready_check: false,
       }),
     }),
@@ -45,6 +46,7 @@ import { WebhooksModule } from './webhooks/webhooks.module';
     LastFMModule,
     PostCategoryModule,
     PostTagModule,
+    PostModule,
   ],
   controllers: [V1Controller],
   providers: [

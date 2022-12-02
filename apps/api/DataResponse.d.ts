@@ -1,7 +1,7 @@
 export interface DataResponse<T> {
   statusCode?: number;
   data: T;
-  meta: Meta;
+  meta?: Meta;
 }
 
 export interface Meta {

@@ -1,10 +1,12 @@
 generator client {
-  provider = "prisma-client-js"
+  provider        = "prisma-client-js"
+  previewFeatures = ["referentialIntegrity"]
 }
 
 datasource db {
-  provider = "postgresql"
-  url      = env("DATABASE_URL")
+  provider     = "postgresql"
+  url          = env("DATABASE_URL")
+  relationMode = "foreignKeys"
 }
 
 model ClockifyTimer {
@@ -132,7 +134,9 @@ model PostCategory {
   id    Int    @id @default(autoincrement())
   slug  String @unique
   title String
-  Post  Post[]
+  posts Post[]
+
+  @@index([id, slug])
 }
 
 model PostTag {
@@ -140,7 +144,9 @@ model PostTag {
   postId Int?
   slug   String @unique
   title  String
-  Post   Post?  @relation(fields: [postId], references: [id])
+  posts  Post[]
+
+  @@index([id, slug])
 }
 
 model Image {

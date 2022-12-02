@@ -1,13 +1,17 @@
 import {
   CacheTTL,
   Controller,
+  Delete,
   Get,
   HttpCode,
+  Post,
   Query,
   UnsupportedMediaTypeException,
+  UploadedFile,
   UseGuards,
   UseInterceptors,
 } from '@nestjs/common';
+import { FileInterceptor } from '@nestjs/platform-express';
 import {
   ApiOperation,
   ApiQuery,
@@ -17,6 +21,7 @@ import {
 } from '@nestjs/swagger';
 import { Image } from '@prisma/client';
 import { DataResponse } from '../../../../DataResponse';
+import { IgnoreCloudinary } from '../../../decorators/IgnoreCloudinary.decorator';
 import { BasicAuthGuard } from '../../../guards/basicAuth.guard';
 import { CloudinaryTransformInterceptor } from '../../../interceptors/cloudinaryTransform.interceptor';
 import { ResponseTransformInterceptor } from '../../../interceptors/responseTransform.interceptor';
@@ -45,6 +50,25 @@ export class ImageController {
       meta: { public_id },
     };
   }
+
+  @Post('/')
+  @HttpCode(200)
+  @ApiOperation({ summary: 'Uploads an image to cloudinary' })
+  @ApiResponse({ status: 200, description: 'Success' })
+  @ApiResponse({ status: 403, description: 'Forbidden' })
+  @IgnoreCloudinary()
+  @UseInterceptors(FileInterceptor('file'))
+  async uploadImage(
+    @UploadedFile('file') file: Express.Multer.File
+  ): Promise<DataResponse<Partial<Image>>> {
+    return {
+      data: await this.imageService.uploadImage(file),
+      meta: {
+        file: file.originalname,
+      },
+    };
+  }
+
   @Get('exif')
   @HttpCode(200)
   @ApiOperation({ summary: 'Get an Images EXIF data' })
@@ -100,6 +124,18 @@ export class ImageController {
     return {
       data: { thumbnail: await this.imageService.getThumbnail(public_id) },
       meta: { public_id: public_id },
+    };
+  }
+
+  @Delete('/')
+  async deleteImage(@Query() query): Promise<DataResponse<string>> {
+    const { public_id } = query;
+
+    return {
+      data: await this.imageService.deleteImage(public_id),
+      meta: {
+        public_id,
+      },
     };
   }
 }

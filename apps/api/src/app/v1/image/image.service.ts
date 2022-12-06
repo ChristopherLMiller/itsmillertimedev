@@ -221,7 +221,7 @@ export class ImageService {
           filename_override: file.originalname,
           folder: `${this.config.get('CLOUDINARY_FOLDER')}/${date
             .getFullYear()
-            .toString()}/${date.getMonth().toString()}`,
+            .toString()}/${(date.getMonth() + 1).toString()}`,
         },
         (error, result) => {
           if (error) {

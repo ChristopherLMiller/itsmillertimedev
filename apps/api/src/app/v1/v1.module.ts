@@ -7,6 +7,7 @@ import { PrismaService } from '../../prisma/prisma.service';
 import { ClockifyModule } from './clockify/clockify.module';
 import { DiscordModule } from './discord/discord.module';
 import { GithubModule } from './github/github.module';
+import { HealthController } from './health/health.controller';
 import { ImageModule } from './image/image.module';
 import { LastFMModule } from './lastfm/lastfm.module';
 import { MapModule } from './maps/maps.module';
@@ -48,7 +49,7 @@ import { WebhooksModule } from './webhooks/webhooks.module';
     PostTagModule,
     PostModule,
   ],
-  controllers: [V1Controller],
+  controllers: [V1Controller, HealthController],
   providers: [
     PrismaService,
     {

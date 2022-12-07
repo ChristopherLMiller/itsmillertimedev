@@ -127,13 +127,15 @@ export class WebhooksController {
   async webhookCloudinaryNotify(
     @Body() body: any
   ): Promise<DataResponse<unknown>> {
-    console.log(body);
-
     // the type of notication means we need to call different services, handle appropriately
     switch (body.notification_type) {
       case 'upload': {
         // Resource was uploaded
         if (await this.image.createImage(body)) {
+          this.discord.sendMessage(
+            `Created new Cloudinary resource, public_id: ${body.public_id}`,
+            DiscordChannels.DISCORD_BOT_SPAM_CHANNEL
+          );
           return {
             data: {
               message: 'Image created successfully',
@@ -148,6 +150,10 @@ export class WebhooksController {
       case 'delete': {
         // Resource was deleted
         if (await this.image.deleteImage(body.resources.public_id)) {
+          this.discord.sendMessage(
+            `Deleted Cloudinary resource, public_id: ${body.resources.public_id}`,
+            DiscordChannels.DISCORD_BOT_SPAM_CHANNEL
+          );
           return {
             data: {
               message: 'Resource was successfully deleted',
@@ -163,6 +169,10 @@ export class WebhooksController {
         // Resource meta was updated
         // Todo
         if (await this.image.updateMetadata('public_id')) {
+          this.discord.sendMessage(
+            `Updated Cloudinary resource, public_id: ${body.resources.public_id}`,
+            DiscordChannels.DISCORD_BOT_SPAM_CHANNEL
+          );
           return {
             data: {
               message: 'Resource meta updated successfully',

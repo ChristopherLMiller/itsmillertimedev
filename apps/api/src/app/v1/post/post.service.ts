@@ -1,5 +1,6 @@
 import { BadRequestException, Injectable } from '@nestjs/common';
 import { Post, Prisma } from '@prisma/client';
+import { PrismaDTO } from 'apps/api/src/prisma/prisma.dto';
 import { PrismaLib } from 'libs/prisma/lib';
 import { PrismaService } from '.././../../prisma/prisma.service';
 
@@ -31,11 +32,31 @@ export class PostService {
     }
   }
 
-  findAll() {
-    return this.prisma.post.findMany({
-      include: { category: true, tags: true, featuredImage: true },
-      orderBy: { publishedAt: 'desc' },
+  async findAll(query: PrismaDTO) {
+    const { sort = 'createdAt:ASC', skip, take, where } = query;
+
+    // recast orderBy as a string
+    const orderBy = {};
+    orderBy[sort.slice(0, sort.indexOf(':'))] = sort
+      .slice(sort.indexOf(':') + 1)
+      .toLowerCase();
+
+    const data = await this.prisma.post.findMany({
+      include: {
+        category: true,
+        tags: true,
+        featuredImage: true,
+      },
+      orderBy: orderBy,
+      skip: parseInt(skip?.toString()) || 0,
+      take: parseInt(take?.toString()) || 10,
+      where: where !== undefined ? JSON.parse(where) : undefined,
     });
+    const total = await this.getCount(where);
+    return {
+      data,
+      meta: { total },
+    };
   }
 
   findOne(slug: string) {
@@ -44,6 +65,12 @@ export class PostService {
       where: {
         slug,
       },
+    });
+  }
+
+  async getCount(where: string): Promise<number> {
+    return this.prisma.post.count({
+      where: where !== undefined ? JSON.parse(where) : undefined,
     });
   }
 

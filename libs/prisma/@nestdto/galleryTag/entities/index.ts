@@ -1,0 +1,2 @@
+
+export * from './galleryTag.entity';

@@ -1,6 +1,18 @@
 generator client {
-  provider        = "prisma-client-js"
-  previewFeatures = ["referentialIntegrity"]
+  provider = "prisma-client-js"
+}
+
+generator nestgraphql {
+  provider = "prisma-nestjs-graphql"
+  output   = "@graphql"
+}
+
+generator nestjsDto {
+  provider                        = "prisma-generator-nestjs-dto"
+  output                          = "@nestdto"
+  outputToNestJsResourceStructure = "true"
+  exportRelationModifierClasses   = "true"
+  reExport                        = "true"
 }
 
 datasource db {
@@ -116,6 +128,7 @@ model Post {
   metaTitle      String
   slug           String       @unique
   summary        String
+  /// @IsOptional
   published      Boolean
   createdAt      DateTime     @default(now())
   updatedAt      DateTime     @updatedAt

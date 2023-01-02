@@ -33,7 +33,37 @@ export class PostService {
   }
 
   async findAll(query: PrismaDTO) {
-    const { sort = 'createdAt:ASC', skip, take, where } = query;
+    const {
+      sort = 'createdAt:ASC',
+      skip,
+      take,
+      where,
+      limit,
+      start,
+      published,
+    } = query;
+
+    // set up the where clause
+    let whereObject = undefined;
+    if (where !== undefined) {
+      whereObject = JSON.parse(where);
+    }
+
+    // Extrapolate out the published field for the where clause
+    let publishedStatus;
+    if (published) {
+      if (published.toLowerCase() === 'all') {
+        publishedStatus = null; // this won't filter out anything
+      } else if (published.toLowerCase() === 'live') {
+        publishedStatus = { published: true }; // this tells prisma to filter out anything with published field of false
+      } else if (published.toLowerCase() === 'preview') {
+        publishedStatus = { published: false };
+      }
+    } else {
+      publishedStatus = { published: true };
+    }
+
+    console.log({ ...whereObject, ...publishedStatus });
 
     // recast orderBy as a string
     const orderBy = {};
@@ -48,9 +78,9 @@ export class PostService {
         featuredImage: true,
       },
       orderBy: orderBy,
-      skip: parseInt(skip?.toString()) || 0,
-      take: parseInt(take?.toString()) || 10,
-      where: where !== undefined ? JSON.parse(where) : undefined,
+      skip: parseInt(skip?.toString()) || parseInt(start?.toString()) || 0,
+      take: parseInt(take?.toString()) || parseInt(limit?.toString()) || 10,
+      where: { ...whereObject, ...publishedStatus },
     });
     const total = await this.getCount(where);
     return {

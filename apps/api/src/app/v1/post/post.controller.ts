@@ -87,7 +87,7 @@ export class PostController {
   })
   @ApiResponse({ status: 403, description: 'Forbidden, check auth key' })
   async findOne(@Param('slug') slug: string) {
-    return this.postService.findOne(slug);
+    return { data: await this.postService.findOne(slug), meta: { slug } };
   }
 
   @Patch(':id')

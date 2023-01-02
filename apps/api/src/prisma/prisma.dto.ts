@@ -1,5 +1,5 @@
 import { Transform } from 'class-transformer';
-import { IsInt, IsOptional } from 'class-validator';
+import { IsInt, IsOptional, IsString } from 'class-validator';
 
 export class PrismaDTO {
   sort: string;
@@ -12,7 +12,21 @@ export class PrismaDTO {
   @IsInt()
   @IsOptional()
   @Transform(({ value }) => Number.parseInt(value))
+  start: number;
+
+  @IsInt()
+  @IsOptional()
+  @Transform(({ value }) => Number.parseInt(value))
   take: number;
+
+  @IsInt()
+  @IsOptional()
+  @Transform(({ value }) => Number.parseInt(value))
+  limit: number;
+
+  @IsString()
+  @IsOptional()
+  published: string;
 
   where: string;
 }

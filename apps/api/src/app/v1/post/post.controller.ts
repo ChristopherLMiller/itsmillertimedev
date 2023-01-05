@@ -92,10 +92,8 @@ export class PostController {
       return post;
     });
 
-    console.log(newData);
-
     return {
-      data,
+      data: newData,
       meta,
     };
   }

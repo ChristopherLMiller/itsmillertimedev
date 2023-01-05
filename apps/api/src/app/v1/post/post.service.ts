@@ -63,8 +63,6 @@ export class PostService {
       publishedStatus = { published: true };
     }
 
-    console.log({ ...whereObject, ...publishedStatus });
-
     // recast orderBy as a string
     const orderBy = {};
     orderBy[sort.slice(0, sort.indexOf(':'))] = sort

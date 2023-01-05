@@ -1,5 +1,6 @@
 import {
   Body,
+  CacheTTL,
   Controller,
   Delete,
   Get,
@@ -41,6 +42,7 @@ export class PostController {
     description: 'Successfully created new post',
   })
   @ApiResponse({ status: 403, description: 'Forbidden, check auth key' })
+  @CacheTTL(60 * 60 * 24) // 1 day
   async create(
     @Body() createPostDto: Post
   ): Promise<DataResponse<Post | Prisma.BatchPayload>> {
@@ -55,10 +57,43 @@ export class PostController {
     description: 'All posts',
   })
   @ApiResponse({ status: 403, description: 'Forbidden, check auth key' })
+  @CacheTTL(60 * 60 * 24)
   async findAll(@Query() query: PrismaDTO): Promise<DataResponse<Post[]>> {
     const { data, meta } = await this.postService.findAll(query);
     return {
       data,
+      meta,
+    };
+  }
+
+  @Get('/minimal')
+  @HttpCode(200)
+  @ApiOperation({ summary: 'Gets all posts' })
+  @ApiResponse({
+    status: 200,
+    description: 'All posts',
+  })
+  @ApiResponse({ status: 403, description: 'Forbidden, check auth key' })
+  async findAllMinimal(
+    @Query() query: PrismaDTO
+  ): Promise<DataResponse<Post[]>> {
+    const { data, meta } = await this.postService.findAll(query);
+
+    const newData = data.map((post) => {
+      // grab out the unnecessary fields and delete before re-adding the post object
+      if (post.featuredImage !== null) {
+        const featuredImage = post.featuredImage;
+        delete featuredImage.base64;
+        delete featuredImage.exif;
+        delete featuredImage.thumbnail;
+        post.featuredImage = featuredImage;
+      }
+
+      return post;
+    });
+
+    return {
+      data: newData,
       meta,
     };
   }

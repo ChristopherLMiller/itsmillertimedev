@@ -21,6 +21,9 @@ export class PostCountAggregate {
     summary!: number;
 
     @Field(() => Int, {nullable:false})
+    wordCount!: number;
+
+    @Field(() => Int, {nullable:false})
     published!: number;
 
     @Field(() => Int, {nullable:false})

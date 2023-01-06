@@ -20,6 +20,9 @@ export class PostMinAggregate {
     @Field(() => String, {nullable:true})
     summary?: string;
 
+    @Field(() => Int, {nullable:true})
+    wordCount?: number;
+
     @Field(() => Boolean, {nullable:true})
     published?: boolean;
 

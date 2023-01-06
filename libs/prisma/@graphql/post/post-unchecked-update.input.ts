@@ -26,6 +26,9 @@ export class PostUncheckedUpdateInput {
     @Field(() => StringFieldUpdateOperationsInput, {nullable:true})
     summary?: StringFieldUpdateOperationsInput;
 
+    @Field(() => IntFieldUpdateOperationsInput, {nullable:true})
+    wordCount?: IntFieldUpdateOperationsInput;
+
     @Field(() => BoolFieldUpdateOperationsInput, {nullable:true})
     published?: BoolFieldUpdateOperationsInput;
 

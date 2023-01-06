@@ -20,6 +20,9 @@ export class PostMaxAggregateInput {
     summary?: true;
 
     @Field(() => Boolean, {nullable:true})
+    wordCount?: true;
+
+    @Field(() => Boolean, {nullable:true})
     published?: true;
 
     @Field(() => Boolean, {nullable:true})

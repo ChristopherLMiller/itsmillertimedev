@@ -6,6 +6,7 @@
     "app": "apps/app",
     "app-e2e": "apps/app-e2e",
     "data": "libs/data",
-    "prisma": "libs/prisma"
+    "prisma": "libs/prisma",
+    "utility-functions": "libs/utility-functions"
   }
 }

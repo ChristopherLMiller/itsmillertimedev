@@ -6,6 +6,7 @@ export enum PostScalarFieldEnum {
     metaTitle = "metaTitle",
     slug = "slug",
     summary = "summary",
+    wordCount = "wordCount",
     published = "published",
     createdAt = "createdAt",
     updatedAt = "updatedAt",

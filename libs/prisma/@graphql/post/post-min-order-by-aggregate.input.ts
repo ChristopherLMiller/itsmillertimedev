@@ -21,6 +21,9 @@ export class PostMinOrderByAggregateInput {
     summary?: keyof typeof SortOrder;
 
     @Field(() => SortOrder, {nullable:true})
+    wordCount?: keyof typeof SortOrder;
+
+    @Field(() => SortOrder, {nullable:true})
     published?: keyof typeof SortOrder;
 
     @Field(() => SortOrder, {nullable:true})

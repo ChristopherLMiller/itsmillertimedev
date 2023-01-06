@@ -25,6 +25,9 @@ export class PostGroupBy {
     @Field(() => String, {nullable:false})
     summary!: string;
 
+    @Field(() => Int, {nullable:false})
+    wordCount!: number;
+
     @Field(() => Boolean, {nullable:false})
     published!: boolean;
 

@@ -10,6 +10,7 @@ title: string ;
 metaTitle: string ;
 slug: string ;
 summary: string ;
+wordCount: number ;
 published: boolean ;
 createdAt: Date ;
 updatedAt: Date ;

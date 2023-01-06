@@ -9,5 +9,8 @@ export class PostSumOrderByAggregateInput {
     id?: keyof typeof SortOrder;
 
     @Field(() => SortOrder, {nullable:true})
+    wordCount?: keyof typeof SortOrder;
+
+    @Field(() => SortOrder, {nullable:true})
     postCategoryId?: keyof typeof SortOrder;
 }

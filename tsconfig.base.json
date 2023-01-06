@@ -16,7 +16,10 @@
     "baseUrl": ".",
     "paths": {
       "@itsmillertimedev/data": ["libs/data/src/index.ts"],
-      "@itsmillertimedev/prisma": ["libs/prisma/src/index.ts"]
+      "@itsmillertimedev/prisma": ["libs/prisma/src/index.ts"],
+      "@itsmillertimedev/utility-functions": [
+        "libs/utility-functions/src/index.ts"
+      ]
     }
   },
   "exclude": ["node_modules", "tmp"]

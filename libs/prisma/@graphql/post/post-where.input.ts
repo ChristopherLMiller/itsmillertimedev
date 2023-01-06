@@ -37,6 +37,9 @@ export class PostWhereInput {
     @Field(() => StringFilter, {nullable:true})
     summary?: StringFilter;
 
+    @Field(() => IntFilter, {nullable:true})
+    wordCount?: IntFilter;
+
     @Field(() => BoolFilter, {nullable:true})
     published?: BoolFilter;
 

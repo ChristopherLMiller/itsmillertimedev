@@ -21,6 +21,9 @@ export class PostUncheckedCreateWithoutFeaturedImageInput {
     @Field(() => String, {nullable:false})
     summary!: string;
 
+    @Field(() => Int, {nullable:true})
+    wordCount?: number;
+
     @Field(() => Boolean, {nullable:false})
     published!: boolean;
 

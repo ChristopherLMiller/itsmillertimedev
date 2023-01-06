@@ -8,5 +8,8 @@ export class PostSumAggregateInput {
     id?: true;
 
     @Field(() => Boolean, {nullable:true})
+    wordCount?: true;
+
+    @Field(() => Boolean, {nullable:true})
     postCategoryId?: true;
 }

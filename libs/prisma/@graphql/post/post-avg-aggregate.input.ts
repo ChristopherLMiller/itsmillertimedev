@@ -8,5 +8,8 @@ export class PostAvgAggregateInput {
     id?: true;
 
     @Field(() => Boolean, {nullable:true})
+    wordCount?: true;
+
+    @Field(() => Boolean, {nullable:true})
     postCategoryId?: true;
 }

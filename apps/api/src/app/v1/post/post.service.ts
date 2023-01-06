@@ -1,3 +1,4 @@
+import { countWords } from '@itsmillertimedev/utility-functions';
 import { BadRequestException, Injectable } from '@nestjs/common';
 import { Post, Prisma } from '@prisma/client';
 import { PrismaDTO } from 'apps/api/src/prisma/prisma.dto';
@@ -16,9 +17,10 @@ export class PostService {
       'post'
     );
     const metaTitle = newData.metaTitle || newData.title;
+    const wordCount = countWords(newData.content);
     try {
       const data = await this.prisma.post.create({
-        data: { ...newData, slug, metaTitle },
+        data: { ...newData, slug, metaTitle, wordCount },
       });
       return data;
     } catch (error) {

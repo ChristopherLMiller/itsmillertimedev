@@ -9,5 +9,8 @@ export class PostAvgAggregate {
     id?: number;
 
     @Field(() => Float, {nullable:true})
+    wordCount?: number;
+
+    @Field(() => Float, {nullable:true})
     postCategoryId?: number;
 }

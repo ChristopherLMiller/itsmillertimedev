@@ -42,7 +42,6 @@ export class PostController {
     description: 'Successfully created new post',
   })
   @ApiResponse({ status: 403, description: 'Forbidden, check auth key' })
-  @CacheTTL(60 * 60 * 24) // 1 day
   async create(
     @Body() createPostDto: Post
   ): Promise<DataResponse<Post | Prisma.BatchPayload>> {
@@ -74,6 +73,7 @@ export class PostController {
     description: 'All posts',
   })
   @ApiResponse({ status: 403, description: 'Forbidden, check auth key' })
+  @CacheTTL(60 * 60 * 24) // 1 day
   async findAllMinimal(
     @Query() query: PrismaDTO
   ): Promise<DataResponse<Post[]>> {
@@ -88,6 +88,7 @@ export class PostController {
         delete featuredImage.thumbnail;
         post.featuredImage = featuredImage;
       }
+      delete post.content;
 
       return post;
     });

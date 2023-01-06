@@ -1,5 +1,6 @@
 import { Field } from '@nestjs/graphql';
 import { InputType } from '@nestjs/graphql';
+import { Int } from '@nestjs/graphql';
 import { PostCategoryCreateNestedOneWithoutPostsInput } from '../post-category/post-category-create-nested-one-without-posts.input';
 import { PostTagCreateNestedManyWithoutPostsInput } from '../post-tag/post-tag-create-nested-many-without-posts.input';
 
@@ -17,6 +18,9 @@ export class PostCreateWithoutFeaturedImageInput {
 
     @Field(() => String, {nullable:false})
     summary!: string;
+
+    @Field(() => Int, {nullable:true})
+    wordCount?: number;
 
     @Field(() => Boolean, {nullable:false})
     published!: boolean;

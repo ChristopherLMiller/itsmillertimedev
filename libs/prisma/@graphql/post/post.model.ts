@@ -25,10 +25,10 @@ export class Post {
     @Field(() => String, {nullable:false})
     summary!: string;
 
-    /**
-     * @IsOptional
-     */
-    @Field(() => Boolean, {nullable:false,description:'@IsOptional'})
+    @Field(() => Int, {nullable:false,defaultValue:0})
+    wordCount!: number;
+
+    @Field(() => Boolean, {nullable:false})
     published!: boolean;
 
     @Field(() => Date, {nullable:false})

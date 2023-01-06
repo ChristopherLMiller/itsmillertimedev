@@ -9,5 +9,8 @@ export class PostSumAggregate {
     id?: number;
 
     @Field(() => Int, {nullable:true})
+    wordCount?: number;
+
+    @Field(() => Int, {nullable:true})
     postCategoryId?: number;
 }

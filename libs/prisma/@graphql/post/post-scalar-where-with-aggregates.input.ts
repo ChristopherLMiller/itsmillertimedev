@@ -34,6 +34,9 @@ export class PostScalarWhereWithAggregatesInput {
     @Field(() => StringWithAggregatesFilter, {nullable:true})
     summary?: StringWithAggregatesFilter;
 
+    @Field(() => IntWithAggregatesFilter, {nullable:true})
+    wordCount?: IntWithAggregatesFilter;
+
     @Field(() => BoolWithAggregatesFilter, {nullable:true})
     published?: BoolWithAggregatesFilter;
 

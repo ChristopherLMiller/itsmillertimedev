@@ -6,5 +6,6 @@ import { PostTagService } from './post-tag.service';
 @Module({
   controllers: [PostTagController],
   providers: [PostTagService, PrismaService],
+  imports: [],
 })
 export class PostTagModule {}

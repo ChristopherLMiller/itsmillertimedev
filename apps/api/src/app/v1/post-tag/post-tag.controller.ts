@@ -1,5 +1,6 @@
 import {
   Body,
+  CacheTTL,
   Controller,
   Delete,
   Get,
@@ -28,6 +29,7 @@ import { PostTagService } from './post-tag.service';
 @UseGuards(BasicAuthGuard)
 @ApiSecurity('x-api-key')
 @UseInterceptors(ResponseTransformInterceptor)
+@CacheTTL(86400)
 export class PostTagController {
   constructor(private readonly postTagService: PostTagService) {}
 
@@ -49,6 +51,7 @@ export class PostTagController {
   }
 
   @Get('/')
+  @CacheTTL(86400)
   @HttpCode(200)
   @ApiOperation({ summary: 'Fetches all post tags' })
   @ApiResponse({

@@ -1,8 +1,7 @@
 import { CacheInterceptor, CacheModule, Module } from '@nestjs/common';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { APP_INTERCEPTOR } from '@nestjs/core';
-import * as redisStore from 'cache-manager-redis-store';
-import type { ClientOpts } from 'redis';
+import { redisStore } from 'cache-manager-redis-yet';
 import { PrismaService } from '../../prisma/prisma.service';
 import { ClockifyModule } from './clockify/clockify.module';
 import { DiscordModule } from './discord/discord.module';
@@ -24,16 +23,21 @@ import { WebhooksModule } from './webhooks/webhooks.module';
       isGlobal: true,
       envFilePath: '.env',
     }),
-    CacheModule.registerAsync<ClientOpts>({
+    CacheModule.register({
+      isGlobal: true,
       imports: [ConfigModule],
       inject: [ConfigService],
-      useFactory: async (configService: ConfigService) => ({
-        store: redisStore,
-        host: configService.get('REDIS_HOST'),
-        port: configService.get('REDIS_PORT'),
-        ttl: parseInt(configService.get('CACHE_TTL')) || 5,
-        max: parseInt(configService.get('MAX_ITEM_IN_CACHE')) || 100,
-        no_ready_check: false,
+      useFactory: async (config: ConfigService) => ({
+        store: await redisStore({
+          socket: {
+            host: config.get('REDIS_HOST'),
+            port: +config.get('REDIS_PORT'),
+            //tls: true,
+          },
+          //password: config.get('REDIS_PASSWORD'),
+          //username: config.get('REDIS_USERNAME'),
+          ttl: config.get('CACHE_TTL'),
+        }),
       }),
     }),
     GithubModule,

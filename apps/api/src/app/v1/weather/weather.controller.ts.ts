@@ -5,7 +5,6 @@ import {
   MinutelyForecast,
 } from '@itsmillertimedev/data';
 import {
-  CacheTTL,
   Controller,
   Get,
   Query,
@@ -13,7 +12,7 @@ import {
   UseInterceptors,
 } from '@nestjs/common';
 import { ApiResponse, ApiSecurity, ApiTags } from '@nestjs/swagger';
-import { DataResponse } from '../../../../DataResponse';
+import { DataResponse } from '../../../common/DataResponse';
 import { BasicAuthGuard } from '../../../guards/basicAuth.guard';
 import { ResponseTransformInterceptor } from '../../../interceptors/responseTransform.interceptor';
 import { WeatherService } from './weather.service';
@@ -23,12 +22,10 @@ import { WeatherService } from './weather.service';
 @ApiSecurity('x-api-key')
 @UseGuards(BasicAuthGuard)
 @UseInterceptors(ResponseTransformInterceptor)
-@CacheTTL(5000)
 export class WeatherController {
   constructor(private weatherService: WeatherService) {}
 
   @Get('current')
-  @CacheTTL(60)
   @ApiResponse({ status: 200, description: 'Success' })
   @ApiResponse({
     status: 400,
@@ -47,7 +44,6 @@ export class WeatherController {
   }
 
   @Get('minutely')
-  @CacheTTL(60)
   @ApiResponse({ status: 200, description: 'Success' })
   @ApiResponse({
     status: 400,
@@ -66,7 +62,6 @@ export class WeatherController {
   }
 
   @Get('hourly')
-  @CacheTTL(60 * 60)
   @ApiResponse({ status: 200, description: 'Success' })
   @ApiResponse({
     status: 400,
@@ -85,7 +80,6 @@ export class WeatherController {
   }
 
   @Get('daily')
-  @CacheTTL(60 * 60)
   @ApiResponse({ status: 200, description: 'Success' })
   @ApiResponse({
     status: 400,
@@ -104,7 +98,6 @@ export class WeatherController {
   }
 
   @Get('alerts')
-  @CacheTTL(60)
   @ApiResponse({ status: 200, description: 'Success' })
   @ApiResponse({
     status: 400,

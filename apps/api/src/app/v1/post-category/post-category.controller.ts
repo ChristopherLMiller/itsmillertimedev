@@ -18,7 +18,7 @@ import {
   ApiTags,
 } from '@nestjs/swagger';
 import { PostCategory, Prisma } from '@prisma/client';
-import { DataResponse } from '../../../../DataResponse';
+import { DataResponse } from '../../../common/DataResponse';
 import { BasicAuthGuard } from '../../../guards/basicAuth.guard';
 import { ResponseTransformInterceptor } from '../../../interceptors/responseTransform.interceptor';
 import { PostCategoryService } from './post-category.service';

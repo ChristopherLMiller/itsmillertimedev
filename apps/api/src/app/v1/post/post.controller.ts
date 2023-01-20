@@ -1,6 +1,5 @@
 import {
   Body,
-  CacheTTL,
   Controller,
   Delete,
   Get,
@@ -20,7 +19,7 @@ import {
   ApiTags,
 } from '@nestjs/swagger';
 import { Post, Prisma } from '@prisma/client';
-import { DataResponse } from '../../../../DataResponse';
+import { DataResponse } from '../../../common/DataResponse';
 import { BasicAuthGuard } from '../../../guards/basicAuth.guard';
 import { ResponseTransformInterceptor } from '../../../interceptors/responseTransform.interceptor';
 import { PrismaDTO } from '../../../prisma/prisma.dto';
@@ -56,7 +55,6 @@ export class PostController {
     description: 'All posts',
   })
   @ApiResponse({ status: 403, description: 'Forbidden, check auth key' })
-  @CacheTTL(60 * 60 * 24)
   async findAll(@Query() query: PrismaDTO): Promise<DataResponse<Post[]>> {
     const { data, meta } = await this.postService.findAll(query);
     return {
@@ -73,7 +71,6 @@ export class PostController {
     description: 'All posts',
   })
   @ApiResponse({ status: 403, description: 'Forbidden, check auth key' })
-  @CacheTTL(60 * 60 * 24) // 1 day
   async findAllMinimal(
     @Query() query: PrismaDTO
   ): Promise<DataResponse<Post[]>> {

@@ -1,5 +1,4 @@
 import {
-  CacheTTL,
   Controller,
   Delete,
   Get,
@@ -20,7 +19,7 @@ import {
   ApiTags,
 } from '@nestjs/swagger';
 import { Image } from '@prisma/client';
-import { DataResponse } from '../../../../DataResponse';
+import { DataResponse } from '../../../common/DataResponse';
 import { IgnoreCloudinary } from '../../../decorators/IgnoreCloudinary.decorator';
 import { BasicAuthGuard } from '../../../guards/basicAuth.guard';
 import { CloudinaryTransformInterceptor } from '../../../interceptors/cloudinaryTransform.interceptor';
@@ -32,7 +31,6 @@ import { ImageService } from './image.service';
 @ApiSecurity('x-api-key')
 @UseGuards(BasicAuthGuard)
 @UseInterceptors(ResponseTransformInterceptor, CloudinaryTransformInterceptor)
-@CacheTTL(86400)
 export class ImageController {
   constructor(private imageService: ImageService) {}
 

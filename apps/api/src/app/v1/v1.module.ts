@@ -17,29 +17,45 @@ import { PostModule } from './post/post.module';
 import { V1Controller } from './v1.controller';
 import { WeatherModule } from './weather/weather.module';
 import { WebhooksModule } from './webhooks/webhooks.module';
+
 @Module({
   imports: [
     ConfigModule.forRoot({
       isGlobal: true,
       envFilePath: '.env',
     }),
-    CacheModule.register({
+    CacheModule.registerAsync({
       isGlobal: true,
       imports: [ConfigModule],
       inject: [ConfigService],
-      useFactory: async (config: ConfigService) => ({
-        store: await redisStore({
-          socket: {
-            host: config.get('REDIS_HOST'),
-            port: +config.get('REDIS_PORT'),
-            //tls: true,
-          },
-          //password: config.get('REDIS_PASSWORD'),
-          //username: config.get('REDIS_USERNAME'),
-          ttl: config.get('CACHE_TTL'),
-        }),
-      }),
+      useFactory: async (config: ConfigService) => {
+        if (config.get('environment') === 'production') {
+          return {
+            store: await redisStore({
+              socket: {
+                host: config.get('REDIS_HOST'),
+                port: +config.get('REDIS_PORT'),
+              },
+              ttl: config.get('CACHE_TTL'),
+            }),
+          };
+        } else {
+          return {
+            store: await redisStore({
+              socket: {
+                host: config.get('REDIS_HOST'),
+                port: +config.get('REDIS_PORT'),
+                tls: true,
+              },
+              password: config.get('REDIS_PASSWORD'),
+              username: config.get('REDIS_USERNAME'),
+              ttl: config.get('CACHE_TTL'),
+            }),
+          };
+        }
+      },
     }),
+
     GithubModule,
     ClockifyModule,
     ImageModule,

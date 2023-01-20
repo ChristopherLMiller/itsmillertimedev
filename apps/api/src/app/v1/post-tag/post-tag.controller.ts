@@ -1,6 +1,5 @@
 import {
   Body,
-  CacheTTL,
   Controller,
   Delete,
   Get,
@@ -19,7 +18,7 @@ import {
   ApiTags,
 } from '@nestjs/swagger';
 import { PostTag, Prisma } from '@prisma/client';
-import { DataResponse } from '../../../../DataResponse';
+import { DataResponse } from '../../../common/DataResponse';
 import { BasicAuthGuard } from '../../../guards/basicAuth.guard';
 import { ResponseTransformInterceptor } from '../../../interceptors/responseTransform.interceptor';
 import { PostTagService } from './post-tag.service';
@@ -29,7 +28,6 @@ import { PostTagService } from './post-tag.service';
 @UseGuards(BasicAuthGuard)
 @ApiSecurity('x-api-key')
 @UseInterceptors(ResponseTransformInterceptor)
-@CacheTTL(86400)
 export class PostTagController {
   constructor(private readonly postTagService: PostTagService) {}
 
@@ -51,7 +49,6 @@ export class PostTagController {
   }
 
   @Get('/')
-  @CacheTTL(86400)
   @HttpCode(200)
   @ApiOperation({ summary: 'Fetches all post tags' })
   @ApiResponse({

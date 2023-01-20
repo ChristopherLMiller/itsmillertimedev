@@ -1,5 +1,5 @@
-import { CacheTTL, Controller, Get, Param } from '@nestjs/common';
-import { DataResponse } from '../../../../DataResponse';
+import { Controller, Get, Param } from '@nestjs/common';
+import { DataResponse } from '../../../common/DataResponse';
 import { LastFMService } from './lastfm.service';
 
 @Controller({ version: '1', path: 'lastfm' })
@@ -16,7 +16,6 @@ export class LastFMController {
     return await this.lastfm.getUser(params.username);
   }
 
-  @CacheTTL(5)
   @Get('playing/:username')
   async getCurrentlyPlaying(@Param() params): Promise<DataResponse<any>> {
     return await this.lastfm.getCurrentlyPlaying(params.username);

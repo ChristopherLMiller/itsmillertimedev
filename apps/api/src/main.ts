@@ -1,22 +1,54 @@
-import { Logger, ValidationPipe, VersioningType } from '@nestjs/common';
+import { ValidationPipe, VersioningType } from '@nestjs/common';
 import { NestFactory } from '@nestjs/core';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 import * as Sentry from '@sentry/node';
+import {
+  utilities as nestWinstonModuleUtilities,
+  WinstonModule,
+} from 'nest-winston';
+import * as winston from 'winston';
+import { createLogger } from 'winston';
 import { V1Module } from './app/v1/v1.module';
 import { SentryInterceptor } from './interceptors/sentry.interceptor';
-import { logger } from './middleware/logging.middleware';
-
 // eslint-disable-next-line @typescript-eslint/no-var-requires
 const packageData = require('../../../package.json');
 
 async function bootstrap() {
-  const app = await NestFactory.create(V1Module, {
-    bufferLogs: true,
+  // Create an instance of Winston
+  const winstonInstance = createLogger({
+    transports: [
+      new winston.transports.Console({
+        format: winston.format.combine(
+          winston.format.timestamp(),
+          winston.format.ms(),
+          winston.format.colorize(),
+          nestWinstonModuleUtilities.format.nestLike('API', {
+            colors: true,
+            prettyPrint: true,
+          })
+        ),
+      }),
+      new winston.transports.Http({
+        level: 'warn',
+        format: winston.format.json(),
+      }),
+    ],
   });
 
-  // Enable versioning
-  app.enableVersioning({
-    type: VersioningType.URI,
+  // Create the Nest App
+  const app = await NestFactory.create(V1Module, {
+    bufferLogs: true,
+    logger: WinstonModule.createLogger({ instance: winstonInstance }),
+  });
+
+  // Create Sentry
+  Sentry.init({
+    dsn: process.env.SENTRY_DSN,
+    release: packageData.version,
+    environment: process.env.NODE_ENV,
+    ignoreErrors: [
+      'UnsupportedMediaTypeException: No Exif segment found in the given image.',
+    ],
   });
 
   // Setup Swagger
@@ -29,31 +61,27 @@ async function bootstrap() {
   const swaggerDocument = SwaggerModule.createDocument(app, swaggerConfig);
   SwaggerModule.setup('docs', app, swaggerDocument);
 
+  // Enable versioning
+  app.enableVersioning({
+    type: VersioningType.URI,
+  });
+
   // Use CORS
   app.enableCors({
     origin: '*',
   });
 
-  // And finally, lets get Sentry going
-  Sentry.init({
-    dsn: process.env.SENTRY_DSN,
-    release: packageData.version,
-    environment: process.env.NODE_ENV,
-    ignoreErrors: [
-      'UnsupportedMediaTypeException: No Exif segment found in the given image.',
-    ],
-  });
-
   //Register global pieces
   app.useGlobalInterceptors(new SentryInterceptor());
   app.useGlobalPipes(new ValidationPipe());
-  app.use(logger);
   app.setGlobalPrefix('api');
 
   // Start the application
   const port = process.env.PORT || 3333;
   await app.listen(port, '0.0.0.0');
-  Logger.log(`🚀 Application is running on: http://localhost:${port}`);
+  winstonInstance.info(
+    `🚀 Application is running on: http://localhost:${port}`
+  );
 }
 
 bootstrap();

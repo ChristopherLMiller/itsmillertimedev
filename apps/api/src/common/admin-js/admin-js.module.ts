@@ -133,7 +133,7 @@ const authenticate = async (email: string, password: string) => {
               },
             ],
           },
-          /*auth: {
+          auth: {
             authenticate,
             cookieName: 'adminjs',
             cookiePassword: 'secret',
@@ -142,7 +142,7 @@ const authenticate = async (email: string, password: string) => {
             resave: true,
             saveUninitialized: true,
             secret: 'secret',
-          },*/
+          },
         };
       },
     }),

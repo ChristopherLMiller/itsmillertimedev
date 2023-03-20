@@ -8,8 +8,9 @@ import {
 } from 'nest-winston';
 import * as winston from 'winston';
 import { createLogger } from 'winston';
-import { V1Module } from './app/v1/v1.module';
-import { SentryInterceptor } from './interceptors/sentry.interceptor';
+import { config } from '../config';
+import { GlobalModule } from './app/global.module';
+import { SentryInterceptor } from './common/interceptors/sentry.interceptor';
 // eslint-disable-next-line @typescript-eslint/no-var-requires
 const packageData = require('../../../package.json');
 
@@ -18,6 +19,7 @@ async function bootstrap() {
   const winstonInstance = createLogger({
     transports: [
       new winston.transports.Console({
+        level: 'debug',
         format: winston.format.combine(
           winston.format.timestamp(),
           winston.format.ms(),
@@ -36,16 +38,16 @@ async function bootstrap() {
   });
 
   // Create the Nest App
-  const app = await NestFactory.create(V1Module, {
+  const app = await NestFactory.create(GlobalModule, {
     bufferLogs: true,
     logger: WinstonModule.createLogger({ instance: winstonInstance }),
   });
 
   // Create Sentry
   Sentry.init({
-    dsn: process.env.SENTRY_DSN,
+    dsn: config.sentry.dsn,
     release: packageData.version,
-    environment: process.env.NODE_ENV,
+    environment: config.general.environment,
     ignoreErrors: [
       'UnsupportedMediaTypeException: No Exif segment found in the given image.',
     ],
@@ -68,7 +70,7 @@ async function bootstrap() {
 
   // Use CORS
   app.enableCors({
-    origin: '*',
+    origin: config.general.allowedOrigins,
   });
 
   //Register global pieces
@@ -77,10 +79,9 @@ async function bootstrap() {
   app.setGlobalPrefix('api');
 
   // Start the application
-  const port = process.env.PORT || 3333;
-  await app.listen(port, '0.0.0.0');
+  await app.listen(config.general.port, '0.0.0.0');
   winstonInstance.info(
-    `🚀 Application is running on: http://localhost:${port}`
+    `🚀 Application is running on: http://localhost:${config.general.port}`
   );
 }
 

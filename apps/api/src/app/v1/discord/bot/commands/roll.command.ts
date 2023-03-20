@@ -1,14 +1,8 @@
-import { TransformPipe } from '@discord-nestjs/common';
-import {
-  Command,
-  DiscordTransformedCommand,
-  Param,
-  Payload,
-  TransformedCommandExecutionContext,
-  UsePipes,
-} from '@discord-nestjs/core';
+import { SlashCommandPipe } from '@discord-nestjs/common';
+import { Command, EventParams, Handler, IA, Param } from '@discord-nestjs/core';
 import { Injectable } from '@nestjs/common';
 import { Transform } from 'class-transformer';
+import { ClientEvents, InteractionReplyOptions } from 'discord.js';
 
 export class RollDto {
   @Transform(({ value }) => value.toLowerCase())
@@ -19,24 +13,27 @@ export class RollDto {
     required: true,
   })
   dice: string;
+  @Param({
+    name: 'hidden',
+    description: 'Hide the dice roll from others on the server',
+  })
+  hidden: boolean;
 }
 
 @Injectable()
 @Command({
   name: 'roll',
-  description: 'Rolls some dice',
+  description: 'Roll specified amount of dice',
 })
-@UsePipes(TransformPipe)
-export class RollCommand implements DiscordTransformedCommand<RollDto> {
-  async handler(
-    @Payload() dto: RollDto,
-    { interaction }: TransformedCommandExecutionContext
-  ): Promise<void> {
-    const { dice } = dto;
-    const username = interaction.member.user.username;
-
-    // Lets let the channel know someone rolled some dice
-    await interaction.channel.send(`${username} has rolled some dice`);
+export class RollCommand {
+  @Handler()
+  async onRollCommand(
+    @IA(SlashCommandPipe) dto: RollDto,
+    @EventParams() interaction: ClientEvents['interactionCreate']
+  ): Promise<InteractionReplyOptions> {
+    const { dice, hidden } = dto;
+    const event = interaction[0];
+    const username = event?.member?.user?.username;
 
     // Split and form an array of dice, can be singular or multiple
     const diceArray = dice.includes(',') ? dice.split(',') : [dice];
@@ -55,16 +52,22 @@ export class RollCommand implements DiscordTransformedCommand<RollDto> {
           dieRolls[index - 1] = result;
         }
 
-        // spit this out to the channel
-        await interaction.channel.send(
-          `Roll for ${die}: ${dieRolls.join(', ')}`
-        );
+        // Return the die rolls
+        return {
+          content: `Roll for ${die}: ${dieRolls.join(', ')}`,
+          ephemeral: hidden,
+        };
       } else {
         // invalid dice, warn user
-        await interaction.channel.send(
-          `The roll of ${die} was invalid, format is (x)d(y), where (x) is the number of die and (y) is how many sides it has`
-        );
+        return {
+          content: `The roll of ${die} was invalid, format is (x)d(y), where (x) is the number of die and (y) is how many sides it has`,
+          ephemeral: hidden,
+        };
       }
     });
+
+    return {
+      content: `${username} has rolled some dice`,
+    };
   }
 }

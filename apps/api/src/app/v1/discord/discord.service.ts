@@ -2,8 +2,9 @@ import { HttpService } from '@nestjs/axios';
 import { Injectable } from '@nestjs/common';
 import { DiscordUserSetting } from '@prisma/client';
 import { catchError, firstValueFrom } from 'rxjs';
-import { PrismaService } from '../../../prisma/prisma.service';
-import { handleAxiosError } from '../../handleAxiosError';
+import { axiosErrorHandler } from '../../../common/handlers/axiosErrorHandler';
+
+import { PrismaService } from '../../../common/prisma/prisma.service';
 import { DiscordChannels } from './discord.types';
 
 @Injectable()
@@ -16,6 +17,7 @@ export class DiscordService {
   async sendMessage(message: string, channel: DiscordChannels) {
     const response = this.httpService
       .post(
+        // TODO Refactor this out for the process
         process.env[channel],
         JSON.stringify({
           username: 'ItsMillerTime',
@@ -30,7 +32,7 @@ export class DiscordService {
           },
         }
       )
-      .pipe(catchError(handleAxiosError));
+      .pipe(catchError(axiosErrorHandler));
 
     const { data } = await firstValueFrom(response);
     return data;

@@ -1,5 +1,6 @@
+import { DataResponse } from '@itsmillertimedev/data';
 import { Controller, Get, Param } from '@nestjs/common';
-import { DataResponse } from '../../../common/DataResponse';
+
 import { LastFMService } from './lastfm.service';
 
 @Controller({ version: '1', path: 'lastfm' })

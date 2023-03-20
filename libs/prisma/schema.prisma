@@ -1,12 +1,15 @@
+// Generator for prisma client, for use in the nestjs API
 generator client {
   provider = "prisma-client-js"
 }
 
+// Generator for graphql interactions with nestjs API
 generator nestgraphql {
   provider = "prisma-nestjs-graphql"
   output   = "@graphql"
 }
 
+// Nest DTO types
 generator nestjsDto {
   provider                        = "prisma-generator-nestjs-dto"
   output                          = "@nestdto"
@@ -15,6 +18,14 @@ generator nestjsDto {
   reExport                        = "true"
 }
 
+// NestJS Swagger API Docs
+generator prismaClassGenerator {
+  provider = "prisma-class-generator"
+  output   = "@nestjsclasses"
+  dryRun   = false
+}
+
+// The connection to the database itself
 datasource db {
   provider     = "postgresql"
   url          = env("DATABASE_URL")

@@ -1,3 +1,4 @@
+import { DataResponse } from '@itsmillertimedev/data';
 import {
   Controller,
   Delete,
@@ -19,11 +20,10 @@ import {
   ApiTags,
 } from '@nestjs/swagger';
 import { Image } from '@prisma/client';
-import { DataResponse } from '../../../common/DataResponse';
-import { IgnoreCloudinary } from '../../../decorators/IgnoreCloudinary.decorator';
-import { BasicAuthGuard } from '../../../guards/basicAuth.guard';
-import { CloudinaryTransformInterceptor } from '../../../interceptors/cloudinaryTransform.interceptor';
-import { ResponseTransformInterceptor } from '../../../interceptors/responseTransform.interceptor';
+import { IgnoreCloudinary } from '../../../common/decorators/IgnoreCloudinary.decorator';
+import { BasicAuthGuard } from '../../../common/guards/basicAuth.guard';
+import { CloudinaryTransformInterceptor } from '../../../common/interceptors/cloudinaryTransform.interceptor';
+import { ResponseTransformInterceptor } from '../../../common/interceptors/responseTransform.interceptor';
 import { ImageService } from './image.service';
 
 @Controller({ version: '1', path: 'image' })

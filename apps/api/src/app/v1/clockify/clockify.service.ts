@@ -2,10 +2,10 @@ import { HttpService } from '@nestjs/axios';
 import { BadRequestException, Injectable, Logger } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { catchError, firstValueFrom, Observable } from 'rxjs';
-import { handleAxiosError } from '../../handleAxiosError';
+import { axiosErrorHandler } from '../../../common/handlers/axiosErrorHandler';
+import { PrismaService } from '../../../common/prisma/prisma.service';
 import { DiscordService } from '../discord/discord.service';
 import { DiscordChannels } from '../discord/discord.types';
-import { PrismaService } from './../../../prisma/prisma.service';
 import { ClockifyWorkspaceDto, StartTimerDto } from './dto';
 
 @Injectable()
@@ -42,19 +42,21 @@ export class ClockifyService {
     archived = false,
     pageSize = 25,
     page = 1,
-  }): Observable<any> {
+  }): Promise<any> {
     this.logger.log(archived, pageSize, page, name);
-    return this.http.get(
-      `/workspaces/${this.config.get('CLOCKIFY_WORKSPACE_ID')}/projects`,
-      {
+    const response = this.http
+      .get(`/workspaces/${this.config.get('CLOCKIFY_WORKSPACE_ID')}/projects`, {
         params: {
           archived,
           'page-size': pageSize,
           page,
           name,
         },
-      }
-    );
+      })
+      .pipe(catchError(axiosErrorHandler));
+
+    const data = firstValueFrom(response);
+    return data;
   }
 
   // Function to run when timers are started
@@ -76,7 +78,7 @@ export class ClockifyService {
           projectId,
         }
       )
-      .pipe(catchError(handleAxiosError));
+      .pipe(catchError(axiosErrorHandler));
     return firstValueFrom(response);
   }
 

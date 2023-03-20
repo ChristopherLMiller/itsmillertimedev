@@ -1,7 +1,7 @@
 import { Controller, Post, UseGuards, UseInterceptors } from '@nestjs/common';
 import { ApiTags } from '@nestjs/swagger';
-import { BasicAuthGuard } from '../../../guards/basicAuth.guard';
-import { ResponseTransformInterceptor } from '../../../interceptors/responseTransform.interceptor';
+import { BasicAuthGuard } from '../../../common/guards/basicAuth.guard';
+import { ResponseTransformInterceptor } from '../../../common/interceptors/responseTransform.interceptor';
 
 @Controller({ version: '1', path: 'email' })
 @ApiTags('Email')

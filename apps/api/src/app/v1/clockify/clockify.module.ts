@@ -1,7 +1,7 @@
 import { HttpModule } from '@nestjs/axios';
 import { Module } from '@nestjs/common';
 import { ConfigModule, ConfigService } from '@nestjs/config';
-import { PrismaService } from '../../../prisma/prisma.service';
+import { PrismaModule } from '../../../common/prisma/prisma.module';
 import { DiscordService } from '../discord/discord.service';
 import { ClockifyController } from './clockify.controller';
 import { ClockifyService } from './clockify.service';
@@ -19,7 +19,9 @@ import { ClockifyService } from './clockify.service';
         },
       }),
     }),
+    PrismaModule,
   ],
-  providers: [ClockifyService, PrismaService, DiscordService, ConfigService],
+  providers: [ClockifyService, DiscordService, ConfigService],
+  exports: [ClockifyService],
 })
 export class ClockifyModule {}

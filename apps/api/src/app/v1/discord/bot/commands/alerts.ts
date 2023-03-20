@@ -1,7 +1,6 @@
-import { TransformPipe } from '@discord-nestjs/common';
-import { Command, DiscordCommand, UsePipes } from '@discord-nestjs/core';
+import { Command, EventParams, Handler } from '@discord-nestjs/core';
 import { Injectable } from '@nestjs/common';
-import { ContextMenuCommandInteraction } from 'discord.js';
+import { ClientEvents, EmbedBuilder } from 'discord.js';
 import { WeatherService } from '../../../weather/weather.service';
 import { DiscordService } from '../../discord.service';
 
@@ -10,43 +9,65 @@ import { DiscordService } from '../../discord.service';
   name: 'alerts',
   description: 'Active Weather Alerts',
 })
-@UsePipes(TransformPipe)
-export class WeatherAlertsCommand implements DiscordCommand {
+export class WeatherAlertsCommand {
   constructor(
     private discord: DiscordService,
     private weatherService: WeatherService
   ) {}
 
-  async handler(interaction: ContextMenuCommandInteraction): Promise<string> {
+  @Handler()
+  async onAlertsCommand(
+    @EventParams() interaction: ClientEvents['interactionCreate']
+  ): Promise<any> {
+    // extract out the event
+    const event = interaction[0];
     // we need to see if the user is setup in the DB first
-    const userSettings = await this.discord.getUserMeta(interaction.user.id);
+    const userSettings = await this.discord.getUserMeta(event.member.user.id);
 
     // If the user settings aren't found, then just let the user know this
-    if (!userSettings) {
-      return 'You need to setup your weather zone to be able to use this command';
+    if (!userSettings.meta['location']) {
+      return {
+        content:
+          'You need to setup your weather zone to be able to use this command',
+        ephemeral: true,
+      };
     }
 
+    const { gps } = JSON.parse(userSettings.meta['location']);
     const data = await this.weatherService.getAlerts({
-      lat: userSettings.meta['lat'],
-      lon: userSettings.meta['lon'],
+      lat: gps.lat,
+      lon: gps.lng,
     });
 
     // extract out the alerts
-    const alerts = data.data.features;
+    const alerts = data.data.alerts;
+    console.log(alerts);
 
-    if (alerts.length < 1) {
-      interaction.reply({
+    if (!alerts || alerts.length < 1) {
+      return {
         content: 'No active weather alerts found',
         ephemeral: true,
-      });
+      };
     }
 
-    interaction.channel.send(`Active Alerts: ${alerts.length}`);
+    // array of embeds to return
+    const embeds = [];
+
     alerts.forEach((alert) => {
-      const { event, headline, description } = alert.properties;
-      interaction.channel.send({
-        content: `${event}\nWhen: ${headline}\nDescription: ${description}`,
-      });
+      const { event, sender_name, description } = alert;
+      const embed = new EmbedBuilder()
+        .setTitle(`${event} - ${sender_name}`)
+        .addFields({
+          name: 'Description',
+          value: description,
+        });
+
+      embeds.push(embed);
     });
+
+    return {
+      embeds: embeds,
+      ephemeral: true,
+    };
   }
 }

@@ -1,4 +1,4 @@
-import { ClockifyResponse } from '@itsmillertimedev/data';
+import { ClockifyResponse, DataResponse } from '@itsmillertimedev/data';
 import {
   BadRequestException,
   Body,
@@ -11,7 +11,6 @@ import { ConfigService } from '@nestjs/config';
 import { ApiSecurity, ApiTags } from '@nestjs/swagger';
 import { ClockifyTimer } from '@prisma/client';
 import { formatDistanceStrict, parseISO } from 'date-fns';
-import { DataResponse } from '../../../common/DataResponse';
 import { ClockifyService } from '../clockify/clockify.service';
 import { DiscordService } from '../discord/discord.service';
 import { DiscordChannels } from '../discord/discord.types';

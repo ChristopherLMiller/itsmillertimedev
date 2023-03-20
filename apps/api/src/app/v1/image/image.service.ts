@@ -4,7 +4,7 @@ import { ConfigService } from '@nestjs/config';
 import { Image, Prisma } from '@prisma/client';
 import { v2 as cloudinary } from 'cloudinary';
 import { firstValueFrom } from 'rxjs';
-import { PrismaService } from '../../../prisma/prisma.service';
+import { PrismaService } from '../../../common/prisma/prisma.service';
 import streamifier = require('streamifier');
 
 // eslint-disable-next-line @typescript-eslint/no-var-requires

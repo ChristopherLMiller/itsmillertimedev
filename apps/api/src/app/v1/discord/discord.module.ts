@@ -3,7 +3,7 @@ import { HttpModule } from '@nestjs/axios';
 import { Module } from '@nestjs/common';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { GatewayIntentBits } from 'discord.js';
-import { PrismaService } from '../../../prisma/prisma.service';
+import { PrismaModule } from '../../../common/prisma/prisma.module';
 import { BotModule } from './bot/bot.module';
 import { DiscordController } from './discord.controller';
 import { DiscordService } from './discord.service';
@@ -27,9 +27,11 @@ import { DiscordService } from './discord.service';
         },
       }),
     }),
+    PrismaModule,
     BotModule,
     HttpModule,
   ],
-  providers: [DiscordService, PrismaService],
+  providers: [DiscordService],
+  exports: [DiscordService],
 })
 export class DiscordModule {}

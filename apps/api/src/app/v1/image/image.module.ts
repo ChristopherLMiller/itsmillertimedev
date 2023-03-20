@@ -1,13 +1,13 @@
 import { HttpModule } from '@nestjs/axios';
 import { CacheModule, Module } from '@nestjs/common';
-import { PrismaService } from '../../../prisma/prisma.service';
+import { PrismaModule } from '../../../common/prisma/prisma.module';
 import { ImageController } from './image.controller';
 import { ImageService } from './image.service';
 
 @Module({
   controllers: [ImageController],
-  imports: [HttpModule, CacheModule.register()],
-  providers: [ImageService, PrismaService],
+  imports: [HttpModule, CacheModule.register(), PrismaModule],
+  providers: [ImageService],
   exports: [ImageService],
 })
 export class ImageModule {}

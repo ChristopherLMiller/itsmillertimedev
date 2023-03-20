@@ -1,6 +1,7 @@
 import {
   CurrentWeather,
   DailyForecast,
+  DataResponse,
   HourlyForecast,
   MinutelyForecast,
 } from '@itsmillertimedev/data';
@@ -12,9 +13,8 @@ import {
   UseInterceptors,
 } from '@nestjs/common';
 import { ApiResponse, ApiSecurity, ApiTags } from '@nestjs/swagger';
-import { DataResponse } from '../../../common/DataResponse';
-import { BasicAuthGuard } from '../../../guards/basicAuth.guard';
-import { ResponseTransformInterceptor } from '../../../interceptors/responseTransform.interceptor';
+import { BasicAuthGuard } from '../../../common/guards/basicAuth.guard';
+import { ResponseTransformInterceptor } from '../../../common/interceptors/responseTransform.interceptor';
 import { WeatherService } from './weather.service';
 
 @Controller({ version: '1', path: 'weather' })

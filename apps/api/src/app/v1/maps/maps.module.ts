@@ -1,5 +1,5 @@
 import { Module } from '@nestjs/common';
-import { PrismaService } from '../../../prisma/prisma.service';
+import { PrismaService } from '../../../common/prisma/prisma.service';
 import { MapsController } from './maps.controller';
 import { MapsService } from './maps.service';
 
@@ -8,4 +8,4 @@ import { MapsService } from './maps.service';
   imports: [],
   providers: [MapsService, PrismaService],
 })
-export class MapModule {}
+export class MapsModule {}

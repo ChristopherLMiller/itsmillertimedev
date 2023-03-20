@@ -1,6 +1,7 @@
 import { Client, LatLngLiteral } from '@googlemaps/google-maps-services-js';
 import { Injectable } from '@nestjs/common';
 import { Marker } from '@prisma/client';
+import { config } from '../../../../config';
 import { PrismaService } from '../../../common/prisma/prisma.service';
 
 @Injectable()
@@ -23,7 +24,7 @@ export class MapsService {
     const response = await this.gmapsClient.geocode({
       params: {
         address: place,
-        key: 'AIzaSyBPcpxSdek6tPuoGpFq5Vu0j7jpMeoBr0s', //config.google_maps.key,
+        key: config.google_maps.key,
       },
     });
 

@@ -194,6 +194,13 @@ model Image {
   @@index([public_id])
 }
 
+model Session {
+  id        String   @id
+  sid       String   @unique
+  data      String
+  expiresAt DateTime
+}
+
 enum PublicationStatus {
   PUBLISHED
   DRAFT

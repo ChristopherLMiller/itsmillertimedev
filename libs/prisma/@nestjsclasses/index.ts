@@ -11,6 +11,7 @@ import { Post as _Post } from './post';
 import { PostCategory as _PostCategory } from './post_category';
 import { PostTag as _PostTag } from './post_tag';
 import { Image as _Image } from './image';
+import { Session as _Session } from './session';
 
 export namespace PrismaModel {
   export class ClockifyTimer extends _ClockifyTimer {}
@@ -26,6 +27,7 @@ export namespace PrismaModel {
   export class PostCategory extends _PostCategory {}
   export class PostTag extends _PostTag {}
   export class Image extends _Image {}
+  export class Session extends _Session {}
 
   export const extraModels = [
     ClockifyTimer,
@@ -41,5 +43,6 @@ export namespace PrismaModel {
     PostCategory,
     PostTag,
     Image,
+    Session,
   ];
 }

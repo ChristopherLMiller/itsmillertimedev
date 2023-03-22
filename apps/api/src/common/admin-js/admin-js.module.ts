@@ -1,7 +1,9 @@
 import { AdminModule } from '@adminjs/nestjs';
 import * as AdminJSPrisma from '@adminjs/prisma';
 import { Module } from '@nestjs/common';
+import { PrismaClient } from '@prisma/client';
 import { DMMFClass } from '@prisma/client/runtime';
+import { PrismaSessionStore } from '@quixo3/prisma-session-store';
 import AdminJS from 'adminjs';
 import { config } from '../../../config';
 import { PostCategoryAdminSettings } from '../../app/v1/posts/post-category/settings';
@@ -29,7 +31,7 @@ const authenticate = async (email: string, password: string) => {
     AdminModule.createAdminAsync({
       imports: [PrismaModule, PostModule],
       inject: [PrismaService, PostService],
-      useFactory: async (prisma: PrismaService, post: PostService) => {
+      useFactory: async (prisma: PrismaService) => {
         const dmmf = (prisma as any)._baseDmmf as DMMFClass;
 
         const MinecraftNavigation = {
@@ -139,6 +141,11 @@ const authenticate = async (email: string, password: string) => {
             cookiePassword: 'secret',
           },
           sessionOptions: {
+            store: new PrismaSessionStore(new PrismaClient(), {
+              checkPeriod: 2 * 60 * 1000,
+              dbRecordIdIsSessionId: true,
+              dbRecordIdFunction: undefined,
+            }),
             resave: true,
             saveUninitialized: true,
             secret: 'secret',

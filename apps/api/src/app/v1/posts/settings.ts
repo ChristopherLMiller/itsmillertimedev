@@ -1,4 +1,4 @@
 export const PostsNavigation = {
-  name: 'Posts',
+  name: 'Blog',
   icon: 'Blog',
 };

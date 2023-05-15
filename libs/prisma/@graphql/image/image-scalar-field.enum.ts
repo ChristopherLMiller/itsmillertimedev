@@ -1,12 +1,12 @@
 import { registerEnumType } from '@nestjs/graphql';
 
 export enum ImageScalarFieldEnum {
+    id = "id",
     public_id = "public_id",
     version = "version",
     format = "format",
     url = "url",
     secureUrl = "secureUrl",
-    base64 = "base64",
     alt = "alt",
     caption = "caption",
     width = "width",

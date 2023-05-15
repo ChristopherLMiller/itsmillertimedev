@@ -7,6 +7,9 @@ import { PostUncheckedCreateNestedManyWithoutFeaturedImageInput } from '../post/
 @InputType()
 export class ImageUncheckedCreateInput {
 
+    @Field(() => Int, {nullable:true})
+    id?: number;
+
     @Field(() => String, {nullable:false})
     public_id!: string;
 
@@ -21,9 +24,6 @@ export class ImageUncheckedCreateInput {
 
     @Field(() => String, {nullable:true})
     secureUrl?: string;
-
-    @Field(() => String, {nullable:true})
-    base64?: string;
 
     @Field(() => String, {nullable:true})
     alt?: string;

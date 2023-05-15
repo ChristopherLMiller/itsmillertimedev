@@ -6,6 +6,9 @@ import { GraphQLJSON } from 'graphql-type-json';
 @InputType()
 export class ImageCreateWithoutPostInput {
 
+    @Field(() => Int, {nullable:true})
+    id?: number;
+
     @Field(() => String, {nullable:false})
     public_id!: string;
 
@@ -20,9 +23,6 @@ export class ImageCreateWithoutPostInput {
 
     @Field(() => String, {nullable:true})
     secureUrl?: string;
-
-    @Field(() => String, {nullable:true})
-    base64?: string;
 
     @Field(() => String, {nullable:true})
     alt?: string;

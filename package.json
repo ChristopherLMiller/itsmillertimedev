@@ -35,6 +35,7 @@
     "adminjs": "^6.8.6",
     "apollo-server-express": "^3.11.1",
     "axios": "^1.3.3",
+    "cache-manager-memory-store": "^1.1.0",
     "cache-manager-redis-store": "^3.0.1",
     "cache-manager-redis-yet": "^4.1.1",
     "class-transformer": "^0.5.1",

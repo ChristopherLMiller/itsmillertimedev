@@ -9,7 +9,6 @@ export class UpdateImageDto {
 format?: string;
 url?: string;
 secureUrl?: string;
-base64?: string;
 alt?: string;
 caption?: string;
 width?: number;

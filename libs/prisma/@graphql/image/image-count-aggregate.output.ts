@@ -6,6 +6,9 @@ import { Int } from '@nestjs/graphql';
 export class ImageCountAggregate {
 
     @Field(() => Int, {nullable:false})
+    id!: number;
+
+    @Field(() => Int, {nullable:false})
     public_id!: number;
 
     @Field(() => Int, {nullable:false})
@@ -19,9 +22,6 @@ export class ImageCountAggregate {
 
     @Field(() => Int, {nullable:false})
     secureUrl!: number;
-
-    @Field(() => Int, {nullable:false})
-    base64!: number;
 
     @Field(() => Int, {nullable:false})
     alt!: number;

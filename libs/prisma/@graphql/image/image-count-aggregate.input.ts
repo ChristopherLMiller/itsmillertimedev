@@ -5,6 +5,9 @@ import { InputType } from '@nestjs/graphql';
 export class ImageCountAggregateInput {
 
     @Field(() => Boolean, {nullable:true})
+    id?: true;
+
+    @Field(() => Boolean, {nullable:true})
     public_id?: true;
 
     @Field(() => Boolean, {nullable:true})
@@ -18,9 +21,6 @@ export class ImageCountAggregateInput {
 
     @Field(() => Boolean, {nullable:true})
     secureUrl?: true;
-
-    @Field(() => Boolean, {nullable:true})
-    base64?: true;
 
     @Field(() => Boolean, {nullable:true})
     alt?: true;

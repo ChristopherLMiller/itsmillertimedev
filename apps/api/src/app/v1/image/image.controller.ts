@@ -77,35 +77,15 @@ export class ImageController {
     const { public_id } = query;
     // try and get the contents
     try {
+      const data = await this.imageService.getExifData(public_id);
       return {
-        data: { exif: await this.imageService.getExifData(public_id) },
-        meta: { public_id: public_id },
+        data: { exif: data.exif },
+        meta: { public_id: data.public_id, data: data.id },
       };
     } catch (error) {
       // if we are unable to get the EXIF data for whatever reason
       throw new UnsupportedMediaTypeException(error.message);
     }
-  }
-
-  @Get('encoded')
-  @HttpCode(200)
-  @ApiOperation({ summary: 'Base64 encode the provided image' })
-  @ApiQuery({
-    name: 'public_id',
-    description: 'The public_id from cloudinary to encode',
-  })
-  @ApiResponse({ status: 200, description: 'Success' })
-  @ApiResponse({ status: 403, description: 'Forbidden' })
-  async getBase64EncodedVersion(
-    @Query() query
-  ): Promise<DataResponse<Partial<Image>>> {
-    const { public_id } = query;
-    return {
-      data: {
-        base64: await this.imageService.getBase64EncodedVersion(public_id),
-      },
-      meta: { public_id: public_id },
-    };
   }
 
   @Get('thumbnail')

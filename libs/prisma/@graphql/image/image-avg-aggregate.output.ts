@@ -6,6 +6,9 @@ import { Float } from '@nestjs/graphql';
 export class ImageAvgAggregate {
 
     @Field(() => Float, {nullable:true})
+    id?: number;
+
+    @Field(() => Float, {nullable:true})
     version?: number;
 
     @Field(() => Float, {nullable:true})

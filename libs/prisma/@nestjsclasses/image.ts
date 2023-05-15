@@ -2,6 +2,9 @@ import { Post } from './post';
 import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
 
 export class Image {
+  @ApiProperty({ type: Number })
+  id: number;
+
   @ApiProperty({ type: String })
   public_id: string;
 
@@ -16,9 +19,6 @@ export class Image {
 
   @ApiPropertyOptional({ type: String })
   secureUrl?: string;
-
-  @ApiPropertyOptional({ type: String })
-  base64?: string;
 
   @ApiPropertyOptional({ type: String })
   alt?: string;

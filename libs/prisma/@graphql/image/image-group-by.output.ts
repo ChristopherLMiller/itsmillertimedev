@@ -11,6 +11,9 @@ import { ImageMaxAggregate } from './image-max-aggregate.output';
 @ObjectType()
 export class ImageGroupBy {
 
+    @Field(() => Int, {nullable:false})
+    id!: number;
+
     @Field(() => String, {nullable:false})
     public_id!: string;
 
@@ -25,9 +28,6 @@ export class ImageGroupBy {
 
     @Field(() => String, {nullable:true})
     secureUrl?: string;
-
-    @Field(() => String, {nullable:true})
-    base64?: string;
 
     @Field(() => String, {nullable:true})
     alt?: string;

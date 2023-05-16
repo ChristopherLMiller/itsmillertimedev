@@ -11,6 +11,9 @@ import { ImageSumOrderByAggregateInput } from './image-sum-order-by-aggregate.in
 export class ImageOrderByWithAggregationInput {
 
     @Field(() => SortOrder, {nullable:true})
+    id?: keyof typeof SortOrder;
+
+    @Field(() => SortOrder, {nullable:true})
     public_id?: keyof typeof SortOrder;
 
     @Field(() => SortOrder, {nullable:true})
@@ -24,9 +27,6 @@ export class ImageOrderByWithAggregationInput {
 
     @Field(() => SortOrder, {nullable:true})
     secureUrl?: keyof typeof SortOrder;
-
-    @Field(() => SortOrder, {nullable:true})
-    base64?: keyof typeof SortOrder;
 
     @Field(() => SortOrder, {nullable:true})
     alt?: keyof typeof SortOrder;

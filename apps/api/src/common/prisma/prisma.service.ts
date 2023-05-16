@@ -5,6 +5,7 @@ import {
   OnModuleInit,
 } from '@nestjs/common';
 import { Prisma, PrismaClient } from '@prisma/client';
+import { config } from '../../../config';
 
 @Injectable()
 export class PrismaService
@@ -17,13 +18,17 @@ export class PrismaService
     super({ log: [{ emit: 'event', level: 'query' }] });
 
     this.logger.log(`Prisma v${Prisma.prismaVersion.client}`);
-    this.$on('query', (e) => this.logger.debug(`${e.query} ${e.params}`));
   }
 
   async onModuleInit(): Promise<void> {
     this.$on('error', (event) => {
       console.log(event.target);
     });
+
+    // lets log when in dev mode
+    if (config.general.isDev) {
+      this.$on('query', (e) => this.logger.debug(`${e.query} ${e.params}`));
+    }
 
     try {
       await this.$connect();

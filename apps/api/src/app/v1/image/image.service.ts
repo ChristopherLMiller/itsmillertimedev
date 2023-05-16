@@ -33,7 +33,6 @@ export class ImageService {
     } = params;
 
     // generate thumbnails & exif
-    const base64 = await this.createBase64(public_id, width);
     const thumbnail = await this.createBase64(public_id, 100);
     const exif = await this.createExif(public_id);
 
@@ -48,7 +47,6 @@ export class ImageService {
         secureUrl: secure_url,
         width,
         height,
-        base64,
         thumbnail,
         alt: public_id,
         caption: public_id,
@@ -119,40 +117,14 @@ export class ImageService {
       const exif = (await promiseReponse) as Image['exif'];
       return exif;
     } catch (exception) {
-      return {};
+      //TODO: handle bad requests and such here
+      console.log(exception);
+      return undefined;
     }
   }
 
   async getImage(public_id: string): Promise<Image> {
     return this.prisma.image.findUnique({ where: { public_id } });
-  }
-
-  async getBase64EncodedVersion(public_id: string): Promise<Image['base64']> {
-    // Attemp to fetch from the DB first
-    const imageFromDB = await this.prisma.image.findUnique({
-      where: { public_id },
-    });
-
-    // Image was found or not
-    if (imageFromDB?.base64) {
-      return imageFromDB.base64;
-    } else {
-      // Now lets insert that into the DB and return it
-      const result = await this.prisma.image.upsert({
-        where: {
-          public_id,
-        },
-        create: {
-          public_id,
-          base64: await this.createBase64(public_id, 'auto'),
-        },
-        update: {
-          public_id,
-          base64: await this.createBase64(public_id, 'auto'),
-        },
-      });
-      return result.base64;
-    }
   }
 
   async getThumbnail(public_id: string): Promise<Image['thumbnail']> {
@@ -181,7 +153,7 @@ export class ImageService {
     }
   }
 
-  async getExifData(public_id: string): Promise<Image['exif']> {
+  async getExifData(public_id: string): Promise<Image> {
     // See if the data already exists
     const fromDB = await this.prisma.image.findUnique({
       where: { public_id },
@@ -189,7 +161,9 @@ export class ImageService {
 
     // If we have exif data from the DB, exit now with it
     if (fromDB?.exif) {
-      return fromDB.exif;
+      console.log('returning DB exif');
+      console.log(fromDB.exif);
+      return fromDB;
     }
 
     // Fetch the exif data
@@ -201,7 +175,7 @@ export class ImageService {
       create: { public_id, exif },
       update: { public_id, exif },
     });
-    return result.exif;
+    return result;
   }
 
   async uploadImage(file: Express.Multer.File): Promise<any> {

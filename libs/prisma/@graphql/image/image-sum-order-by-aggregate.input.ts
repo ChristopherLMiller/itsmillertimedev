@@ -6,6 +6,9 @@ import { SortOrder } from '../prisma/sort-order.enum';
 export class ImageSumOrderByAggregateInput {
 
     @Field(() => SortOrder, {nullable:true})
+    id?: keyof typeof SortOrder;
+
+    @Field(() => SortOrder, {nullable:true})
     version?: keyof typeof SortOrder;
 
     @Field(() => SortOrder, {nullable:true})

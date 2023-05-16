@@ -1,5 +1,6 @@
 import { Field } from '@nestjs/graphql';
 import { InputType } from '@nestjs/graphql';
+import { IntWithAggregatesFilter } from '../prisma/int-with-aggregates-filter.input';
 import { StringWithAggregatesFilter } from '../prisma/string-with-aggregates-filter.input';
 import { IntNullableWithAggregatesFilter } from '../prisma/int-nullable-with-aggregates-filter.input';
 import { StringNullableWithAggregatesFilter } from '../prisma/string-nullable-with-aggregates-filter.input';
@@ -18,6 +19,9 @@ export class ImageScalarWhereWithAggregatesInput {
     @Field(() => [ImageScalarWhereWithAggregatesInput], {nullable:true})
     NOT?: Array<ImageScalarWhereWithAggregatesInput>;
 
+    @Field(() => IntWithAggregatesFilter, {nullable:true})
+    id?: IntWithAggregatesFilter;
+
     @Field(() => StringWithAggregatesFilter, {nullable:true})
     public_id?: StringWithAggregatesFilter;
 
@@ -32,9 +36,6 @@ export class ImageScalarWhereWithAggregatesInput {
 
     @Field(() => StringNullableWithAggregatesFilter, {nullable:true})
     secureUrl?: StringNullableWithAggregatesFilter;
-
-    @Field(() => StringNullableWithAggregatesFilter, {nullable:true})
-    base64?: StringNullableWithAggregatesFilter;
 
     @Field(() => StringNullableWithAggregatesFilter, {nullable:true})
     alt?: StringNullableWithAggregatesFilter;

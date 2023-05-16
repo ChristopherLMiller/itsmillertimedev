@@ -174,12 +174,12 @@ model PostTag {
 }
 
 model Image {
+  id        Int      @default(autoincrement())
   public_id String   @id @unique
   version   Int?
   format    String?
   url       String?
   secureUrl String?
-  base64    String?
   alt       String?
   caption   String?
   width     Int?
@@ -191,7 +191,7 @@ model Image {
   updatedAt DateTime @updatedAt
   Post      Post[]
 
-  @@index([public_id])
+  @@index([id, public_id])
 }
 
 model Session {

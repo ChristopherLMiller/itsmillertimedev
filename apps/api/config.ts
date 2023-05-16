@@ -1,6 +1,7 @@
 export const config = {
   general: {
     environment: process.env.NODE_ENV,
+    isDev: process.env.NODE_ENV === 'development',
     port: process.env.PORT || 3333,
     allowedOrigins: process.env.ALLOWED_ORIGINS || '*',
   },
@@ -15,9 +16,9 @@ export const config = {
   adminjs: {
     email: process.env.ADMINJS_EMAIL,
     password: process.env.ADMINJS_PASSWORD,
+    secret: process.env.ADMINJS_SECRET,
   },
   caching: {
-    enabled: process.env.CACHING_ENABLED || false,
     redis: {
       host: process.env.REDIS_HOST,
       port: process.env.REDIS_PORT,

@@ -1,5 +1,6 @@
 import { Field } from '@nestjs/graphql';
 import { InputType } from '@nestjs/graphql';
+import { IntFilter } from '../prisma/int-filter.input';
 import { StringFilter } from '../prisma/string-filter.input';
 import { IntNullableFilter } from '../prisma/int-nullable-filter.input';
 import { StringNullableFilter } from '../prisma/string-nullable-filter.input';
@@ -19,6 +20,9 @@ export class ImageWhereInput {
     @Field(() => [ImageWhereInput], {nullable:true})
     NOT?: Array<ImageWhereInput>;
 
+    @Field(() => IntFilter, {nullable:true})
+    id?: IntFilter;
+
     @Field(() => StringFilter, {nullable:true})
     public_id?: StringFilter;
 
@@ -33,9 +37,6 @@ export class ImageWhereInput {
 
     @Field(() => StringNullableFilter, {nullable:true})
     secureUrl?: StringNullableFilter;
-
-    @Field(() => StringNullableFilter, {nullable:true})
-    base64?: StringNullableFilter;
 
     @Field(() => StringNullableFilter, {nullable:true})
     alt?: StringNullableFilter;

@@ -5,6 +5,9 @@ import { Int } from '@nestjs/graphql';
 @ObjectType()
 export class ImageMaxAggregate {
 
+    @Field(() => Int, {nullable:true})
+    id?: number;
+
     @Field(() => String, {nullable:true})
     public_id?: string;
 
@@ -19,9 +22,6 @@ export class ImageMaxAggregate {
 
     @Field(() => String, {nullable:true})
     secureUrl?: string;
-
-    @Field(() => String, {nullable:true})
-    base64?: string;
 
     @Field(() => String, {nullable:true})
     alt?: string;

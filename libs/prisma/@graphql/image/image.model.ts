@@ -1,13 +1,16 @@
 import { Field } from '@nestjs/graphql';
 import { ObjectType } from '@nestjs/graphql';
-import { ID } from '@nestjs/graphql';
 import { Int } from '@nestjs/graphql';
+import { ID } from '@nestjs/graphql';
 import { GraphQLJSON } from 'graphql-type-json';
 import { Post } from '../post/post.model';
 import { ImageCount } from './image-count.output';
 
 @ObjectType()
 export class Image {
+
+    @Field(() => Int, {nullable:false})
+    id!: number;
 
     @Field(() => ID, {nullable:false})
     public_id!: string;
@@ -23,9 +26,6 @@ export class Image {
 
     @Field(() => String, {nullable:true})
     secureUrl!: string | null;
-
-    @Field(() => String, {nullable:true})
-    base64!: string | null;
 
     @Field(() => String, {nullable:true})
     alt!: string | null;

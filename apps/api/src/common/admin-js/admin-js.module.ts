@@ -6,6 +6,20 @@ import { DMMFClass } from '@prisma/client/runtime';
 import { PrismaSessionStore } from '@quixo3/prisma-session-store';
 import AdminJS from 'adminjs';
 import { config } from '../../../config';
+import { ClockifyAdminSettings } from '../../app/v1/clockify/settings';
+import { DiscordAdminSettings } from '../../app/v1/discord/settings';
+import {
+  GalleryAdminSettings,
+  GalleryCategoryAdminSettings,
+  GalleryImageAdminSettings,
+  GalleryTagAdminSettings,
+} from '../../app/v1/gallery/settings';
+import { ImageAdminSettings } from '../../app/v1/image/settings.admin';
+import { MapsAdminSettings } from '../../app/v1/maps/settings';
+import {
+  MinecraftRuleAdminSettings,
+  MinecraftRuleCategoryAdminSettings,
+} from '../../app/v1/minecraft/settings';
 import { PostCategoryAdminSettings } from '../../app/v1/posts/post-category/settings';
 import { PostTagAdminSettings } from '../../app/v1/posts/post-tag/settings';
 import { PostModule } from '../../app/v1/posts/post/post.module';
@@ -34,11 +48,6 @@ const authenticate = async (email: string, password: string) => {
       useFactory: async (prisma: PrismaService) => {
         const dmmf = (prisma as any)._baseDmmf as DMMFClass;
 
-        const MinecraftNavigation = {
-          name: 'Minecraft',
-          icon: 'GameConsole',
-        };
-
         return {
           adminJsOptions: {
             rootPath: '/admin',
@@ -56,89 +65,66 @@ const authenticate = async (email: string, password: string) => {
                 options: PostTagAdminSettings,
               },
               {
-                resource: { model: dmmf.modelMap.Image, client: prisma },
-                options: {
-                  properties: {
-                    base64: {
-                      isVisible: {
-                        edit: false,
-                        show: false,
-                        list: false,
-                        filter: false,
-                      },
-                    },
-                    thumbnail: {
-                      isVisible: {
-                        edit: false,
-                        show: false,
-                        list: false,
-                        filter: false,
-                      },
-                    },
-                  },
-                },
-              },
-              {
                 resource: {
                   model: dmmf.modelMap.ClockifyTimer,
                   client: prisma,
                 },
-                options: {},
+                options: ClockifyAdminSettings,
               },
               {
                 resource: {
                   model: dmmf.modelMap.DiscordUserSetting,
                   client: prisma,
                 },
-                options: {},
+                options: DiscordAdminSettings,
               },
               {
                 resource: { model: dmmf.modelMap.Gallery, client: prisma },
-                options: {},
+                options: GalleryAdminSettings,
               },
               {
                 resource: {
                   model: dmmf.modelMap.GalleryCategory,
                   client: prisma,
                 },
-                options: {},
+                options: GalleryCategoryAdminSettings,
               },
               {
                 resource: { model: dmmf.modelMap.GalleryImage, client: prisma },
-                options: {},
+                options: GalleryImageAdminSettings,
               },
               {
                 resource: { model: dmmf.modelMap.GalleryTag, client: prisma },
-                options: {},
+                options: GalleryTagAdminSettings,
               },
               {
                 resource: { model: dmmf.modelMap.Marker, client: prisma },
-                options: {},
+                options: MapsAdminSettings,
+              },
+              {
+                resource: { model: dmmf.modelMap.Image, client: prisma },
+                options: ImageAdminSettings,
               },
               {
                 resource: {
                   model: dmmf.modelMap.MinecraftRule,
                   client: prisma,
                 },
-                options: {
-                  navigation: MinecraftNavigation,
-                },
+                options: MinecraftRuleAdminSettings,
               },
               {
                 resource: {
                   model: dmmf.modelMap.MinecraftRuleCategory,
                   client: prisma,
                 },
-                options: {
-                  navigation: MinecraftNavigation,
-                },
+                options: MinecraftRuleCategoryAdminSettings,
               },
             ],
           },
           auth: {
             authenticate,
             cookieName: 'adminjs',
-            cookiePassword: 'secret',
+            cookiePassword: config.adminjs.secret,
           },
           sessionOptions: {
             store: new PrismaSessionStore(new PrismaClient(), {
@@ -148,7 +134,7 @@ const authenticate = async (email: string, password: string) => {
             }),
             resave: true,
             saveUninitialized: true,
-            secret: 'secret',
+            secret: config.adminjs.secret,
           },
         };
       },

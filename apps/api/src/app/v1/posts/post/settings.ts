@@ -10,11 +10,10 @@ export const PostAdminSettings = {
     'published',
     'publishedAt',
     'category',
-    'tags',
   ],
   properties: {
     content: {
-      type: 'richtext',
+      type: 'textarea',
     },
   },
 };

@@ -6,6 +6,7 @@ import { NullableIntFieldUpdateOperationsInput } from '../prisma/nullable-int-fi
 import { NullableStringFieldUpdateOperationsInput } from '../prisma/nullable-string-field-update-operations.input';
 import { DateTimeFieldUpdateOperationsInput } from '../prisma/date-time-field-update-operations.input';
 import { GraphQLJSON } from 'graphql-type-json';
+import { PageUncheckedUpdateManyWithoutFeaturedImageNestedInput } from '../page/page-unchecked-update-many-without-featured-image-nested.input';
 
 @InputType()
 export class ImageUncheckedUpdateWithoutPostInput {
@@ -54,4 +55,7 @@ export class ImageUncheckedUpdateWithoutPostInput {
 
     @Field(() => DateTimeFieldUpdateOperationsInput, {nullable:true})
     updatedAt?: DateTimeFieldUpdateOperationsInput;
+
+    @Field(() => PageUncheckedUpdateManyWithoutFeaturedImageNestedInput, {nullable:true})
+    Page?: PageUncheckedUpdateManyWithoutFeaturedImageNestedInput;
 }

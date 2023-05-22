@@ -7,4 +7,7 @@ export class ImageCount {
 
     @Field(() => Int, {nullable:false})
     Post?: number;
+
+    @Field(() => Int, {nullable:false})
+    Page?: number;
 }

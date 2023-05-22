@@ -4,6 +4,7 @@ import { Int } from '@nestjs/graphql';
 import { ID } from '@nestjs/graphql';
 import { GraphQLJSON } from 'graphql-type-json';
 import { Post } from '../post/post.model';
+import { Page } from '../page/page.model';
 import { ImageCount } from './image-count.output';
 
 @ObjectType()
@@ -56,6 +57,9 @@ export class Image {
 
     @Field(() => [Post], {nullable:true})
     Post?: Array<Post>;
+
+    @Field(() => [Page], {nullable:true})
+    Page?: Array<Page>;
 
     @Field(() => ImageCount, {nullable:false})
     _count?: ImageCount;

@@ -133,6 +133,21 @@ model MinecraftRuleCategory {
   @@index([id])
 }
 
+model Page {
+  id             Int      @id @default(autoincrement())
+  title          String
+  slug           String   @unique
+  summary        String
+  content        String?
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
+  featuredImage  Image?   @relation(fields: [imagePublic_id], references: [public_id])
+  imagePublic_id String?
+  isPublic       Boolean
+
+  @@index([id])
+}
+
 model Post {
   id             Int          @id @default(autoincrement())
   title          String
@@ -190,6 +205,7 @@ model Image {
   exif      Json?
   updatedAt DateTime @updatedAt
   Post      Post[]
+  Page      Page[]
 
   @@index([id, public_id])
 }

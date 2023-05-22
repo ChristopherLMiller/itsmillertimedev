@@ -7,6 +7,7 @@ import { GalleryTag as _GalleryTag } from './gallery_tag';
 import { Marker as _Marker } from './marker';
 import { MinecraftRule as _MinecraftRule } from './minecraft_rule';
 import { MinecraftRuleCategory as _MinecraftRuleCategory } from './minecraft_rule_category';
+import { Page as _Page } from './page';
 import { Post as _Post } from './post';
 import { PostCategory as _PostCategory } from './post_category';
 import { PostTag as _PostTag } from './post_tag';
@@ -23,6 +24,7 @@ export namespace PrismaModel {
   export class Marker extends _Marker {}
   export class MinecraftRule extends _MinecraftRule {}
   export class MinecraftRuleCategory extends _MinecraftRuleCategory {}
+  export class Page extends _Page {}
   export class Post extends _Post {}
   export class PostCategory extends _PostCategory {}
   export class PostTag extends _PostTag {}
@@ -39,6 +41,7 @@ export namespace PrismaModel {
     Marker,
     MinecraftRule,
     MinecraftRuleCategory,
+    Page,
     Post,
     PostCategory,
     PostTag,

@@ -1,6 +1,7 @@
 
 import {Prisma} from '@prisma/client'
 import {Post} from '../../post/entities/post.entity'
+import {Page} from '../../page/entities/page.entity'
 
 
 export class Image {
@@ -20,4 +21,5 @@ thumbnail: string  | null;
 exif: Prisma.JsonValue  | null;
 updatedAt: Date ;
 Post?: Post[] ;
+Page?: Page[] ;
 }

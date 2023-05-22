@@ -20,6 +20,7 @@ import {
   MinecraftRuleAdminSettings,
   MinecraftRuleCategoryAdminSettings,
 } from '../../app/v1/minecraft/settings';
+import { PageAdminSettings } from '../../app/v1/page/settings';
 import { PostCategoryAdminSettings } from '../../app/v1/posts/post-category/settings';
 import { PostTagAdminSettings } from '../../app/v1/posts/post-tag/settings';
 import { PostModule } from '../../app/v1/posts/post/post.module';
@@ -118,6 +119,13 @@ const authenticate = async (email: string, password: string) => {
                   client: prisma,
                 },
                 options: MinecraftRuleCategoryAdminSettings,
+              },
+              {
+                resource: {
+                  model: dmmf.modelMap.Page,
+                  client: prisma,
+                },
+                options: PageAdminSettings,
               },
             ],
           },

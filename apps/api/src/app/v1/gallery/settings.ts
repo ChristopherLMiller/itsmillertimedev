@@ -12,8 +12,6 @@ export const GalleryAdminSettings = {
     'visibility',
     'isNsfw',
     'image',
-    'categories',
-    'tags',
   ],
 };
 

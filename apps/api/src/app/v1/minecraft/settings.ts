@@ -10,5 +10,5 @@ export const MinecraftRuleAdminSettings = {
 
 export const MinecraftRuleCategoryAdminSettings = {
   navigation: MinecraftNavigation,
-  listProperties: ['name', 'icon', 'MinecraftRules'],
+  listProperties: ['name', 'icon'],
 };

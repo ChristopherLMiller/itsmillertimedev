@@ -1,18 +1,11 @@
 export const PageNavigation = {
-  name: 'Blog',
-  icon: 'Blog',
+  name: 'Pages',
+  icon: 'FileText',
 };
 
 export const PageAdminSettings = {
   navigation: PageNavigation,
-  listProperties: [
-    'title',
-    'summary',
-    'createdAt',
-    'updatedAt',
-    'published',
-    'isPublic',
-  ],
+  listProperties: ['title', 'summary', 'createdAt', 'updatedAt', 'isPublic'],
   properties: {
     content: {
       type: 'textarea',

@@ -1,6 +1,6 @@
 export const ImageNavigation = {
   name: 'Media',
-  icon: 'media',
+  icon: 'Image',
 };
 
 export const ImageAdminSettings = {

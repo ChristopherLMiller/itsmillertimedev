@@ -27,12 +27,5 @@ export const GalleryCategoryAdminSettings = {
 
 export const GalleryImageAdminSettings = {
   navigation: GalleryNavigation,
-  listProperties: [
-    'title',
-    'createdAt',
-    'updatedAt',
-    'visibility',
-    'url',
-    'galleries',
-  ],
+  listProperties: ['title', 'createdAt', 'updatedAt', 'visibility', 'url'],
 };

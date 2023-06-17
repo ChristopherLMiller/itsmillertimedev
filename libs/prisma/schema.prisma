@@ -98,6 +98,13 @@ model GalleryTag {
   @@index([id, slug])
 }
 
+model Manufacturer {
+  id    Int     @id @default(autoincrement())
+  title String
+  slug  String  @unique
+  Model Model[]
+}
+
 model Marker {
   id         Int     @id @default(autoincrement())
   lat        Decimal
@@ -131,6 +138,41 @@ model MinecraftRuleCategory {
   MinecraftRules MinecraftRule[]
 
   @@index([id])
+}
+
+model Model {
+  id                Int          @id @default(autoincrement())
+  slug              String       @unique
+  completed         Boolean      @default(true)
+  visibility        Visibility
+  metaTitle         String
+  summary           String
+  featuredImage     String
+  createdAt         DateTime     @default(now())
+  updatedAt         DateTime     @updatedAt
+  tags              ModelTags[]
+  images            Image[]
+  manufacturer      Manufacturer @relation(fields: [manufacturerId], references: [id])
+  scale             Scale        @relation(fields: [scaleId], references: [id])
+  clockifyProjectId String?
+  contents          String
+  yearReleased      Int
+  completedAt       DateTime
+  imagePublic_id    String
+  manufacturerId    Int
+  scaleId           Int
+
+  @@index([id, slug])
+}
+
+model ModelTags {
+  id      Int    @id @default(autoincrement())
+  slug    String @unique
+  title   String
+  Model   Model? @relation(fields: [modelId], references: [id])
+  modelId Int?
+
+  @@index([id, slug])
 }
 
 model Page {
@@ -206,8 +248,19 @@ model Image {
   updatedAt DateTime @updatedAt
   Post      Post[]
   Page      Page[]
+  modelId   Int?
+  Model     Model?   @relation(fields: [modelId], references: [id])
 
   @@index([id, public_id])
+}
+
+model Scale {
+  id    Int     @id @default(autoincrement())
+  title String
+  slug  String  @unique
+  Model Model[]
+
+  @@index([id, slug])
 }
 
 model Session {

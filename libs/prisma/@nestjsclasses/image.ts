@@ -1,5 +1,6 @@
 import { Post } from './post';
 import { Page } from './page';
+import { Model } from './model';
 import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
 
 export class Image {
@@ -53,4 +54,10 @@ export class Image {
 
   @ApiProperty({ isArray: true, type: () => Page })
   Page: Page[];
+
+  @ApiPropertyOptional({ type: Number })
+  modelId?: number;
+
+  @ApiPropertyOptional({ type: () => Model })
+  Model?: Model;
 }

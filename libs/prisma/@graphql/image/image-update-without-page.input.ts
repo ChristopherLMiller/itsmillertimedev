@@ -7,6 +7,7 @@ import { NullableStringFieldUpdateOperationsInput } from '../prisma/nullable-str
 import { DateTimeFieldUpdateOperationsInput } from '../prisma/date-time-field-update-operations.input';
 import { GraphQLJSON } from 'graphql-type-json';
 import { PostUpdateManyWithoutFeaturedImageNestedInput } from '../post/post-update-many-without-featured-image-nested.input';
+import { ModelUpdateOneWithoutImagesNestedInput } from '../model/model-update-one-without-images-nested.input';
 
 @InputType()
 export class ImageUpdateWithoutPageInput {
@@ -58,4 +59,7 @@ export class ImageUpdateWithoutPageInput {
 
     @Field(() => PostUpdateManyWithoutFeaturedImageNestedInput, {nullable:true})
     Post?: PostUpdateManyWithoutFeaturedImageNestedInput;
+
+    @Field(() => ModelUpdateOneWithoutImagesNestedInput, {nullable:true})
+    Model?: ModelUpdateOneWithoutImagesNestedInput;
 }

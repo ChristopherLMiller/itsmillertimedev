@@ -58,4 +58,7 @@ export class ImageUncheckedUpdateWithoutPageInput {
 
     @Field(() => PostUncheckedUpdateManyWithoutFeaturedImageNestedInput, {nullable:true})
     Post?: PostUncheckedUpdateManyWithoutFeaturedImageNestedInput;
+
+    @Field(() => NullableIntFieldUpdateOperationsInput, {nullable:true})
+    modelId?: NullableIntFieldUpdateOperationsInput;
 }

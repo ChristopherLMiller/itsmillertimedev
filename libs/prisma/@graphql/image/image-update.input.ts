@@ -8,6 +8,7 @@ import { DateTimeFieldUpdateOperationsInput } from '../prisma/date-time-field-up
 import { GraphQLJSON } from 'graphql-type-json';
 import { PostUpdateManyWithoutFeaturedImageNestedInput } from '../post/post-update-many-without-featured-image-nested.input';
 import { PageUpdateManyWithoutFeaturedImageNestedInput } from '../page/page-update-many-without-featured-image-nested.input';
+import { ModelUpdateOneWithoutImagesNestedInput } from '../model/model-update-one-without-images-nested.input';
 
 @InputType()
 export class ImageUpdateInput {
@@ -62,4 +63,7 @@ export class ImageUpdateInput {
 
     @Field(() => PageUpdateManyWithoutFeaturedImageNestedInput, {nullable:true})
     Page?: PageUpdateManyWithoutFeaturedImageNestedInput;
+
+    @Field(() => ModelUpdateOneWithoutImagesNestedInput, {nullable:true})
+    Model?: ModelUpdateOneWithoutImagesNestedInput;
 }

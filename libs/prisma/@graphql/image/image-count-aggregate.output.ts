@@ -51,5 +51,8 @@ export class ImageCountAggregate {
     updatedAt!: number;
 
     @Field(() => Int, {nullable:false})
+    modelId!: number;
+
+    @Field(() => Int, {nullable:false})
     _all!: number;
 }

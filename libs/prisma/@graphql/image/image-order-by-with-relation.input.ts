@@ -3,6 +3,7 @@ import { InputType } from '@nestjs/graphql';
 import { SortOrder } from '../prisma/sort-order.enum';
 import { PostOrderByRelationAggregateInput } from '../post/post-order-by-relation-aggregate.input';
 import { PageOrderByRelationAggregateInput } from '../page/page-order-by-relation-aggregate.input';
+import { ModelOrderByWithRelationInput } from '../model/model-order-by-with-relation.input';
 
 @InputType()
 export class ImageOrderByWithRelationInput {
@@ -57,4 +58,10 @@ export class ImageOrderByWithRelationInput {
 
     @Field(() => PageOrderByRelationAggregateInput, {nullable:true})
     Page?: PageOrderByRelationAggregateInput;
+
+    @Field(() => SortOrder, {nullable:true})
+    modelId?: keyof typeof SortOrder;
+
+    @Field(() => ModelOrderByWithRelationInput, {nullable:true})
+    Model?: ModelOrderByWithRelationInput;
 }

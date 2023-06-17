@@ -3,6 +3,7 @@ import { InputType } from '@nestjs/graphql';
 import { Int } from '@nestjs/graphql';
 import { GraphQLJSON } from 'graphql-type-json';
 import { PostCreateNestedManyWithoutFeaturedImageInput } from '../post/post-create-nested-many-without-featured-image.input';
+import { ModelCreateNestedOneWithoutImagesInput } from '../model/model-create-nested-one-without-images.input';
 
 @InputType()
 export class ImageCreateWithoutPageInput {
@@ -54,4 +55,7 @@ export class ImageCreateWithoutPageInput {
 
     @Field(() => PostCreateNestedManyWithoutFeaturedImageInput, {nullable:true})
     Post?: PostCreateNestedManyWithoutFeaturedImageInput;
+
+    @Field(() => ModelCreateNestedOneWithoutImagesInput, {nullable:true})
+    Model?: ModelCreateNestedOneWithoutImagesInput;
 }

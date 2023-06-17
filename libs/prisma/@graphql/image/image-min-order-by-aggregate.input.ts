@@ -46,4 +46,7 @@ export class ImageMinOrderByAggregateInput {
 
     @Field(() => SortOrder, {nullable:true})
     updatedAt?: keyof typeof SortOrder;
+
+    @Field(() => SortOrder, {nullable:true})
+    modelId?: keyof typeof SortOrder;
 }

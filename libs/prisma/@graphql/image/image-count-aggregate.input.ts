@@ -50,5 +50,8 @@ export class ImageCountAggregateInput {
     updatedAt?: true;
 
     @Field(() => Boolean, {nullable:true})
+    modelId?: true;
+
+    @Field(() => Boolean, {nullable:true})
     _all?: true;
 }

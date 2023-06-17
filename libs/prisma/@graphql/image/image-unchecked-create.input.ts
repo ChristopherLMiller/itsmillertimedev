@@ -58,4 +58,7 @@ export class ImageUncheckedCreateInput {
 
     @Field(() => PageUncheckedCreateNestedManyWithoutFeaturedImageInput, {nullable:true})
     Page?: PageUncheckedCreateNestedManyWithoutFeaturedImageInput;
+
+    @Field(() => Int, {nullable:true})
+    modelId?: number;
 }

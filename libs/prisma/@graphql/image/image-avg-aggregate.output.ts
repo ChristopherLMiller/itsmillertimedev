@@ -19,4 +19,7 @@ export class ImageAvgAggregate {
 
     @Field(() => Float, {nullable:true})
     bytes?: number;
+
+    @Field(() => Float, {nullable:true})
+    modelId?: number;
 }

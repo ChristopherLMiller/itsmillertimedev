@@ -20,6 +20,10 @@ import {
   MinecraftRuleAdminSettings,
   MinecraftRuleCategoryAdminSettings,
 } from '../../app/v1/minecraft/settings';
+import { ManufacturerAdminSettings } from '../../app/v1/models/manufacturers/admin.settings';
+import { ModelAdminSettings } from '../../app/v1/models/model/admin.settings';
+import { ScaleAdminSettings } from '../../app/v1/models/scale/admin.settings';
+import { ModelTagsAdminSettings } from '../../app/v1/models/tags/admin.settings';
 import { PageAdminSettings } from '../../app/v1/page/settings';
 import { PostCategoryAdminSettings } from '../../app/v1/posts/post-category/settings';
 import { PostTagAdminSettings } from '../../app/v1/posts/post-tag/settings';
@@ -126,6 +130,34 @@ const authenticate = async (email: string, password: string) => {
                   client: prisma,
                 },
                 options: PageAdminSettings,
+              },
+              {
+                resource: {
+                  model: dmmf.modelMap.Scale,
+                  client: prisma,
+                },
+                options: ScaleAdminSettings,
+              },
+              {
+                resource: {
+                  model: dmmf.modelMap.Manufacturer,
+                  client: prisma,
+                },
+                options: ManufacturerAdminSettings,
+              },
+              {
+                resource: {
+                  model: dmmf.modelMap.ModelTags,
+                  client: prisma,
+                },
+                options: ModelTagsAdminSettings,
+              },
+              {
+                resource: {
+                  model: dmmf.modelMap.Model,
+                  client: prisma,
+                },
+                options: ModelAdminSettings,
               },
             ],
           },

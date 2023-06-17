@@ -9,6 +9,9 @@ export class ModelCountAggregate {
     id!: number;
 
     @Field(() => Int, {nullable:false})
+    title!: number;
+
+    @Field(() => Int, {nullable:false})
     slug!: number;
 
     @Field(() => Int, {nullable:false})

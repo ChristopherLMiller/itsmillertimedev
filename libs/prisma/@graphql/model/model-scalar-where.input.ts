@@ -23,6 +23,9 @@ export class ModelScalarWhereInput {
     id?: IntFilter;
 
     @Field(() => StringFilter, {nullable:true})
+    title?: StringFilter;
+
+    @Field(() => StringFilter, {nullable:true})
     slug?: StringFilter;
 
     @Field(() => BoolFilter, {nullable:true})

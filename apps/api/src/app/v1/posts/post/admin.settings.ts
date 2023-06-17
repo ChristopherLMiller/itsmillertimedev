@@ -1,10 +1,9 @@
-import { PostsNavigation } from '../settings';
+import { PostsNavigation } from '../admin.settings';
 
 export const PostAdminSettings = {
   navigation: PostsNavigation,
   listProperties: [
     'title',
-    'summary',
     'createdAt',
     'updatedAt',
     'published',
@@ -14,6 +13,16 @@ export const PostAdminSettings = {
   properties: {
     content: {
       type: 'textarea',
+      props: {
+        rows: 10,
+      },
+    },
+    title: {
+      isTitle: true,
+    },
+    slug: {
+      isRequired: false,
+      isDisabled: true,
     },
   },
 };

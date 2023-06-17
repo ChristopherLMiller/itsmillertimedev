@@ -10,6 +10,9 @@ export class Model {
   id: number;
 
   @ApiProperty({ type: String })
+  title: string;
+
+  @ApiProperty({ type: String })
   slug: string;
 
   @ApiProperty({ type: Boolean })

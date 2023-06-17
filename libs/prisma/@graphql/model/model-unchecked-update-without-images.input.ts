@@ -15,6 +15,9 @@ export class ModelUncheckedUpdateWithoutImagesInput {
     id?: IntFieldUpdateOperationsInput;
 
     @Field(() => StringFieldUpdateOperationsInput, {nullable:true})
+    title?: StringFieldUpdateOperationsInput;
+
+    @Field(() => StringFieldUpdateOperationsInput, {nullable:true})
     slug?: StringFieldUpdateOperationsInput;
 
     @Field(() => BoolFieldUpdateOperationsInput, {nullable:true})

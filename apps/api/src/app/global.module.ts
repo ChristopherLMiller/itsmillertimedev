@@ -5,6 +5,7 @@ import MemoryStore from 'cache-manager-memory-store';
 import { redisStore } from 'cache-manager-redis-yet';
 import { config } from '../../config';
 import { AdminJSModule } from '../common/admin-js/admin-js.module';
+import { AuthModule } from '../common/auth/auth.module';
 import { V1Module } from './v1/v1.module';
 
 @Module({
@@ -36,6 +37,7 @@ import { V1Module } from './v1/v1.module';
       },
     }),
     V1Module,
+    AuthModule,
     AdminJSModule,
   ],
   providers: [

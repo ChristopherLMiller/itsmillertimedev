@@ -16,6 +16,9 @@ export class Model {
     id!: number;
 
     @Field(() => String, {nullable:false})
+    title!: string;
+
+    @Field(() => String, {nullable:false})
     slug!: string;
 
     @Field(() => Boolean, {nullable:false,defaultValue:true})

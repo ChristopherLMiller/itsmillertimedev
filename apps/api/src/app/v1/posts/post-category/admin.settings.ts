@@ -1,7 +1,7 @@
-import { ModelsNavigation } from '../admin.settings';
+import { PostsNavigation } from '../admin.settings';
 
-export const ManufacturerAdminSettings = {
-  navigation: ModelsNavigation,
+export const PostCategoryAdminSettings = {
+  navigation: PostsNavigation,
   listProperties: ['title', 'slug'],
   properties: {
     slug: {

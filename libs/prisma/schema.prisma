@@ -142,6 +142,7 @@ model MinecraftRuleCategory {
 
 model Model {
   id                Int          @id @default(autoincrement())
+  title             String
   slug              String       @unique
   completed         Boolean      @default(true)
   visibility        Visibility

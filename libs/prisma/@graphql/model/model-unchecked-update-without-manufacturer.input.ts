@@ -16,6 +16,9 @@ export class ModelUncheckedUpdateWithoutManufacturerInput {
     id?: IntFieldUpdateOperationsInput;
 
     @Field(() => StringFieldUpdateOperationsInput, {nullable:true})
+    title?: StringFieldUpdateOperationsInput;
+
+    @Field(() => StringFieldUpdateOperationsInput, {nullable:true})
     slug?: StringFieldUpdateOperationsInput;
 
     @Field(() => BoolFieldUpdateOperationsInput, {nullable:true})

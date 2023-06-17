@@ -23,6 +23,9 @@ export class ModelScalarWhereWithAggregatesInput {
     id?: IntWithAggregatesFilter;
 
     @Field(() => StringWithAggregatesFilter, {nullable:true})
+    title?: StringWithAggregatesFilter;
+
+    @Field(() => StringWithAggregatesFilter, {nullable:true})
     slug?: StringWithAggregatesFilter;
 
     @Field(() => BoolWithAggregatesFilter, {nullable:true})

@@ -10,6 +10,9 @@ export class ModelMaxAggregate {
     id?: number;
 
     @Field(() => String, {nullable:true})
+    title?: string;
+
+    @Field(() => String, {nullable:true})
     slug?: string;
 
     @Field(() => Boolean, {nullable:true})

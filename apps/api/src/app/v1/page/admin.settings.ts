@@ -9,6 +9,13 @@ export const PageAdminSettings = {
   properties: {
     content: {
       type: 'textarea',
+      props: {
+        rows: 10,
+      },
+    },
+    slug: {
+      isDisabled: true,
+      isRequired: false,
     },
   },
 };

@@ -14,6 +14,9 @@ export class ModelOrderByWithAggregationInput {
     id?: keyof typeof SortOrder;
 
     @Field(() => SortOrder, {nullable:true})
+    title?: keyof typeof SortOrder;
+
+    @Field(() => SortOrder, {nullable:true})
     slug?: keyof typeof SortOrder;
 
     @Field(() => SortOrder, {nullable:true})

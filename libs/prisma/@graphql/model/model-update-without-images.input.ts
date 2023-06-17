@@ -14,6 +14,9 @@ import { IntFieldUpdateOperationsInput } from '../prisma/int-field-update-operat
 export class ModelUpdateWithoutImagesInput {
 
     @Field(() => StringFieldUpdateOperationsInput, {nullable:true})
+    title?: StringFieldUpdateOperationsInput;
+
+    @Field(() => StringFieldUpdateOperationsInput, {nullable:true})
     slug?: StringFieldUpdateOperationsInput;
 
     @Field(() => BoolFieldUpdateOperationsInput, {nullable:true})

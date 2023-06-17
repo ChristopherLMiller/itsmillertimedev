@@ -8,6 +8,7 @@ import {Scale} from '../../scale/entities/scale.entity'
 
 export class Model {
   id: number ;
+title: string ;
 slug: string ;
 completed: boolean ;
 visibility: Visibility ;

@@ -30,4 +30,8 @@ export const config = {
   google_maps: {
     key: process.env.GOOGLE_MAP_API_KEY,
   },
+  supabase: {
+    url: process.env.SUPABASE_URL,
+    key: process.env.SUPABASE_KEY,
+  },
 };

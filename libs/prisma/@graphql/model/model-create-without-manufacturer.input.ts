@@ -10,6 +10,9 @@ import { Int } from '@nestjs/graphql';
 export class ModelCreateWithoutManufacturerInput {
 
     @Field(() => String, {nullable:false})
+    title!: string;
+
+    @Field(() => String, {nullable:false})
     slug!: string;
 
     @Field(() => Boolean, {nullable:true})

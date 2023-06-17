@@ -15,6 +15,9 @@ import { IntFieldUpdateOperationsInput } from '../prisma/int-field-update-operat
 export class ModelUpdateInput {
 
     @Field(() => StringFieldUpdateOperationsInput, {nullable:true})
+    title?: StringFieldUpdateOperationsInput;
+
+    @Field(() => StringFieldUpdateOperationsInput, {nullable:true})
     slug?: StringFieldUpdateOperationsInput;
 
     @Field(() => BoolFieldUpdateOperationsInput, {nullable:true})

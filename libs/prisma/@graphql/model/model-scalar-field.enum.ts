@@ -2,6 +2,7 @@ import { registerEnumType } from '@nestjs/graphql';
 
 export enum ModelScalarFieldEnum {
     id = "id",
+    title = "title",
     slug = "slug",
     completed = "completed",
     visibility = "visibility",

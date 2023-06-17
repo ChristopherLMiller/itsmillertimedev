@@ -10,6 +10,9 @@ export class ModelCreateManyInput {
     id?: number;
 
     @Field(() => String, {nullable:false})
+    title!: string;
+
+    @Field(() => String, {nullable:false})
     slug!: string;
 
     @Field(() => Boolean, {nullable:true})

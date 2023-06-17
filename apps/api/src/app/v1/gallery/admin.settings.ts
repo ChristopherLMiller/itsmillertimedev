@@ -13,6 +13,21 @@ export const GalleryAdminSettings = {
     'isNsfw',
     'image',
   ],
+  properties: {
+    slug: {
+      isRequired: false,
+      isDisabled: true,
+    },
+    isNsfw: {
+      isRequired: false,
+    },
+    description: {
+      type: 'textarea',
+      props: {
+        rows: 10,
+      },
+    },
+  },
 };
 
 export const GalleryTagAdminSettings = {

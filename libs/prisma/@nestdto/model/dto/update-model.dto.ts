@@ -6,7 +6,8 @@ import {ApiProperty} from '@nestjs/swagger'
 
 
 export class UpdateModelDto {
-  slug?: string;
+  title?: string;
+slug?: string;
 @ApiProperty({ enum: Visibility})
 visibility?: Visibility;
 metaTitle?: string;

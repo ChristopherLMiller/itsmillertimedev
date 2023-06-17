@@ -46,4 +46,7 @@ export class ImageMaxAggregate {
 
     @Field(() => Date, {nullable:true})
     updatedAt?: Date | string;
+
+    @Field(() => Int, {nullable:true})
+    modelId?: number;
 }

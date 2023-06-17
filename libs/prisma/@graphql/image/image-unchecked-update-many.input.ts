@@ -54,4 +54,7 @@ export class ImageUncheckedUpdateManyInput {
 
     @Field(() => DateTimeFieldUpdateOperationsInput, {nullable:true})
     updatedAt?: DateTimeFieldUpdateOperationsInput;
+
+    @Field(() => NullableIntFieldUpdateOperationsInput, {nullable:true})
+    modelId?: NullableIntFieldUpdateOperationsInput;
 }

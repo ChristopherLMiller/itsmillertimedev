@@ -15,7 +15,8 @@ export enum ImageScalarFieldEnum {
     createdAt = "createdAt",
     thumbnail = "thumbnail",
     exif = "exif",
-    updatedAt = "updatedAt"
+    updatedAt = "updatedAt",
+    modelId = "modelId"
 }
 
 

@@ -2,27 +2,19 @@ import { DataResponse } from '@itsmillertimedev/data';
 import { countWords } from '@itsmillertimedev/utility-functions';
 import { BadRequestException, Injectable } from '@nestjs/common';
 import { Post, Prisma } from '@prisma/client';
-import { PrismaDTO } from 'apps/api/src/common/prisma/prisma.dto';
-import { PrismaLib } from 'libs/prisma/lib';
+import { PrismaDTO } from '../../../../common/prisma/prisma.dto';
 import { PrismaService } from '../../../../common/prisma/prisma.service';
 
 @Injectable()
 export class PostService {
   constructor(private prisma: PrismaService) {}
 
-  // instantiate the prisma lib so we have access its functions
-  prismaLib = new PrismaLib();
-
   async create(newData: Post): Promise<Post> {
-    const slug = await this.prismaLib.generateSlug(
-      newData.slug || newData.title,
-      'post'
-    );
     const metaTitle = newData.metaTitle || newData.title;
     const wordCount = countWords(newData.content);
     try {
       const data = await this.prisma.post.create({
-        data: { ...newData, slug, metaTitle, wordCount },
+        data: { ...newData, metaTitle, wordCount },
       });
       return data;
     } catch (error) {

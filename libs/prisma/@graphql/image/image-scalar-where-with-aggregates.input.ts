@@ -63,4 +63,7 @@ export class ImageScalarWhereWithAggregatesInput {
 
     @Field(() => DateTimeWithAggregatesFilter, {nullable:true})
     updatedAt?: DateTimeWithAggregatesFilter;
+
+    @Field(() => IntNullableWithAggregatesFilter, {nullable:true})
+    modelId?: IntNullableWithAggregatesFilter;
 }

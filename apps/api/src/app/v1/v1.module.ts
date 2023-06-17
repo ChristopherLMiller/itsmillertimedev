@@ -8,10 +8,10 @@ import { ImageModule } from './image/image.module';
 import { LastFMModule } from './lastfm/lastfm.module';
 import { MapsModule } from './maps/maps.module';
 import { MinecraftModule } from './minecraft/minecraft.module';
+import { PageModule } from './page/page.module';
 import { PostCategoryModule } from './posts/post-category/post-category.module';
 import { PostTagModule } from './posts/post-tag/post-tag.module';
 import { PostModule } from './posts/post/post.module';
-import { V1Controller } from './v1.controller';
 import { WeatherModule } from './weather/weather.module';
 import { WebhooksModule } from './webhooks/webhooks.module';
 
@@ -29,7 +29,8 @@ import { WebhooksModule } from './webhooks/webhooks.module';
     PostCategoryModule,
     PostTagModule,
     PostModule,
+    PageModule,
   ],
-  controllers: [V1Controller, HealthController],
+  controllers: [HealthController],
 })
 export class V1Module {}

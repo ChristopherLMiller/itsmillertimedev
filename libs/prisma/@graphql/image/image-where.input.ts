@@ -7,6 +7,8 @@ import { StringNullableFilter } from '../prisma/string-nullable-filter.input';
 import { DateTimeFilter } from '../prisma/date-time-filter.input';
 import { JsonNullableFilter } from '../prisma/json-nullable-filter.input';
 import { PostListRelationFilter } from '../post/post-list-relation-filter.input';
+import { PageListRelationFilter } from '../page/page-list-relation-filter.input';
+import { ModelRelationFilter } from '../model/model-relation-filter.input';
 
 @InputType()
 export class ImageWhereInput {
@@ -67,4 +69,13 @@ export class ImageWhereInput {
 
     @Field(() => PostListRelationFilter, {nullable:true})
     Post?: PostListRelationFilter;
+
+    @Field(() => PageListRelationFilter, {nullable:true})
+    Page?: PageListRelationFilter;
+
+    @Field(() => IntNullableFilter, {nullable:true})
+    modelId?: IntNullableFilter;
+
+    @Field(() => ModelRelationFilter, {nullable:true})
+    Model?: ModelRelationFilter;
 }

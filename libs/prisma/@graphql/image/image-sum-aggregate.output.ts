@@ -19,4 +19,7 @@ export class ImageSumAggregate {
 
     @Field(() => Int, {nullable:true})
     bytes?: number;
+
+    @Field(() => Int, {nullable:true})
+    modelId?: number;
 }

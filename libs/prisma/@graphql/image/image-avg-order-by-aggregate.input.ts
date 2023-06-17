@@ -19,4 +19,7 @@ export class ImageAvgOrderByAggregateInput {
 
     @Field(() => SortOrder, {nullable:true})
     bytes?: keyof typeof SortOrder;
+
+    @Field(() => SortOrder, {nullable:true})
+    modelId?: keyof typeof SortOrder;
 }

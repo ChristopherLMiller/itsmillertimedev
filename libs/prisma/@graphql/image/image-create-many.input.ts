@@ -50,4 +50,7 @@ export class ImageCreateManyInput {
 
     @Field(() => Date, {nullable:true})
     updatedAt?: Date | string;
+
+    @Field(() => Int, {nullable:true})
+    modelId?: number;
 }

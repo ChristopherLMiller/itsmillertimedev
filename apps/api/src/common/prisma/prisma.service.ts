@@ -6,6 +6,7 @@ import {
 } from '@nestjs/common';
 import { Prisma, PrismaClient } from '@prisma/client';
 import { config } from '../../../config';
+import { GenerateSlugMiddleware } from '../middleware/GenerateSlugMiddlware';
 
 @Injectable()
 export class PrismaService
@@ -29,6 +30,9 @@ export class PrismaService
     if (config.general.isDev) {
       this.$on('query', (e) => this.logger.debug(`${e.query} ${e.params}`));
     }
+
+    // Register middleware here for our app
+    this.$use(GenerateSlugMiddleware());
 
     try {
       await this.$connect();

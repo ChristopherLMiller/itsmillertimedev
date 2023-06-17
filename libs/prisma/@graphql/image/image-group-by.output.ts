@@ -56,6 +56,9 @@ export class ImageGroupBy {
     @Field(() => Date, {nullable:false})
     updatedAt!: Date | string;
 
+    @Field(() => Int, {nullable:true})
+    modelId?: number;
+
     @Field(() => ImageCountAggregate, {nullable:true})
     _count?: ImageCountAggregate;
 

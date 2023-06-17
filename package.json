@@ -9,6 +9,7 @@
   },
   "private": true,
   "dependencies": {
+    "@adminjs/design-system": "^4.0.2",
     "@adminjs/express": "^5.1.0",
     "@adminjs/nestjs": "^5.1.0",
     "@adminjs/prisma": "^3.0.1",
@@ -32,6 +33,7 @@
     "@quixo3/prisma-session-store": "^3.1.10",
     "@sentry/node": "^7.37.2",
     "@sentry/tracing": "^7.37.2",
+    "@supabase/supabase-js": "^2.25.0",
     "adminjs": "^6.8.6",
     "apollo-server-express": "^3.11.1",
     "axios": "^1.3.3",
@@ -61,6 +63,7 @@
     "react": "18.2.0",
     "react-dom": "18.2.0",
     "react-is": "18.2.0",
+    "react-router-dom": "^6.12.1",
     "redis": "^4.6.4",
     "reflect-metadata": "^0.1.13",
     "regenerator-runtime": "0.13.11",

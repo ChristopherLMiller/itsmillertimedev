@@ -55,6 +55,9 @@ export class ImageOrderByWithAggregationInput {
     @Field(() => SortOrder, {nullable:true})
     updatedAt?: keyof typeof SortOrder;
 
+    @Field(() => SortOrder, {nullable:true})
+    modelId?: keyof typeof SortOrder;
+
     @Field(() => ImageCountOrderByAggregateInput, {nullable:true})
     _count?: ImageCountOrderByAggregateInput;
 

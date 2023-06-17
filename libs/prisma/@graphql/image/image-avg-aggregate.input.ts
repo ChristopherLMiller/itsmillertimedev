@@ -18,4 +18,7 @@ export class ImageAvgAggregateInput {
 
     @Field(() => Boolean, {nullable:true})
     bytes?: true;
+
+    @Field(() => Boolean, {nullable:true})
+    modelId?: true;
 }

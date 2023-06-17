@@ -6,25 +6,30 @@ import { DMMFClass } from '@prisma/client/runtime';
 import { PrismaSessionStore } from '@quixo3/prisma-session-store';
 import AdminJS from 'adminjs';
 import { config } from '../../../config';
-import { ClockifyAdminSettings } from '../../app/v1/clockify/settings';
-import { DiscordAdminSettings } from '../../app/v1/discord/settings';
+import { ClockifyAdminSettings } from '../../app/v1/clockify/admin.settings';
+import { DiscordAdminSettings } from '../../app/v1/discord/admin.settings';
 import {
   GalleryAdminSettings,
   GalleryCategoryAdminSettings,
   GalleryImageAdminSettings,
   GalleryTagAdminSettings,
-} from '../../app/v1/gallery/settings';
-import { ImageAdminSettings } from '../../app/v1/image/settings.admin';
-import { MapsAdminSettings } from '../../app/v1/maps/settings';
+} from '../../app/v1/gallery/admin.settings';
+import { ImageAdminSettings } from '../../app/v1/image/admin.settings';
+import { MapsAdminSettings } from '../../app/v1/maps/admin.settings';
 import {
   MinecraftRuleAdminSettings,
   MinecraftRuleCategoryAdminSettings,
-} from '../../app/v1/minecraft/settings';
-import { PostCategoryAdminSettings } from '../../app/v1/posts/post-category/settings';
-import { PostTagAdminSettings } from '../../app/v1/posts/post-tag/settings';
-import { PostModule } from '../../app/v1/posts/post/post.module';
-import { PostService } from '../../app/v1/posts/post/post.service';
-import { PostAdminSettings } from '../../app/v1/posts/post/settings';
+} from '../../app/v1/minecraft/admin.settings';
+import { ManufacturerAdminSettings } from '../../app/v1/models/manufacturers/admin.settings';
+import { ModelAdminSettings } from '../../app/v1/models/model/admin.settings';
+import { ScaleAdminSettings } from '../../app/v1/models/scale/admin.settings';
+import { ModelTagsAdminSettings } from '../../app/v1/models/tags/admin.settings';
+import { PageAdminSettings } from '../../app/v1/page/admin.settings';
+import { PostCategoryAdminSettings } from '../../app/v1/posts/post-category/admin.settings';
+import { PostTagAdminSettings } from '../../app/v1/posts/post-tag/admin.settings';
+import { PostAdminSettings } from '../../app/v1/posts/post/admin.settings';
+import { AuthModule } from '../auth/auth.module';
+import { AuthService } from '../auth/auth.service';
 import { PrismaModule } from '../prisma/prisma.module';
 import { PrismaService } from '../prisma/prisma.service';
 
@@ -33,19 +38,12 @@ AdminJS.registerAdapter({
   Database: AdminJSPrisma.Database,
 });
 
-const authenticate = async (email: string, password: string) => {
-  if (email === config.adminjs.email && password === config.adminjs.password) {
-    return Promise.resolve({ email, password });
-  }
-  return null;
-};
-
 @Module({
   imports: [
     AdminModule.createAdminAsync({
-      imports: [PrismaModule, PostModule],
-      inject: [PrismaService, PostService],
-      useFactory: async (prisma: PrismaService) => {
+      imports: [PrismaModule, AuthModule],
+      inject: [PrismaService, AuthService],
+      useFactory: async (prisma: PrismaService, authService: AuthService) => {
         const dmmf = (prisma as any)._baseDmmf as DMMFClass;
 
         return {
@@ -119,10 +117,45 @@ const authenticate = async (email: string, password: string) => {
                 },
                 options: MinecraftRuleCategoryAdminSettings,
               },
+              {
+                resource: {
+                  model: dmmf.modelMap.Page,
+                  client: prisma,
+                },
+                options: PageAdminSettings,
+              },
+              {
+                resource: {
+                  model: dmmf.modelMap.Scale,
+                  client: prisma,
+                },
+                options: ScaleAdminSettings,
+              },
+              {
+                resource: {
+                  model: dmmf.modelMap.Manufacturer,
+                  client: prisma,
+                },
+                options: ManufacturerAdminSettings,
+              },
+              {
+                resource: {
+                  model: dmmf.modelMap.ModelTags,
+                  client: prisma,
+                },
+                options: ModelTagsAdminSettings,
+              },
+              {
+                resource: {
+                  model: dmmf.modelMap.Model,
+                  client: prisma,
+                },
+                options: ModelAdminSettings,
+              },
             ],
           },
           auth: {
-            authenticate,
+            authenticate: authService.signInEmail,
             cookieName: 'adminjs',
             cookiePassword: config.adminjs.secret,
           },
@@ -135,6 +168,9 @@ const authenticate = async (email: string, password: string) => {
             resave: true,
             saveUninitialized: true,
             secret: config.adminjs.secret,
+          },
+          branding: {
+            companyName: 'ItsMillerTime',
           },
         };
       },

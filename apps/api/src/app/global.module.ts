@@ -4,8 +4,8 @@ import { APP_INTERCEPTOR } from '@nestjs/core';
 import MemoryStore from 'cache-manager-memory-store';
 import { redisStore } from 'cache-manager-redis-yet';
 import { config } from '../../config';
-import { AdminJSModule } from '../common/admin-js/admin-js.module';
-import { AuthModule } from '../common/auth/auth.module';
+import { AdminJSModule } from './admin/admin-js.module';
+import { AuthModule } from './auth/auth.module';
 import { V1Module } from './v1/v1.module';
 
 @Module({

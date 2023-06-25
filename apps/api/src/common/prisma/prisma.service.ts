@@ -23,7 +23,7 @@ export class PrismaService
 
   async onModuleInit(): Promise<void> {
     this.$on('error', (event) => {
-      console.log(event.target);
+      this.logger.log(event.target);
     });
 
     // lets log when in dev mode
@@ -38,7 +38,7 @@ export class PrismaService
       await this.$connect();
     } catch (error) {
       if (error.errorCode === 'P10001') {
-        console.log(error);
+        this.logger.log(error);
         process.exit(1);
       }
     }

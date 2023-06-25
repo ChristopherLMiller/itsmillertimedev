@@ -5,6 +5,7 @@ import { PrismaModule } from '../../../../common/prisma/prisma.module';
 import { MapsModule } from '../../maps/maps.module';
 import { MapsService } from '../../maps/maps.service';
 
+import { SettingsModule } from '../../../settings/settings.module';
 import { WeatherModule } from '../../weather/weather.module';
 import { DiscordService } from '../discord.service';
 import { BotGateway } from './bot.gateway';
@@ -20,6 +21,7 @@ import { SettingsCommand } from './commands/settings/settings.command';
     WeatherModule,
     PrismaModule,
     MapsModule,
+    SettingsModule,
   ],
   providers: [
     BotGateway,

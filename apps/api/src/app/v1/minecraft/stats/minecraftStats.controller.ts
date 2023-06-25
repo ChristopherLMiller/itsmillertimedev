@@ -1,3 +1,4 @@
+import { DataResponse } from '@itsmillertimedev/data';
 import {
   Controller,
   Get,
@@ -18,7 +19,7 @@ export class MinecraftStatsController {
   constructor(private minecraft: MinecraftService) {}
 
   @Get('player/:id')
-  async getStats(@Query('id') id): Promise<any> {
+  async getStats(@Query('id') id): Promise<DataResponse<any>> {
     return { data: { stats: [] }, meta: { playerId: id } };
   }
 }

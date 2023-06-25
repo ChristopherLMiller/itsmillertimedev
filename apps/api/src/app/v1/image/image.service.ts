@@ -1,10 +1,11 @@
 import { HttpService } from '@nestjs/axios';
-import { Injectable } from '@nestjs/common';
-import { ConfigService } from '@nestjs/config';
+import { Injectable, Logger } from '@nestjs/common';
 import { Image, Prisma } from '@prisma/client';
 import { v2 as cloudinary } from 'cloudinary';
-import { firstValueFrom } from 'rxjs';
+
+import { dataFetcher } from '../../../common/handlers/dataFetcher';
 import { PrismaService } from '../../../common/prisma/prisma.service';
+import { SettingsService } from '../../settings/settings.service';
 import streamifier = require('streamifier');
 
 // eslint-disable-next-line @typescript-eslint/no-var-requires
@@ -15,11 +16,21 @@ export class ImageService {
   constructor(
     private httpService: HttpService,
     private prisma: PrismaService,
-    private readonly config: ConfigService
+    private readonly settings: SettingsService
   ) {}
 
+  logger = new Logger();
+
   async createImage(params): Promise<Image> {
-    // TODO: try/catch, key might exist and if so just exit
+    // check that the image doesn't exist first
+    const ImageExists = await this.prisma.image.findUnique({
+      where: { public_id: params.public_id },
+    });
+    if (ImageExists) {
+      // short circuit out with the image data
+      return ImageExists;
+    }
+
     // Extract out the data necessary
     const {
       public_id,
@@ -64,7 +75,7 @@ export class ImageService {
       return 'Record deleted Successfully';
     } catch (error) {
       if (error instanceof Prisma.PrismaClientKnownRequestError) {
-        console.log(error);
+        this.logger.log(error);
         // Prisma error code for record doesn't exist
         if (error.code === 'P2025') {
           return error.meta['cause'] as string;
@@ -77,34 +88,39 @@ export class ImageService {
     public_id: string,
     width: number | 'auto'
   ): Promise<string> {
+    const settings = await this.settings.getSetting('cloudinary');
     // Retrieve the image from cloudinary
-    const imageData = await firstValueFrom(
+    this.logger.log(
+      `${settings['image_domain']}/w_${width},q_auto,f_auto/${public_id}`
+    );
+
+    const imageData = await dataFetcher(
       this.httpService.get(
-        `${this.config.get(
-          'IMAGE_ENDPOINT'
-        )}/w_${width},q_auto,f_auto/${public_id}`,
+        `${settings['image_domain']}/w_${width},q_auto,f_auto/${public_id}`,
         { responseType: 'arraybuffer' }
       )
     );
+
     // Convert the buffer data into a base64 string
-    return Buffer.from(imageData.data, 'binary').toString('base64');
+    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+    // @ts-ignore
+    // TODO: find out why this is erroring on linting
+    return Buffer.from(imageData, 'binary').toString('base64');
   }
 
   async createExif(public_id: string): Promise<Image['exif']> {
+    const settings = this.settings.getSetting('cloudinary');
     try {
       // Fetch the image
-      const imageData = await firstValueFrom(
-        this.httpService.get(
-          `${this.config.get('IMAGE_ENDPOINT')}/${public_id}`,
-          {
-            responseType: 'arraybuffer',
-          }
-        )
+      const imageData = await dataFetcher(
+        this.httpService.get(`${settings['image_domain']}/${public_id}`, {
+          responseType: 'arraybuffer',
+        })
       );
 
       // Extract the EXIF data from the image
       const promiseReponse = new Promise((resolve, reject) => {
-        new ExifImage({ image: imageData.data }, (error, exifData) => {
+        new ExifImage({ image: imageData }, (error, exifData) => {
           if (error) {
             reject(error);
           } else {
@@ -118,7 +134,7 @@ export class ImageService {
       return exif;
     } catch (exception) {
       //TODO: handle bad requests and such here
-      console.log(exception);
+      this.logger.log(exception);
       return undefined;
     }
   }
@@ -161,8 +177,8 @@ export class ImageService {
 
     // If we have exif data from the DB, exit now with it
     if (fromDB?.exif) {
-      console.log('returning DB exif');
-      console.log(fromDB.exif);
+      this.logger.log('returning DB exif');
+      this.logger.log(fromDB.exif);
       return fromDB;
     }
 
@@ -179,10 +195,11 @@ export class ImageService {
   }
 
   async uploadImage(file: Express.Multer.File): Promise<any> {
+    const settings = this.settings.getSetting('cloudinary');
     cloudinary.config({
-      api_key: this.config.get('CLOUDINARY_API_KEY'),
-      api_secret: this.config.get('CLOUDINARY_API_SECRET'),
-      cloud_name: this.config.get('CLOUDINARY_CLOUD'),
+      api_key: settings['api_key'],
+      api_secret: settings['api_secret'],
+      cloud_name: settings['cloud'],
     });
 
     try {
@@ -190,16 +207,16 @@ export class ImageService {
 
       const uploadStream = cloudinary.uploader.upload_stream(
         {
-          upload_preset: this.config.get('CLOUDINARY_UPLOAD_PRESET'),
+          upload_preset: settings['upload_preset'],
           use_filename: true,
           filename_override: file.originalname,
-          folder: `${this.config.get('CLOUDINARY_FOLDER')}/${date
-            .getFullYear()
-            .toString()}/${(date.getMonth() + 1).toString()}`,
+          folder: `${settings['folder']}/${date.getFullYear().toString()}/${(
+            date.getMonth() + 1
+          ).toString()}`,
         },
         (error, result) => {
           if (error) {
-            console.log(error);
+            this.logger.log(error);
             throw new Error(error.message);
           }
 
@@ -212,7 +229,7 @@ export class ImageService {
 
       return 'File uploaded successfully';
     } catch (error) {
-      console.log(error);
+      this.logger.log(error);
     }
   }
 

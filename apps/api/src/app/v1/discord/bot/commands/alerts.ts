@@ -1,5 +1,5 @@
 import { Command, EventParams, Handler } from '@discord-nestjs/core';
-import { Injectable } from '@nestjs/common';
+import { Injectable, Logger } from '@nestjs/common';
 import { ClientEvents, EmbedBuilder } from 'discord.js';
 import { WeatherService } from '../../../weather/weather.service';
 import { DiscordService } from '../../discord.service';
@@ -14,6 +14,8 @@ export class WeatherAlertsCommand {
     private discord: DiscordService,
     private weatherService: WeatherService
   ) {}
+
+  logger = new Logger(WeatherAlertsCommand.name);
 
   @Handler()
   async onAlertsCommand(
@@ -41,7 +43,7 @@ export class WeatherAlertsCommand {
 
     // extract out the alerts
     const alerts = data.data.alerts;
-    console.log(alerts);
+    this.logger.log(alerts);
 
     if (!alerts || alerts.length < 1) {
       return {

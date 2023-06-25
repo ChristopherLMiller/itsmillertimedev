@@ -1,11 +1,8 @@
 import { HttpService } from '@nestjs/axios';
 import { BadRequestException, Injectable, Logger } from '@nestjs/common';
-import { ConfigService } from '@nestjs/config';
-import { catchError, firstValueFrom, Observable } from 'rxjs';
-import { axiosErrorHandler } from '../../../common/handlers/axiosErrorHandler';
+import { dataFetcher } from '../../../common/handlers/dataFetcher';
 import { PrismaService } from '../../../common/prisma/prisma.service';
-import { DiscordService } from '../discord/discord.service';
-import { DiscordChannels } from '../discord/discord.types';
+import { SettingsService } from '../../settings/settings.service';
 import { ClockifyWorkspaceDto, StartTimerDto } from './dto';
 
 @Injectable()
@@ -15,8 +12,7 @@ export class ClockifyService {
   constructor(
     private prisma: PrismaService,
     private http: HttpService,
-    private discord: DiscordService,
-    private readonly config: ConfigService
+    private readonly settings: SettingsService
   ) {}
 
   // Start new timer for projectID
@@ -32,20 +28,24 @@ export class ClockifyService {
   }
 
   // Get list of workspaces
-  getWorkspaces(): Observable<ClockifyWorkspaceDto> {
-    return this.http.get('workspaces');
+  async getWorkspaces(): Promise<ClockifyWorkspaceDto> {
+    return await dataFetcher(this.http.get('workspaces'));
   }
 
   // Get list of projects
-  getProjects({
+  async getProjects({
     name,
     archived = false,
     pageSize = 25,
     page = 1,
   }): Promise<any> {
-    this.logger.log(archived, pageSize, page, name);
-    const response = this.http
-      .get(`/workspaces/${this.config.get('CLOCKIFY_WORKSPACE_ID')}/projects`, {
+    const workspaceId = await this.settings.getField(
+      'clockify',
+      'workspace_id'
+    );
+
+    const data = await dataFetcher(
+      this.http.get(`/workspaces/${workspaceId}/projects`, {
         params: {
           archived,
           'page-size': pageSize,
@@ -53,9 +53,20 @@ export class ClockifyService {
           name,
         },
       })
-      .pipe(catchError(axiosErrorHandler));
+    );
+    return data;
+  }
 
-    const data = firstValueFrom(response);
+  async getProject({ id }): Promise<any> {
+    const workspaceId = await this.settings.getField(
+      'clockify',
+      'workspace_id'
+    );
+
+    const data = await dataFetcher(
+      this.http.get(`/workspaces/${workspaceId}/projects/${id}`)
+    );
+
     return data;
   }
 
@@ -65,49 +76,50 @@ export class ClockifyService {
       throw new BadRequestException('Must provide projectId');
     }
 
-    // kick off the webhook for the timer start
-    this.discord.sendMessage(
-      `Clockify Project Started - ${projectId}`,
-      DiscordChannels.DISCORD_BOT_SPAM_CHANNEL
+    const workspaceId = await this.settings.getField(
+      'clockify',
+      'workspace_id'
     );
 
-    const response = this.http
-      .post(
-        `/workspaces/${this.config.get('CLOCKIFY_WORKSPACE_ID')}/time-entries`,
-        {
-          projectId,
-        }
-      )
-      .pipe(catchError(axiosErrorHandler));
-    return firstValueFrom(response);
+    const data = await dataFetcher(
+      this.http.post(`/workspaces/${workspaceId}/time-entries`, {
+        projectId,
+      })
+    );
+    return data;
   }
 
   // Function to run when timers are stopped
-  stopTimer(projectId: string): Observable<any> {
-    this.discord.sendMessage(
-      `Clockify Project Stopped - ${projectId}`,
-      DiscordChannels.DISCORD_BOT_SPAM_CHANNEL
+  async stopTimer(): Promise<any> {
+    const clockifySettings = await this.settings.getSetting('clockify');
+
+    const data = await dataFetcher(
+      this.http.patch(
+        `/workspaces/${clockifySettings['workspace_id']}
+      )}/user/${clockifySettings['user_id']}/time-entries`,
+        {
+          end: new Date().toISOString(),
+        }
+      )
     );
-    return this.http.patch(
-      `/workspaces/${this.config.get(
-        'CLOCKIFY_WORKSPACE_ID'
-      )}/user/${this.config.get('CLOCKIFY_USER_ID')}/time-entries`,
-      {
-        end: new Date().toISOString(),
-      }
-    );
+    return data;
   }
 
   // Get the build time of the projectID specified
-  getBuildTime(projectId: string): Observable<any> {
+  async getBuildTime(projectId: string): Promise<any> {
     if (projectId === null) {
       throw new BadRequestException('Must provide clockify project_id');
     }
 
-    return this.http.get(
-      `workspaces/${this.config.get(
-        'CLOCKIFY_WORKSPACE_ID'
-      )}/projects/${projectId}`
+    const workspaceId = await this.settings.getField(
+      'clockify',
+      'workspace_id'
     );
+
+    const data = await dataFetcher(
+      this.http.get(`workspaces/${workspaceId}/projects/${projectId}`)
+    );
+
+    return data;
   }
 }

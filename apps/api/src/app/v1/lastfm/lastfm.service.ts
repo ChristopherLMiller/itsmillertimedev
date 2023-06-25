@@ -1,15 +1,7 @@
 import { HttpService } from '@nestjs/axios';
-import {
-  BadRequestException,
-  HttpStatus,
-  Injectable,
-  InternalServerErrorException,
-  Logger,
-  NotFoundException,
-  UnauthorizedException,
-} from '@nestjs/common';
-import { ConfigService } from '@nestjs/config';
-import { catchError, firstValueFrom, throwError } from 'rxjs';
+import { Injectable, Logger } from '@nestjs/common';
+import { dataFetcher } from '../../../common/handlers/dataFetcher';
+import { SettingsService } from '../../settings/settings.service';
 
 @Injectable()
 export class LastFMService {
@@ -17,51 +9,51 @@ export class LastFMService {
 
   constructor(
     private http: HttpService,
-    private readonly config: ConfigService
+    private readonly settings: SettingsService
   ) {}
 
   async getTopArtists() {
-    const response = this.http
-      .get('', {
+    const lastFmKey = this.settings.getField('lastfm', 'api_key');
+    const data = await dataFetcher(
+      this.http.get('', {
         params: {
-          api_key: this.config.get('LASTFM_API_KEY'),
+          api_key: lastFmKey,
           method: 'chart.gettopartists',
           format: 'json',
         },
       })
-      .pipe(catchError(this.errorHandler));
-    const { data } = await firstValueFrom(response);
-    return { data, meta: { count: data.artists.artist.length } };
+    );
+    return data;
   }
 
   async getUser(username: string) {
-    const response = this.http
-      .get('', {
+    const lastFmKey = this.settings.getField('lastfm', 'api_key');
+    const data = await dataFetcher(
+      this.http.get('', {
         params: {
-          api_key: this.config.get('LASTFM_API_KEY'),
+          api_key: lastFmKey,
           method: 'user.getinfo',
           user: username,
           format: 'json',
         },
       })
-      .pipe(catchError(this.errorHandler));
-    const { data } = await firstValueFrom(response);
-    return { data, meta: { username } };
+    );
+    return data;
   }
 
   async getRecentTracks(username: string) {
-    const response = this.http
-      .get('', {
+    const lastFmKey = this.settings.getField('lastfm', 'api_key');
+    const data = await dataFetcher(
+      this.http.get('', {
         params: {
-          api_key: this.config.get('LASTFM_API_KEY'),
+          api_key: lastFmKey,
           method: 'user.getRecentTracks',
           user: username,
           format: 'json',
         },
       })
-      .pipe(catchError(this.errorHandler));
-    const { data } = await firstValueFrom(response);
-    return { data, meta: { username } };
+    );
+    return data;
   }
 
   async getCurrentlyPlaying(username: string) {
@@ -74,25 +66,6 @@ export class LastFMService {
       return { data: newestTrack, meta: { isPlaying: true } };
     } else {
       return { data: [], meta: { isPlaying: false } };
-    }
-  }
-
-  errorHandler(error: any) {
-    switch (error.response.status) {
-      case HttpStatus.BAD_REQUEST:
-        console.log(error);
-        return throwError(() => new BadRequestException(error));
-      case HttpStatus.UNAUTHORIZED:
-        return throwError(() => new UnauthorizedException(error));
-      case HttpStatus.INTERNAL_SERVER_ERROR:
-        return throwError(() => new InternalServerErrorException(error));
-      case HttpStatus.NOT_FOUND:
-        console.log(error.response.data.message);
-        return throwError(
-          () => new NotFoundException(error.response.data.message)
-        );
-      default:
-        return throwError(() => new Error(error));
     }
   }
 }

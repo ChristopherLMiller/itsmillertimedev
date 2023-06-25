@@ -8,7 +8,7 @@ import {
 import { throwError } from 'rxjs';
 
 export function axiosErrorHandler(error: any) {
-  switch (error.response.status) {
+  switch (error?.response?.status) {
     case HttpStatus.BAD_REQUEST:
       return throwError(() => new BadRequestException(error));
     case HttpStatus.UNAUTHORIZED:

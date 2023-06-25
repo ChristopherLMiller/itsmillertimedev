@@ -1,17 +1,13 @@
 import { CanActivate, ExecutionContext, Injectable } from '@nestjs/common';
-import { ConfigService } from '@nestjs/config';
-import { Observable } from 'rxjs';
+import { SettingsService } from '../../app/settings/settings.service';
 
 @Injectable()
 export class BasicAuthGuard implements CanActivate {
-  constructor(private readonly config: ConfigService) {}
+  constructor(private readonly settings: SettingsService) {}
 
-  canActivate(
-    context: ExecutionContext
-  ): boolean | Promise<boolean> | Observable<boolean> {
+  async canActivate(context: ExecutionContext): Promise<boolean> {
+    const apiKey = await this.settings.getField('general', 'api_key');
     const request = context.switchToHttp().getRequest();
-    return (
-      request.headers['x-api-key'] === this.config.get('SUPER_SECRET_API_KEY')
-    );
+    return request.headers['x-api-key'] === apiKey;
   }
 }

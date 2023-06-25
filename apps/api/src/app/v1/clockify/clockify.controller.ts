@@ -1,4 +1,4 @@
-import { DataResponse } from '@itsmillertimedev/data';
+import { ClockifyProject, DataResponse } from '@itsmillertimedev/data';
 import {
   Body,
   Controller,
@@ -16,7 +16,6 @@ import {
   ApiSecurity,
   ApiTags,
 } from '@nestjs/swagger';
-import { Observable } from 'rxjs';
 import { BasicAuthGuard } from '../../../common/guards/basicAuth.guard';
 import { ResponseTransformInterceptor } from '../../../common/interceptors/responseTransform.interceptor';
 import { ClockifyService } from './clockify.service';
@@ -36,8 +35,8 @@ export class ClockifyController {
   @ApiResponse({ status: 200, description: 'Success' })
   @ApiResponse({ status: 400, description: 'Bad Request' })
   @ApiResponse({ status: 401, description: 'Unauthorized' })
-  getWorkspaces(): Observable<ClockifyWorkspaceDto> {
-    return this.clockify.getWorkspaces();
+  async getWorkspaces(): Promise<DataResponse<ClockifyWorkspaceDto>> {
+    return { data: await this.clockify.getWorkspaces() };
   }
 
   @Get('projects')
@@ -46,38 +45,41 @@ export class ClockifyController {
   @ApiResponse({ status: 200, description: 'Success' })
   @ApiResponse({ status: 400, description: 'Bad Request' })
   @ApiResponse({ status: 401, description: 'Unauthorized' })
-  async getProjects<ClockifyProject>(
+  async getProjects(
     @Query('archived') archived?: boolean,
     @Query('page-size') pageSize?: number,
     @Query('name') name?: string,
     @Query('page') page?: number
   ): Promise<DataResponse<ClockifyProject>> {
+    const projects = await this.clockify.getProjects({
+      archived,
+      pageSize,
+      page,
+      name,
+    });
+
     return {
-      data: await this.clockify.getProjects({ archived, pageSize, page, name }),
-      meta: {
-        archived,
-        pageSize,
-        name,
-        page,
-      },
+      data: projects,
+      meta: { archived, pageSize, name, page },
     };
   }
 
-  @Get('project:/id')
+  @Get('project/:id')
   @HttpCode(200)
   @ApiOperation({ summary: 'Get a specific clockify project' })
   @ApiResponse({ status: 200, description: 'Success' })
   @ApiResponse({ status: 400, description: 'Bad Request' })
   @ApiResponse({ status: 401, description: 'Unauthorized' })
-  async getProject<ClockifyProject>(
-    @Query('archived') archived?: boolean,
-    @Query('page-size') pageSize?: number,
-    @Query('name') name?: string,
-    @Query('page') page?: number
+  async getProject(
+    @Param('id') id: string
   ): Promise<DataResponse<ClockifyProject>> {
+    const project = await this.clockify.getProject({
+      id,
+    });
+
     return {
-      data: await this.clockify.getProjects({ archived, pageSize, page, name }),
-      meta: { archived, pageSize, name, page },
+      data: project,
+      meta: { id },
     };
   }
 
@@ -90,18 +92,27 @@ export class ClockifyController {
   })
   @ApiResponse({ status: 401, description: 'Unauthorized' })
   @Post('start-timer')
-  async startTimer(@Body('projectID') projectID: StartTimerDto): Promise<any> {
+  async startTimer(
+    @Body('projectID') projectID: StartTimerDto
+  ): Promise<DataResponse<any>> {
     const data = this.clockify.startTimer(projectID);
-    return data;
+    return { data, meta: { projectID } };
   }
 
   @Post('stop-timer')
-  stopTimer(@Body() body: any): Observable<any> {
-    return this.clockify.stopTimer(body?.projectId);
+  async stopTimer(): Promise<DataResponse<any>> {
+    return {
+      data: await this.clockify.stopTimer(),
+    };
   }
 
   @Get('buildtime/:id')
-  getBuildTime(@Param('id') id: any): Observable<any> {
-    return this.clockify.getBuildTime(id);
+  async getBuildTime(@Param('id') id: string): Promise<DataResponse<any>> {
+    return {
+      data: await this.clockify.getBuildTime(id),
+      meta: {
+        projectID: id,
+      },
+    };
   }
 }

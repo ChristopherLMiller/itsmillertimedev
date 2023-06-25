@@ -5,11 +5,13 @@ import { PrismaClient } from '@prisma/client';
 import { DMMFClass } from '@prisma/client/runtime';
 import { PrismaSessionStore } from '@quixo3/prisma-session-store';
 import AdminJS from 'adminjs';
-import { config } from '../../../config';
 import { PrismaModule } from '../../common/prisma/prisma.module';
 import { PrismaService } from '../../common/prisma/prisma.service';
 import { AuthModule } from '../auth/auth.module';
 import { AuthService } from '../auth/auth.service';
+import { SettingsAdminSettings } from '../settings/admin.settings';
+import { SettingsModule } from '../settings/settings.module';
+import { SettingsService } from '../settings/settings.service';
 import { ClockifyAdminSettings } from '../v1/clockify/admin.settings';
 import { DiscordAdminSettings } from '../v1/discord/admin.settings';
 import {
@@ -41,10 +43,15 @@ AdminJS.registerAdapter({
 @Module({
   imports: [
     AdminModule.createAdminAsync({
-      imports: [PrismaModule, AuthModule],
-      inject: [PrismaService, AuthService],
-      useFactory: async (prisma: PrismaService, authService: AuthService) => {
+      imports: [PrismaModule, AuthModule, SettingsModule],
+      inject: [PrismaService, AuthService, SettingsService],
+      useFactory: async (
+        prisma: PrismaService,
+        authService: AuthService,
+        settings: SettingsService
+      ) => {
         const dmmf = (prisma as any)._baseDmmf as DMMFClass;
+        const adminSettings = await settings.getSetting('adminjs');
 
         return {
           adminJsOptions: {
@@ -152,12 +159,19 @@ AdminJS.registerAdapter({
                 },
                 options: ModelAdminSettings,
               },
+              {
+                resource: {
+                  model: dmmf.modelMap.Settings,
+                  client: prisma,
+                },
+                options: SettingsAdminSettings,
+              },
             ],
           },
           auth: {
             authenticate: authService.signInEmail,
             cookieName: 'adminjs',
-            cookiePassword: config.adminjs.secret,
+            cookiePassword: adminSettings['secret'],
           },
           sessionOptions: {
             store: new PrismaSessionStore(new PrismaClient(), {
@@ -167,7 +181,7 @@ AdminJS.registerAdapter({
             }),
             resave: true,
             saveUninitialized: true,
-            secret: config.adminjs.secret,
+            secret: adminSettings['secret'],
           },
           branding: {
             companyName: 'ItsMillerTime',

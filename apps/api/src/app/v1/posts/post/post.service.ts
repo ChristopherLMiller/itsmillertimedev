@@ -1,6 +1,6 @@
 import { DataResponse } from '@itsmillertimedev/data';
 import { countWords } from '@itsmillertimedev/utility-functions';
-import { BadRequestException, Injectable } from '@nestjs/common';
+import { BadRequestException, Injectable, Logger } from '@nestjs/common';
 import { Post, Prisma } from '@prisma/client';
 import { PrismaDTO } from '../../../../common/prisma/prisma.dto';
 import { PrismaService } from '../../../../common/prisma/prisma.service';
@@ -8,6 +8,8 @@ import { PrismaService } from '../../../../common/prisma/prisma.service';
 @Injectable()
 export class PostService {
   constructor(private prisma: PrismaService) {}
+
+  logger = new Logger(PostService.name);
 
   async create(newData: Post): Promise<Post> {
     const metaTitle = newData.metaTitle || newData.title;
@@ -19,7 +21,7 @@ export class PostService {
       return data;
     } catch (error) {
       if (error instanceof Prisma.PrismaClientValidationError) {
-        console.log(error.message);
+        this.logger.log(error.message);
         throw new BadRequestException(
           'Unable to validate the post',
           error.message

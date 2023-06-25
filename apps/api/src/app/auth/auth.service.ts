@@ -1,24 +1,25 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, Logger } from '@nestjs/common';
 import { createClient } from '@supabase/supabase-js';
 import { CurrentAdmin } from 'adminjs';
 import { config } from '../../../config';
 
 @Injectable()
 export class AuthService {
+  logger = new Logger(AuthService.name);
   supabase = createClient(config.supabase.url, config.supabase.key);
 
   signInEmail = async (
     email: string,
     password: string
   ): Promise<CurrentAdmin | null> => {
-    const { data, error } = await this.supabase.auth.signInWithPassword({
+    const { error } = await this.supabase.auth.signInWithPassword({
       email,
       password,
     });
     if (!error) {
       return Promise.resolve({ email, password });
     } else {
-      console.log(error.stack);
+      this.logger.error(error.message);
       throw new Error(error.message);
     }
   };

@@ -14,7 +14,6 @@ export class PostTagService {
   ): Promise<PostTag | Prisma.BatchPayload> {
     // check if a singular item or an array
     if (Array.isArray(newData)) {
-      console.log('array items');
       // handle as an array
       const insertableItems = await Promise.all(
         newData.flatMap(async (item) => {

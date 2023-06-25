@@ -16,6 +16,7 @@ import { PostCategory as _PostCategory } from './post_category';
 import { PostTag as _PostTag } from './post_tag';
 import { Image as _Image } from './image';
 import { Scale as _Scale } from './scale';
+import { Settings as _Settings } from './settings';
 import { Session as _Session } from './session';
 
 export namespace PrismaModel {
@@ -37,6 +38,7 @@ export namespace PrismaModel {
   export class PostTag extends _PostTag {}
   export class Image extends _Image {}
   export class Scale extends _Scale {}
+  export class Settings extends _Settings {}
   export class Session extends _Session {}
 
   export const extraModels = [
@@ -58,6 +60,7 @@ export namespace PrismaModel {
     PostTag,
     Image,
     Scale,
+    Settings,
     Session,
   ];
 }

@@ -1,20 +1,20 @@
 import { Injectable } from '@nestjs/common';
+import { MinecraftRule, MinecraftRuleCategory } from '@prisma/client';
 import { PrismaService } from '../../../common/prisma/prisma.service';
 
 @Injectable()
 export class MinecraftService {
   constructor(private prisma: PrismaService) {}
 
-  findRules(): any {
+  findRules(): Promise<MinecraftRule[]> {
     return this.prisma.minecraftRule.findMany();
   }
 
-  findRule(ruleId: number): any {
-    console.info(ruleId);
+  findRule(ruleId: number): Promise<MinecraftRule> {
     return this.prisma.minecraftRule.findFirst({ where: { id: ruleId } });
   }
 
-  findRulesCategories(): any {
+  findRulesCategories(): Promise<MinecraftRuleCategory[]> {
     return this.prisma.minecraftRuleCategory.findMany();
   }
 }

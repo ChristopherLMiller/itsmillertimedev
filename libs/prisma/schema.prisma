@@ -264,6 +264,12 @@ model Scale {
   @@index([id, slug])
 }
 
+model Settings {
+  id    Int    @id @default(autoincrement())
+  key   String @unique
+  value Json
+}
+
 model Session {
   id        String   @id
   sid       String   @unique

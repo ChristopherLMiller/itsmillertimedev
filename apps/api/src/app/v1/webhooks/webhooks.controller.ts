@@ -5,12 +5,13 @@ import {
   Controller,
   ForbiddenException,
   Headers,
+  Logger,
   Post,
 } from '@nestjs/common';
-import { ConfigService } from '@nestjs/config';
 import { ApiSecurity, ApiTags } from '@nestjs/swagger';
 import { ClockifyTimer } from '@prisma/client';
 import { formatDistanceStrict, parseISO } from 'date-fns';
+import { SettingsService } from '../../settings/settings.service';
 import { ClockifyService } from '../clockify/clockify.service';
 import { DiscordService } from '../discord/discord.service';
 import { DiscordChannels } from '../discord/discord.types';
@@ -23,19 +24,25 @@ export class WebhooksController {
     private clockify: ClockifyService,
     private discord: DiscordService,
     private image: ImageService,
-    private readonly config: ConfigService
+    private readonly settings: SettingsService
   ) {}
+
+  logger = new Logger(WebhooksController.name);
 
   //#region Clockify
   @Post('clockify/start')
   @ApiSecurity('clockify-signature')
-  webhookClockifyStart(
+  async webhookClockifyStart(
     @Headers('clockify-signature') clockifySignature: string,
     @Body() body: ClockifyResponse
   ): Promise<ClockifyTimer> {
+    const startSignature = await this.settings.getField(
+      'clockify',
+      'start_signature'
+    );
     // if the signatures don't match we need to eject with a 403 error
-    if (clockifySignature != this.config.get('CLOCKIFY_SIGNATURE_START')) {
-      console.error('Invalid Clockify Webhook Signature provided');
+    if (clockifySignature != startSignature) {
+      this.logger.error('Invalid Clockify Webhook Signature provided');
       throw new ForbiddenException(
         'Invalid Clockify Webhook Signature provided'
       );
@@ -45,7 +52,7 @@ export class WebhooksController {
 
     // if there isn't a projectID eject now
     if (project?.id == null) {
-      console.error('Must provide projectID');
+      this.logger.error('Must provide projectID');
       throw new BadRequestException('Must provide projectId');
     }
     // send a message to discord
@@ -59,13 +66,17 @@ export class WebhooksController {
   }
 
   @Post('clockify/stop')
-  webhookClockifyStop(
+  async webhookClockifyStop(
     @Headers('clockify-signature') clockifySignature: string,
     @Body() body: ClockifyResponse
   ): Promise<ClockifyTimer> {
+    const stopSignature = await this.settings.getField(
+      'clockify',
+      'stop_signature'
+    );
     // if the signatures don't match we need to eject with a 403 error
-    if (clockifySignature != this.config.get('CLOCKIFY_SIGNATURE_STOP')) {
-      console.error('Invalid Clockify Webhook Signature provided');
+    if (clockifySignature != stopSignature) {
+      this.logger.error('Invalid Clockify Webhook Signature provided');
       throw new ForbiddenException(
         'Invalid Clockify Webhook Signature provided'
       );
@@ -74,7 +85,7 @@ export class WebhooksController {
 
     // if the projectId is null we just will ignore this
     if (project?.id == null) {
-      console.error('Must provide projectID');
+      this.logger.error('Must provide projectID');
       throw new BadRequestException('Must provide projectId');
     }
 
@@ -93,13 +104,17 @@ export class WebhooksController {
   }
 
   @Post('clockify/delete')
-  webhookClockifyDelete(
+  async webhookClockifyDelete(
     @Headers('clockify-signature') clockifySignature: string,
     @Body() body: ClockifyResponse
   ): Promise<ClockifyTimer> {
+    const stopSignature = await this.settings.getField(
+      'clockify',
+      'stop_signature'
+    );
     // if the signatures don't match we need to eject with a 403 error
-    if (clockifySignature != this.config.get('CLOCKIFY_SIGNATURE_STOP')) {
-      console.error('Invalid Clockify Webhook Signature provided');
+    if (clockifySignature != stopSignature) {
+      this.logger.error('Invalid Clockify Webhook Signature provided');
       throw new ForbiddenException(
         'Invalid Clockify Webhook Signature provided'
       );
@@ -108,7 +123,7 @@ export class WebhooksController {
 
     // if the projectId is null we just will ignore this
     if (project?.id == null) {
-      console.error('Must provide projectID');
+      this.logger.error('Must provide projectID');
       throw new BadRequestException('Must provide projectId');
     }
 
@@ -183,7 +198,7 @@ export class WebhooksController {
         }
         break;
       default:
-        console.log(body.notification_type);
+        this.logger.log(body.notification_type);
         break;
     }
   }

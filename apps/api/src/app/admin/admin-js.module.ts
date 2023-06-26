@@ -5,12 +5,9 @@ import { PrismaClient } from '@prisma/client';
 import { DMMFClass } from '@prisma/client/runtime';
 import { PrismaSessionStore } from '@quixo3/prisma-session-store';
 import AdminJS from 'adminjs';
-import { PrismaModule } from '../../common/prisma/prisma.module';
 import { PrismaService } from '../../common/prisma/prisma.service';
-import { AuthModule } from '../auth/auth.module';
 import { AuthService } from '../auth/auth.service';
 import { SettingsAdminSettings } from '../settings/admin.settings';
-import { SettingsModule } from '../settings/settings.module';
 import { SettingsService } from '../settings/settings.service';
 import { ClockifyAdminSettings } from '../v1/clockify/admin.settings';
 import { DiscordAdminSettings } from '../v1/discord/admin.settings';
@@ -43,7 +40,7 @@ AdminJS.registerAdapter({
 @Module({
   imports: [
     AdminModule.createAdminAsync({
-      imports: [PrismaModule, AuthModule, SettingsModule],
+      imports: [],
       inject: [PrismaService, AuthService, SettingsService],
       useFactory: async (
         prisma: PrismaService,

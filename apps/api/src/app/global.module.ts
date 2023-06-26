@@ -1,16 +1,24 @@
 import { CacheInterceptor, CacheModule, Logger, Module } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
 import { APP_INTERCEPTOR } from '@nestjs/core';
+import { DevtoolsModule } from '@nestjs/devtools-integration';
 import MemoryStore from 'cache-manager-memory-store';
 import { redisStore } from 'cache-manager-redis-yet';
 import { config } from '../../config';
+import { PrismaModule } from '../common/prisma/prisma.module';
 import { AdminJSModule } from './admin/admin-js.module';
 import { AuthModule } from './auth/auth.module';
+import { SettingsModule } from './settings/settings.module';
 import { V1Module } from './v1/v1.module';
 
 @Module({
   controllers: [],
   imports: [
+    DevtoolsModule.register({
+      http: config.general.environment !== 'production',
+    }),
+    SettingsModule,
+    PrismaModule,
     ConfigModule.forRoot({
       isGlobal: true,
       envFilePath: '.env',

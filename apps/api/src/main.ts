@@ -3,8 +3,8 @@ import { NestFactory } from '@nestjs/core';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 import * as Sentry from '@sentry/node';
 import {
-  utilities as nestWinstonModuleUtilities,
   WinstonModule,
+  utilities as nestWinstonModuleUtilities,
 } from 'nest-winston';
 import * as winston from 'winston';
 import { createLogger } from 'winston';
@@ -40,6 +40,7 @@ async function bootstrap() {
   // Create the Nest App
   const app = await NestFactory.create(GlobalModule, {
     bufferLogs: true,
+    snapshot: true,
     logger: WinstonModule.createLogger({ instance: winstonInstance }),
   });
 

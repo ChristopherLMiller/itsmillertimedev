@@ -21,6 +21,7 @@
     "@nestjs/common": "^9.3.9",
     "@nestjs/config": "^2.3.1",
     "@nestjs/core": "^9.3.9",
+    "@nestjs/devtools-integration": "^0.1.5",
     "@nestjs/graphql": "^10.2.0",
     "@nestjs/mapped-types": "^1.2.2",
     "@nestjs/platform-express": "^9.3.9",

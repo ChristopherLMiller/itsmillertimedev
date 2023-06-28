@@ -1,4 +1,4 @@
-import { DataResponse } from '@itsmillertimedev/data';
+import { Response } from '@itsmillertimedev/data';
 import {
   Controller,
   Get,
@@ -19,7 +19,7 @@ export class GithubController {
   constructor(private github: GithubService) {}
 
   @Get('user/:login')
-  async getUser(@Param('login') login: string): Promise<DataResponse<any>> {
+  async getUser(@Param('login') login: string): Response<any> {
     return { data: await this.github.findUser(login) };
   }
 }

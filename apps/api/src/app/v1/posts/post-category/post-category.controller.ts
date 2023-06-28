@@ -1,4 +1,4 @@
-import { DataResponse } from '@itsmillertimedev/data';
+import { Response } from '@itsmillertimedev/data';
 import {
   Body,
   Controller,
@@ -41,7 +41,7 @@ export class PostCategoryController {
   @ApiResponse({ status: 403, description: 'Forbidden' })
   async create(
     @Body() createPostCategoryDto: PostCategory
-  ): Promise<DataResponse<PostCategory | Prisma.BatchPayload>> {
+  ): Response<PostCategory | Prisma.BatchPayload> {
     return {
       data: await this.postCategoryService.create(createPostCategoryDto),
       meta: {},
@@ -56,7 +56,7 @@ export class PostCategoryController {
     description: 'Object containing all categories',
   })
   @ApiResponse({ status: 403, description: 'Forbidden' })
-  async findAll(): Promise<DataResponse<PostCategory[]>> {
+  async findAll(): Response<PostCategory[]> {
     return { data: await this.postCategoryService.findAll(), meta: {} };
   }
 
@@ -88,7 +88,7 @@ export class PostCategoryController {
   async update(
     @Param('slug') slug: string,
     @Body() updatePostCategoryDto: PostCategory
-  ): Promise<DataResponse<PostCategory>> {
+  ): Response<PostCategory> {
     return {
       data: await this.postCategoryService.update(slug, updatePostCategoryDto),
       meta: { slug },
@@ -104,7 +104,7 @@ export class PostCategoryController {
     description: 'Successful removal of the category',
   })
   @ApiResponse({ status: 403, description: 'Forbidden' })
-  async remove(@Param('slug') slug: string) {
+  async remove(@Param('slug') slug: string): Response<PostCategory> {
     return {
       data: await this.postCategoryService.remove(slug),
       meta: { slug },

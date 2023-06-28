@@ -1,4 +1,4 @@
-import { DataResponse } from '@itsmillertimedev/data';
+import { Response } from '@itsmillertimedev/data';
 import {
   Controller,
   Get,
@@ -21,7 +21,7 @@ export class MinecraftServerController {
   constructor(private minecraft: MinecraftService) {}
 
   @Get('rules')
-  async getRules(): Promise<DataResponse<MinecraftRule[]>> {
+  async getRules(): Response<MinecraftRule[]> {
     const data = await this.minecraft
       .findRules()
       .then((rules) => rules.map((rule) => rule));
@@ -29,7 +29,7 @@ export class MinecraftServerController {
   }
 
   @Get('rules/:id')
-  async getRule(@Param('id') ruleId): Promise<DataResponse<MinecraftRule>> {
+  async getRule(@Param('id') ruleId): Response<MinecraftRule> {
     const data = await this.minecraft
       .findRule(parseInt(ruleId))
       .then((rule) => {
@@ -42,7 +42,7 @@ export class MinecraftServerController {
   }
 
   @Get('rules-categories')
-  async getRulesCategories(): Promise<DataResponse<MinecraftRuleCategory[]>> {
+  async getRulesCategories(): Response<MinecraftRuleCategory[]> {
     const data = await this.minecraft.findRulesCategories();
     return { data, meta: { totalRecords: data.length } };
   }

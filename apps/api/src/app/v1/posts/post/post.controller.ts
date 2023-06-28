@@ -1,13 +1,13 @@
-import { DataResponse } from '@itsmillertimedev/data';
+import { Response } from '@itsmillertimedev/data';
 import {
   Body,
   Controller,
   Delete,
   Get,
   HttpCode,
+  Post as NestPost,
   Param,
   Patch,
-  Post as NestPost,
   Query,
   UseGuards,
   UseInterceptors,
@@ -43,7 +43,8 @@ export class PostController {
   @ApiResponse({ status: 403, description: 'Forbidden, check auth key' })
   async create(
     @Body() createPostDto: Post
-  ): Promise<DataResponse<Post | Prisma.BatchPayload>> {
+  ): Response<Post | Prisma.BatchPayload> {
+    // Response<Post | Prisma.BatchPayload>> {
     return { data: await this.postService.create(createPostDto) };
   }
 
@@ -55,14 +56,8 @@ export class PostController {
     description: 'All posts',
   })
   @ApiResponse({ status: 403, description: 'Forbidden, check auth key' })
-  async findAll(
-    @Query() query: PrismaDTO
-  ): Promise<DataResponse<Partial<Post[]>>> {
-    const { data, meta } = await this.postService.findAll(query);
-    return {
-      data,
-      meta,
-    };
+  async findAll(@Query() query: PrismaDTO): Response<Partial<Post[]>> {
+    return { ...(await this.postService.findAll(query)) };
   }
 
   @Get('/count')
@@ -73,7 +68,7 @@ export class PostController {
     description: 'Count of posts',
   })
   @ApiResponse({ status: 403, description: 'Forbidden, check auth key' })
-  async getCount(): Promise<DataResponse<number>> {
+  async getCount(): Response<number> {
     return {
       data: await this.postService.getCount(''),
     };
@@ -88,7 +83,7 @@ export class PostController {
     description: 'Post to get',
   })
   @ApiResponse({ status: 403, description: 'Forbidden, check auth key' })
-  async findOne(@Param('slug') slug: string) {
+  async findOne(@Param('slug') slug: string): Response<Post> {
     return { data: await this.postService.findOne(slug), meta: { slug } };
   }
 
@@ -101,8 +96,11 @@ export class PostController {
     description: 'Successfully created new post',
   })
   @ApiResponse({ status: 403, description: 'Forbidden, check auth key' })
-  async update(@Param('id') id: string, @Body() updatePostDto: Post) {
-    return this.postService.update(+id, updatePostDto);
+  async update(
+    @Param('id') id: string,
+    @Body() updatePostDto: Post
+  ): Response<string> {
+    return { data: await this.postService.update(+id, updatePostDto) };
   }
 
   @Delete(':id')
@@ -114,7 +112,7 @@ export class PostController {
     description: 'Post successfully deleted',
   })
   @ApiResponse({ status: 403, description: 'Forbidden, check auth key' })
-  async remove(@Param('id') id: string) {
-    return this.postService.remove(+id);
+  async remove(@Param('id') id: string): Response<string> {
+    return { data: await this.postService.remove(+id) };
   }
 }

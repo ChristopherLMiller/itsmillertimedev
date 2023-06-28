@@ -1,4 +1,4 @@
-import { DataResponse } from '@itsmillertimedev/data';
+import { Response } from '@itsmillertimedev/data';
 import { countWords } from '@itsmillertimedev/utility-functions';
 import { BadRequestException, Injectable, Logger } from '@nestjs/common';
 import { Post, Prisma } from '@prisma/client';
@@ -30,7 +30,7 @@ export class PostService {
     }
   }
 
-  async findAll(query: PrismaDTO): Promise<DataResponse<Partial<Post[]>>> {
+  async findAll(query: PrismaDTO): Response<Partial<Post[]>> {
     const {
       sort = 'createdAt:ASC',
       skip,

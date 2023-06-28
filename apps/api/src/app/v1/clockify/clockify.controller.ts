@@ -1,4 +1,4 @@
-import { ClockifyProject, DataResponse } from '@itsmillertimedev/data';
+import { ClockifyProject, Response } from '@itsmillertimedev/data';
 import {
   Body,
   Controller,
@@ -35,7 +35,7 @@ export class ClockifyController {
   @ApiResponse({ status: 200, description: 'Success' })
   @ApiResponse({ status: 400, description: 'Bad Request' })
   @ApiResponse({ status: 401, description: 'Unauthorized' })
-  async getWorkspaces(): Promise<DataResponse<ClockifyWorkspaceDto>> {
+  async getWorkspaces(): Response<ClockifyWorkspaceDto> {
     return { data: await this.clockify.getWorkspaces() };
   }
 
@@ -50,7 +50,7 @@ export class ClockifyController {
     @Query('page-size') pageSize?: number,
     @Query('name') name?: string,
     @Query('page') page?: number
-  ): Promise<DataResponse<ClockifyProject>> {
+  ): Response<ClockifyProject> {
     const projects = await this.clockify.getProjects({
       archived,
       pageSize,
@@ -70,9 +70,7 @@ export class ClockifyController {
   @ApiResponse({ status: 200, description: 'Success' })
   @ApiResponse({ status: 400, description: 'Bad Request' })
   @ApiResponse({ status: 401, description: 'Unauthorized' })
-  async getProject(
-    @Param('id') id: string
-  ): Promise<DataResponse<ClockifyProject>> {
+  async getProject(@Param('id') id: string): Response<ClockifyProject> {
     const project = await this.clockify.getProject({
       id,
     });
@@ -92,22 +90,20 @@ export class ClockifyController {
   })
   @ApiResponse({ status: 401, description: 'Unauthorized' })
   @Post('start-timer')
-  async startTimer(
-    @Body('projectID') projectID: StartTimerDto
-  ): Promise<DataResponse<any>> {
+  async startTimer(@Body('projectID') projectID: StartTimerDto): Response<any> {
     const data = this.clockify.startTimer(projectID);
     return { data, meta: { projectID } };
   }
 
   @Post('stop-timer')
-  async stopTimer(): Promise<DataResponse<any>> {
+  async stopTimer(): Response<any> {
     return {
       data: await this.clockify.stopTimer(),
     };
   }
 
   @Get('buildtime/:id')
-  async getBuildTime(@Param('id') id: string): Promise<DataResponse<any>> {
+  async getBuildTime(@Param('id') id: string): Response<any> {
     return {
       data: await this.clockify.getBuildTime(id),
       meta: {

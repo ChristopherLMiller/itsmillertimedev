@@ -10,6 +10,7 @@ import { ClockifyService } from './clockify.service';
     HttpModule.registerAsync({
       imports: [],
       inject: [SettingsService],
+      // @ts-ignore
       useFactory: async (settings: SettingsService) => ({
         baseURL: 'https://api.clockify.me/api/v1',
         headers: {

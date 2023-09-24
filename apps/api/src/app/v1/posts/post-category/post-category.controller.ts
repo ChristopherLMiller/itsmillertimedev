@@ -9,7 +9,6 @@ import {
   Patch,
   Post,
   UseGuards,
-  UseInterceptors,
 } from '@nestjs/common';
 import {
   ApiOperation,
@@ -20,14 +19,12 @@ import {
 } from '@nestjs/swagger';
 import { PostCategory, Prisma } from '@prisma/client';
 import { BasicAuthGuard } from '../../../../common/guards/basicAuth.guard';
-import { ResponseTransformInterceptor } from '../../../../common/interceptors/responseTransform.interceptor';
 import { PostCategoryService } from './post-category.service';
 
 @Controller({ version: '1', path: 'post-category' })
 @ApiTags('Post', 'Post Category')
 @UseGuards(BasicAuthGuard)
 @ApiSecurity('x-api-key')
-@UseInterceptors(ResponseTransformInterceptor)
 export class PostCategoryController {
   constructor(private readonly postCategoryService: PostCategoryService) {}
 

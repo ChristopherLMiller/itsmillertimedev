@@ -1,3 +1,4 @@
+import { Alert as _Alert } from './alert';
 import { ClockifyTimer as _ClockifyTimer } from './clockify_timer';
 import { DiscordUserSetting as _DiscordUserSetting } from './discord_user_setting';
 import { Gallery as _Gallery } from './gallery';
@@ -18,8 +19,13 @@ import { Image as _Image } from './image';
 import { Scale as _Scale } from './scale';
 import { Settings as _Settings } from './settings';
 import { Session as _Session } from './session';
+import { Role as _Role } from './role';
+import { Permission as _Permission } from './permission';
+import { PermissionsToRoles as _PermissionsToRoles } from './permissions_to_roles';
+import { User as _User } from './user';
 
 export namespace PrismaModel {
+  export class Alert extends _Alert {}
   export class ClockifyTimer extends _ClockifyTimer {}
   export class DiscordUserSetting extends _DiscordUserSetting {}
   export class Gallery extends _Gallery {}
@@ -40,8 +46,13 @@ export namespace PrismaModel {
   export class Scale extends _Scale {}
   export class Settings extends _Settings {}
   export class Session extends _Session {}
+  export class Role extends _Role {}
+  export class Permission extends _Permission {}
+  export class PermissionsToRoles extends _PermissionsToRoles {}
+  export class User extends _User {}
 
   export const extraModels = [
+    Alert,
     ClockifyTimer,
     DiscordUserSetting,
     Gallery,
@@ -62,5 +73,9 @@ export namespace PrismaModel {
     Scale,
     Settings,
     Session,
+    Role,
+    Permission,
+    PermissionsToRoles,
+    User,
   ];
 }

@@ -163,13 +163,46 @@ AdminJS.registerAdapter({
                 },
                 options: SettingsAdminSettings,
               },
+              /* the following still need configured properly */
+              {
+                resource: {
+                  model: dmmf.modelMap.User,
+                  client: prisma,
+                },
+                options: {
+                  properties: {
+                    meta: {
+                      isRequired: false,
+                      type: 'mixed',
+                    },
+                  },
+                },
+              },
+              {
+                resource: {
+                  model: dmmf.modelMap.Role,
+                  client: prisma,
+                },
+              },
+              {
+                resource: {
+                  model: dmmf.modelMap.Permission,
+                  client: prisma,
+                },
+              },
+              {
+                resource: {
+                  model: dmmf.modelMap.PermissionsToRoles,
+                  client: prisma,
+                },
+              },
             ],
           },
-          auth: {
-            authenticate: authService.signInEmail,
+          /*auth: {
+            authenticate: authService.signInEmail['user'],
             cookieName: 'adminjs',
             cookiePassword: adminSettings['secret'],
-          },
+          },*/
           sessionOptions: {
             store: new PrismaSessionStore(new PrismaClient(), {
               checkPeriod: 2 * 60 * 1000,

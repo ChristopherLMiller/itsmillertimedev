@@ -32,6 +32,17 @@ datasource db {
   relationMode = "foreignKeys"
 }
 
+model Alert {
+  id            Int      @id @default(autoincrement())
+  title         String
+  active        Boolean
+  validUntil    DateTime
+  startDate     DateTime
+  AlertAttempts Int      @default(1)
+
+  @@index([id])
+}
+
 model ClockifyTimer {
   projectId String @unique
   startTime String
@@ -275,6 +286,43 @@ model Session {
   sid       String   @unique
   data      String
   expiresAt DateTime
+}
+
+model Role {
+  id          Int                  @id @default(autoincrement())
+  name        String
+  permissions PermissionsToRoles[]
+  User        User[]
+
+  @@index([id])
+}
+
+model Permission {
+  id    Int                  @id @default(autoincrement())
+  node  String               @unique
+  roles PermissionsToRoles[]
+
+  @@index([id, node])
+}
+
+model PermissionsToRoles {
+  Role         Role       @relation(fields: [roleId], references: [id])
+  roleId       Int
+  Permission   Permission @relation(fields: [permissionId], references: [id])
+  permissionId Int
+
+  @@id([roleId, permissionId])
+}
+
+model User {
+  id         Int    @id @default(autoincrement())
+  supabaseId String @unique
+  email      String
+  role       Role   @relation(fields: [roleId], references: [id])
+  roleId     Int
+  meta       Json?
+
+  @@index([id])
 }
 
 enum PublicationStatus {

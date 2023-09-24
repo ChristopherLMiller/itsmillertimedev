@@ -5,18 +5,15 @@ import {
   NotFoundException,
   Param,
   UseGuards,
-  UseInterceptors,
 } from '@nestjs/common';
 import { ApiTags } from '@nestjs/swagger';
 import { MinecraftRule, MinecraftRuleCategory } from '@prisma/client';
 import { BasicAuthGuard } from '../../../../common/guards/basicAuth.guard';
-import { ResponseTransformInterceptor } from '../../../../common/interceptors/responseTransform.interceptor';
 import { MinecraftService } from '../minecraft.service';
 
 @Controller({ version: '1', path: 'minecraft/server' })
 @ApiTags('Minecraft Server')
 @UseGuards(BasicAuthGuard)
-@UseInterceptors(ResponseTransformInterceptor)
 export class MinecraftServerController {
   constructor(private minecraft: MinecraftService) {}
 

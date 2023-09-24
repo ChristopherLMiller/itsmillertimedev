@@ -1,12 +1,10 @@
-import { Controller, Post, UseGuards, UseInterceptors } from '@nestjs/common';
+import { Controller, Post, UseGuards } from '@nestjs/common';
 import { ApiTags } from '@nestjs/swagger';
 import { BasicAuthGuard } from '../../../common/guards/basicAuth.guard';
-import { ResponseTransformInterceptor } from '../../../common/interceptors/responseTransform.interceptor';
 
 @Controller({ version: '1', path: 'email' })
 @ApiTags('Email')
 @UseGuards(BasicAuthGuard)
-@UseInterceptors(ResponseTransformInterceptor)
 export class EmailController {
   cosntructor() {
     // Nothing to see here

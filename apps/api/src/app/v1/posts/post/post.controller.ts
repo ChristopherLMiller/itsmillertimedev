@@ -5,47 +5,43 @@ import {
   Delete,
   Get,
   HttpCode,
-  Post as NestPost,
   Param,
   Patch,
+  Post,
   Query,
   UseGuards,
-  UseInterceptors,
 } from '@nestjs/common';
+import { ApiOperation, ApiQuery, ApiResponse, ApiTags } from '@nestjs/swagger';
+import { Prisma, Post as PrismaPost } from '@prisma/client';
 import {
-  ApiOperation,
-  ApiQuery,
-  ApiResponse,
-  ApiSecurity,
-  ApiTags,
-} from '@nestjs/swagger';
-import { Post, Prisma } from '@prisma/client';
-import { BasicAuthGuard } from '../../../../common/guards/basicAuth.guard';
-import { ResponseTransformInterceptor } from '../../../../common/interceptors/responseTransform.interceptor';
-import { PrismaDTO } from '../../../../common/prisma/prisma.dto';
+  PermissionsPublic,
+  PermissionsRequired,
+} from '../../../../common/decorators/auth.decorator';
+import { supabaseAuthGuard } from '../../../../common/guards/supabaseAuth.guard';
 import { PostService } from './post.service';
 
 @Controller({ version: '1', path: 'post' })
 @ApiTags('Post')
-@UseGuards(BasicAuthGuard)
-@ApiSecurity('x-api-key')
-@UseInterceptors(ResponseTransformInterceptor)
+@UseGuards(supabaseAuthGuard)
 export class PostController {
   constructor(private readonly postService: PostService) {}
 
-  @NestPost('/')
+  @Post('/')
   @HttpCode(200)
   @ApiOperation({ summary: 'Creates a new Post' })
   @ApiResponse({
     status: 200,
     description: 'Successfully created new post',
   })
-  @ApiResponse({ status: 403, description: 'Forbidden, check auth key' })
+  @ApiResponse({
+    status: 403,
+    description: 'Must be authenticated to create new resource',
+  })
+  @PermissionsRequired('POST.CREATE')
   async create(
-    @Body() createPostDto: Post
-  ): Response<Post | Prisma.BatchPayload> {
-    // Response<Post | Prisma.BatchPayload>> {
-    return { data: await this.postService.create(createPostDto) };
+    @Body() createPostData: Prisma.PostCreateInput
+  ): Response<PrismaPost | Prisma.BatchPayload> {
+    return { data: await this.postService.create(createPostData) };
   }
 
   @Get('/')
@@ -55,23 +51,11 @@ export class PostController {
     status: 200,
     description: 'All posts',
   })
-  @ApiResponse({ status: 403, description: 'Forbidden, check auth key' })
-  async findAll(@Query() query: PrismaDTO): Response<Partial<Post[]>> {
+  @PermissionsPublic()
+  async findAll(
+    @Query() query: Prisma.PostFindManyArgs
+  ): Response<Partial<PrismaPost[]>> {
     return { ...(await this.postService.findAll(query)) };
-  }
-
-  @Get('/count')
-  @HttpCode(200)
-  @ApiOperation({ summary: 'Count how many posts there are' })
-  @ApiResponse({
-    status: 200,
-    description: 'Count of posts',
-  })
-  @ApiResponse({ status: 403, description: 'Forbidden, check auth key' })
-  async getCount(): Response<number> {
-    return {
-      data: await this.postService.getCount(''),
-    };
   }
 
   @Get(':slug')
@@ -83,7 +67,8 @@ export class PostController {
     description: 'Post to get',
   })
   @ApiResponse({ status: 403, description: 'Forbidden, check auth key' })
-  async findOne(@Param('slug') slug: string): Response<Post> {
+  @PermissionsPublic()
+  async findOne(@Param('slug') slug: string): Response<PrismaPost> {
     return { data: await this.postService.findOne(slug), meta: { slug } };
   }
 
@@ -98,7 +83,7 @@ export class PostController {
   @ApiResponse({ status: 403, description: 'Forbidden, check auth key' })
   async update(
     @Param('id') id: string,
-    @Body() updatePostDto: Post
+    @Body() updatePostDto: PrismaPost
   ): Response<string> {
     return { data: await this.postService.update(+id, updatePostDto) };
   }

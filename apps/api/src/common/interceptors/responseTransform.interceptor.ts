@@ -20,12 +20,16 @@ export class ResponseTransformInterceptor<T>
     next: CallHandler<T>
   ): Observable<Response<T>> {
     return next.handle().pipe(
-      map((data) => ({
-        statusCode: 200,
-        data: data['data'],
-        meta: data['meta'],
-        error: data['error'],
-      }))
+      map((data) => {
+        if (data) {
+          return {
+            statusCode: 200,
+            data: data['data'],
+            meta: data['meta'],
+            error: data['error'],
+          };
+        }
+      })
     );
   }
 }

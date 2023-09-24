@@ -5,23 +5,15 @@ import {
   MinutelyForecast,
   Response,
 } from '@itsmillertimedev/data';
-import {
-  Controller,
-  Get,
-  Query,
-  UseGuards,
-  UseInterceptors,
-} from '@nestjs/common';
+import { Controller, Get, Query, UseGuards } from '@nestjs/common';
 import { ApiResponse, ApiSecurity, ApiTags } from '@nestjs/swagger';
 import { BasicAuthGuard } from '../../../common/guards/basicAuth.guard';
-import { ResponseTransformInterceptor } from '../../../common/interceptors/responseTransform.interceptor';
 import { WeatherService } from './weather.service';
 
 @Controller({ version: '1', path: 'weather' })
 @ApiTags('Weather')
 @ApiSecurity('x-api-key')
 @UseGuards(BasicAuthGuard)
-@UseInterceptors(ResponseTransformInterceptor)
 export class WeatherController {
   constructor(private weatherService: WeatherService) {}
 

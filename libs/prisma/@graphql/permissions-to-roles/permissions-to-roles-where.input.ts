@@ -1,0 +1,30 @@
+import { Field } from '@nestjs/graphql';
+import { InputType } from '@nestjs/graphql';
+import { RoleRelationFilter } from '../role/role-relation-filter.input';
+import { IntFilter } from '../prisma/int-filter.input';
+import { PermissionRelationFilter } from '../permission/permission-relation-filter.input';
+
+@InputType()
+export class PermissionsToRolesWhereInput {
+
+    @Field(() => [PermissionsToRolesWhereInput], {nullable:true})
+    AND?: Array<PermissionsToRolesWhereInput>;
+
+    @Field(() => [PermissionsToRolesWhereInput], {nullable:true})
+    OR?: Array<PermissionsToRolesWhereInput>;
+
+    @Field(() => [PermissionsToRolesWhereInput], {nullable:true})
+    NOT?: Array<PermissionsToRolesWhereInput>;
+
+    @Field(() => RoleRelationFilter, {nullable:true})
+    Role?: RoleRelationFilter;
+
+    @Field(() => IntFilter, {nullable:true})
+    roleId?: IntFilter;
+
+    @Field(() => PermissionRelationFilter, {nullable:true})
+    Permission?: PermissionRelationFilter;
+
+    @Field(() => IntFilter, {nullable:true})
+    permissionId?: IntFilter;
+}

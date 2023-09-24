@@ -1,27 +1,19 @@
 import {
   CurrentWeather,
   DailyForecast,
-  DataResponse,
   HourlyForecast,
   MinutelyForecast,
+  Response,
 } from '@itsmillertimedev/data';
-import {
-  Controller,
-  Get,
-  Query,
-  UseGuards,
-  UseInterceptors,
-} from '@nestjs/common';
+import { Controller, Get, Query, UseGuards } from '@nestjs/common';
 import { ApiResponse, ApiSecurity, ApiTags } from '@nestjs/swagger';
 import { BasicAuthGuard } from '../../../common/guards/basicAuth.guard';
-import { ResponseTransformInterceptor } from '../../../common/interceptors/responseTransform.interceptor';
 import { WeatherService } from './weather.service';
 
 @Controller({ version: '1', path: 'weather' })
 @ApiTags('Weather')
 @ApiSecurity('x-api-key')
 @UseGuards(BasicAuthGuard)
-@UseInterceptors(ResponseTransformInterceptor)
 export class WeatherController {
   constructor(private weatherService: WeatherService) {}
 
@@ -39,7 +31,7 @@ export class WeatherController {
   async getCurrentWeather(
     @Query('lat') lat: string,
     @Query('lon') lon: string
-  ): Promise<DataResponse<CurrentWeather>> {
+  ): Response<CurrentWeather> {
     return await this.weatherService.getCurrentWeather({ lat, lon });
   }
 
@@ -57,7 +49,7 @@ export class WeatherController {
   async getMinutelyForecast(
     @Query('lat') lat: string,
     @Query('lon') lon: string
-  ): Promise<DataResponse<MinutelyForecast>> {
+  ): Response<MinutelyForecast> {
     return await this.weatherService.getMinutelyForecast({ lat, lon });
   }
 
@@ -75,7 +67,7 @@ export class WeatherController {
   async getHourlyForecast(
     @Query('lat') lat: string,
     @Query('lon') lon: string
-  ): Promise<DataResponse<HourlyForecast>> {
+  ): Response<HourlyForecast> {
     return await this.weatherService.getHourlyForecast({ lat, lon });
   }
 
@@ -93,7 +85,7 @@ export class WeatherController {
   async getDailyForecast(
     @Query('lat') lat: string,
     @Query('lon') lon: string
-  ): Promise<DataResponse<DailyForecast>> {
+  ): Response<DailyForecast> {
     return await this.weatherService.getDailyForecast({ lat, lon });
   }
 
@@ -111,7 +103,7 @@ export class WeatherController {
   async getAlerts(
     @Query('lat') lat: string,
     @Query('lon') lon: string
-  ): Promise<DataResponse<any>> {
+  ): Response<any> {
     return await this.weatherService.getAlerts({ lat, lon });
   }
 }

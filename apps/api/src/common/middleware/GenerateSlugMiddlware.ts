@@ -1,3 +1,4 @@
+import { Logger } from '@nestjs/common';
 import { Prisma } from '@prisma/client';
 import { PrismaLib } from 'libs/prisma/lib';
 
@@ -5,6 +6,7 @@ export function GenerateSlugMiddleware<
   T extends Prisma.BatchPayload = Prisma.BatchPayload
 >(): Prisma.Middleware {
   const prismaLib = new PrismaLib();
+  const logger = new Logger(GenerateSlugMiddleware.name);
 
   return async (
     params: Prisma.MiddlewareParams,
@@ -30,8 +32,9 @@ export function GenerateSlugMiddleware<
           params.args.data.slug = slug;
           break;
         }
+
         default: {
-          throw new Error(`Invalid Prisma model type: ${params.model}`);
+          logger.log(`Unknown model type: ${params.model}`);
         }
       }
     }

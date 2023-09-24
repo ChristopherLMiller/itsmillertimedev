@@ -14,7 +14,7 @@ export class SettingsService {
     return data.value;
   }
 
-  async getField(key: string, field): Promise<string> {
+  async getField<T>(key: string, field): Promise<T> {
     const data = await this.getSetting(key);
     return data[field];
   }

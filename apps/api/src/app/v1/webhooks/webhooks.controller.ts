@@ -1,4 +1,4 @@
-import { ClockifyResponse, DataResponse } from '@itsmillertimedev/data';
+import { ClockifyResponse, Response } from '@itsmillertimedev/data';
 import {
   BadRequestException,
   Body,
@@ -138,9 +138,7 @@ export class WebhooksController {
 
   //#region Cloudinary
   @Post('cloudinary/notify')
-  async webhookCloudinaryNotify(
-    @Body() body: any
-  ): Promise<DataResponse<unknown>> {
+  async webhookCloudinaryNotify(@Body() body: any): Response<unknown> {
     // the type of notication means we need to call different services, handle appropriately
     switch (body.notification_type) {
       case 'upload': {

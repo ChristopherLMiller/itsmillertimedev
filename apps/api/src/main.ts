@@ -3,13 +3,14 @@ import { NestFactory } from '@nestjs/core';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 import * as Sentry from '@sentry/node';
 import {
-  utilities as nestWinstonModuleUtilities,
   WinstonModule,
+  utilities as nestWinstonModuleUtilities,
 } from 'nest-winston';
 import * as winston from 'winston';
 import { createLogger } from 'winston';
 import { config } from '../config';
 import { GlobalModule } from './app/global.module';
+import { ResponseTransformInterceptor } from './common/interceptors/responseTransform.interceptor';
 import { SentryInterceptor } from './common/interceptors/sentry.interceptor';
 // eslint-disable-next-line @typescript-eslint/no-var-requires
 const packageData = require('../../../package.json');
@@ -40,6 +41,7 @@ async function bootstrap() {
   // Create the Nest App
   const app = await NestFactory.create(GlobalModule, {
     bufferLogs: true,
+    snapshot: true,
     logger: WinstonModule.createLogger({ instance: winstonInstance }),
   });
 
@@ -74,7 +76,10 @@ async function bootstrap() {
   });
 
   //Register global pieces
-  app.useGlobalInterceptors(new SentryInterceptor());
+  app.useGlobalInterceptors(
+    new SentryInterceptor(),
+    new ResponseTransformInterceptor()
+  );
   app.useGlobalPipes(new ValidationPipe());
   app.setGlobalPrefix('api');
 

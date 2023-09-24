@@ -1,11 +1,8 @@
 import { DiscordModule } from '@discord-nestjs/core';
 import { HttpModule } from '@nestjs/axios';
 import { Module } from '@nestjs/common';
-import { PrismaModule } from '../../../../common/prisma/prisma.module';
 import { MapsModule } from '../../maps/maps.module';
 import { MapsService } from '../../maps/maps.service';
-
-import { SettingsModule } from '../../../settings/settings.module';
 import { WeatherModule } from '../../weather/weather.module';
 import { DiscordService } from '../discord.service';
 import { BotGateway } from './bot.gateway';
@@ -15,14 +12,7 @@ import { LocationSubCommand } from './commands/settings/locationSub.command';
 import { SettingsCommand } from './commands/settings/settings.command';
 
 @Module({
-  imports: [
-    DiscordModule.forFeature(),
-    HttpModule,
-    WeatherModule,
-    PrismaModule,
-    MapsModule,
-    SettingsModule,
-  ],
+  imports: [DiscordModule.forFeature(), HttpModule, WeatherModule, MapsModule],
   providers: [
     BotGateway,
     RollCommand,

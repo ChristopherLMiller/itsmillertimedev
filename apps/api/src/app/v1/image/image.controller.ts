@@ -1,4 +1,4 @@
-import { DataResponse } from '@itsmillertimedev/data';
+import { Response } from '@itsmillertimedev/data';
 import {
   Controller,
   Delete,
@@ -41,7 +41,7 @@ export class ImageController {
   @ApiResponse({ status: 200, description: 'Success' })
   @ApiResponse({ status: 403, description: 'Forbidden' })
   @ApiResponse({ status: 404, description: 'Image not found' })
-  async getImage(@Query() query): Promise<DataResponse<Image>> {
+  async getImage(@Query() query): Response<Image> {
     const { public_id } = query;
     return {
       data: await this.imageService.getImage(public_id),
@@ -58,7 +58,7 @@ export class ImageController {
   @UseInterceptors(FileInterceptor('file'))
   async uploadImage(
     @UploadedFile('file') file: Express.Multer.File
-  ): Promise<DataResponse<Partial<Image>>> {
+  ): Response<Partial<Image>> {
     return {
       data: await this.imageService.uploadImage(file),
       meta: {
@@ -73,7 +73,7 @@ export class ImageController {
   @ApiQuery({ name: 'public_id', description: 'Image ID from Cloudinary' })
   @ApiResponse({ status: 200, description: 'Success' })
   @ApiResponse({ status: 403, description: 'Forbidden' })
-  async getExifData(@Query() query): Promise<DataResponse<Partial<Image>>> {
+  async getExifData(@Query() query): Response<Partial<Image>> {
     const { public_id } = query;
     // try and get the contents
     try {
@@ -97,7 +97,7 @@ export class ImageController {
   })
   @ApiResponse({ status: 200, description: 'Success' })
   @ApiResponse({ status: 403, description: 'Forbidden' })
-  async getThumbnail(@Query() query): Promise<DataResponse<Partial<Image>>> {
+  async getThumbnail(@Query() query): Response<Partial<Image>> {
     const { public_id } = query;
     return {
       data: { thumbnail: await this.imageService.getThumbnail(public_id) },
@@ -106,7 +106,7 @@ export class ImageController {
   }
 
   @Delete('/')
-  async deleteImage(@Query() query): Promise<DataResponse<string>> {
+  async deleteImage(@Query() query): Response<string> {
     const { public_id } = query;
 
     return {

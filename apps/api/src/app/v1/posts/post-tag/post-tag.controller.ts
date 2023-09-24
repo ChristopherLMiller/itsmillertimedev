@@ -1,4 +1,4 @@
-import { DataResponse } from '@itsmillertimedev/data';
+import { Response } from '@itsmillertimedev/data';
 import {
   Body,
   Controller,
@@ -9,7 +9,6 @@ import {
   Patch,
   Post,
   UseGuards,
-  UseInterceptors,
 } from '@nestjs/common';
 import {
   ApiOperation,
@@ -20,14 +19,12 @@ import {
 } from '@nestjs/swagger';
 import { PostTag, Prisma } from '@prisma/client';
 import { BasicAuthGuard } from '../../../../common/guards/basicAuth.guard';
-import { ResponseTransformInterceptor } from '../../../../common/interceptors/responseTransform.interceptor';
 import { PostTagService } from './post-tag.service';
 
 @Controller({ version: '1', path: 'post-tag' })
 @ApiTags('Post', 'Post Tag')
 @UseGuards(BasicAuthGuard)
 @ApiSecurity('x-api-key')
-@UseInterceptors(ResponseTransformInterceptor)
 export class PostTagController {
   constructor(private readonly postTagService: PostTagService) {}
 
@@ -41,7 +38,7 @@ export class PostTagController {
   @ApiResponse({ status: 403, description: 'Forbidden' })
   async create(
     @Body() createPostTagDto: PostTag
-  ): Promise<DataResponse<PostTag | Prisma.BatchPayload>> {
+  ): Response<PostTag | Prisma.BatchPayload> {
     return {
       data: await this.postTagService.create(createPostTagDto),
       meta: {},
@@ -56,7 +53,7 @@ export class PostTagController {
     description: 'Object containing all tag',
   })
   @ApiResponse({ status: 403, description: 'Forbidden' })
-  async findAll(): Promise<DataResponse<PostTag[]>> {
+  async findAll(): Response<PostTag[]> {
     return { data: await this.postTagService.findAll(), meta: {} };
   }
 
@@ -69,7 +66,7 @@ export class PostTagController {
     description: 'Object containing a singular Tag',
   })
   @ApiResponse({ status: 403, description: 'Forbidden' })
-  async findOne(@Param('slug') slug: string): Promise<DataResponse<PostTag>> {
+  async findOne(@Param('slug') slug: string): Response<PostTag> {
     return { data: await this.postTagService.findOne(slug), meta: { slug } };
   }
 
@@ -85,7 +82,7 @@ export class PostTagController {
   async update(
     @Param('slug') slug: string,
     @Body() updatePostTagDto: PostTag
-  ): Promise<DataResponse<PostTag>> {
+  ): Response<PostTag> {
     return {
       data: await this.postTagService.update(slug, updatePostTagDto),
       meta: { slug },
@@ -101,7 +98,7 @@ export class PostTagController {
     description: 'Successful removal of the Tag',
   })
   @ApiResponse({ status: 403, description: 'Forbidden' })
-  async remove(@Param('slug') slug: string): Promise<DataResponse<PostTag>> {
+  async remove(@Param('slug') slug: string): Response<PostTag> {
     return { data: await this.postTagService.remove(slug), meta: { slug } };
   }
 }

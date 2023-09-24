@@ -1,4 +1,4 @@
-import { DataResponse } from '@itsmillertimedev/data';
+import { Response } from '@itsmillertimedev/data';
 import { Body, Controller, Post } from '@nestjs/common';
 import { DiscordService } from './discord.service';
 
@@ -7,7 +7,7 @@ export class DiscordController {
   constructor(private discord: DiscordService) {}
 
   @Post('message')
-  async sendMessage(@Body() body: any): Promise<DataResponse<unknown>> {
+  async sendMessage(@Body() body: any): Response<any> {
     const { message, channel } = body;
     return await this.discord.sendMessage(message, channel);
   }

@@ -84,6 +84,7 @@ export class PostService {
     // Create some variables to store data in
     let data;
 
+    // @ts-ignore
     const order = JSON.parse(orderBy);
 
     if (select !== null && select !== undefined) {

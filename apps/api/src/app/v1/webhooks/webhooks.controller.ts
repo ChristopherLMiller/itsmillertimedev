@@ -1,4 +1,4 @@
-import { ClockifyResponse, Response } from '@itsmillertimedev/data';
+import { Response } from '@itsmillertimedev/data';
 import {
   BadRequestException,
   Body,
@@ -34,7 +34,7 @@ export class WebhooksController {
   @ApiSecurity('clockify-signature')
   async webhookClockifyStart(
     @Headers('clockify-signature') clockifySignature: string,
-    @Body() body: ClockifyResponse
+    @Body() body: any
   ): Promise<ClockifyTimer> {
     const startSignature = await this.settings.getField(
       'clockify',
@@ -68,7 +68,7 @@ export class WebhooksController {
   @Post('clockify/stop')
   async webhookClockifyStop(
     @Headers('clockify-signature') clockifySignature: string,
-    @Body() body: ClockifyResponse
+    @Body() body: any
   ): Promise<ClockifyTimer> {
     const stopSignature = await this.settings.getField(
       'clockify',
@@ -106,7 +106,7 @@ export class WebhooksController {
   @Post('clockify/delete')
   async webhookClockifyDelete(
     @Headers('clockify-signature') clockifySignature: string,
-    @Body() body: ClockifyResponse
+    @Body() body: any
   ): Promise<ClockifyTimer> {
     const stopSignature = await this.settings.getField(
       'clockify',

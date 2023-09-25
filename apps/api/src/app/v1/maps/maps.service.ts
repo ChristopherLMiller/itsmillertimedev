@@ -28,7 +28,7 @@ export class MapsService {
     const response = await this.gmapsClient.geocode({
       params: {
         address: place,
-        key: apiKey,
+        key: apiKey as string,
       },
     });
 

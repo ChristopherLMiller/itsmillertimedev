@@ -99,6 +99,6 @@ export class AuthService {
     userId: string
   ): Promise<PermissionsToRoles[]> => {
     const userRole = await this.getUserRole(userId);
-    return this.getRolePermissions(userRole.roleId);
+    return this.getRolePermissions(userRole.id);
   };
 }

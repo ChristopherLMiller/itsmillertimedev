@@ -3,7 +3,6 @@ import { BadRequestException, Injectable, Logger } from '@nestjs/common';
 import { dataFetcher } from '../../../common/handlers/dataFetcher';
 import { PrismaService } from '../../../common/prisma/prisma.service';
 import { SettingsService } from '../../settings/settings.service';
-import { ClockifyWorkspaceDto, StartTimerDto } from './dto';
 
 @Injectable()
 export class ClockifyService {
@@ -28,8 +27,8 @@ export class ClockifyService {
   }
 
   // Get list of workspaces
-  async getWorkspaces(): Promise<ClockifyWorkspaceDto> {
-    return await dataFetcher(this.http.get('workspaces'));
+  async getWorkspaces(): Promise<any> {
+    return dataFetcher(this.http.get('workspaces'));
   }
 
   // Get list of projects
@@ -71,7 +70,7 @@ export class ClockifyService {
   }
 
   // Function to run when timers are started
-  async startTimer(projectId: StartTimerDto): Promise<any> {
+  async startTimer(projectId: string): Promise<any> {
     if (!projectId) {
       throw new BadRequestException('Must provide projectId');
     }

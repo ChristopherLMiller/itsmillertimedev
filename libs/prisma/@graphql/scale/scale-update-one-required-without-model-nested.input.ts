@@ -4,8 +4,9 @@ import { ScaleCreateWithoutModelInput } from './scale-create-without-model.input
 import { Type } from 'class-transformer';
 import { ScaleCreateOrConnectWithoutModelInput } from './scale-create-or-connect-without-model.input';
 import { ScaleUpsertWithoutModelInput } from './scale-upsert-without-model.input';
+import { Prisma } from '@prisma/client';
 import { ScaleWhereUniqueInput } from './scale-where-unique.input';
-import { ScaleUpdateWithoutModelInput } from './scale-update-without-model.input';
+import { ScaleUpdateToOneWithWhereWithoutModelInput } from './scale-update-to-one-with-where-without-model.input';
 
 @InputType()
 export class ScaleUpdateOneRequiredWithoutModelNestedInput {
@@ -24,9 +25,9 @@ export class ScaleUpdateOneRequiredWithoutModelNestedInput {
 
     @Field(() => ScaleWhereUniqueInput, {nullable:true})
     @Type(() => ScaleWhereUniqueInput)
-    connect?: ScaleWhereUniqueInput;
+    connect?: Prisma.AtLeast<ScaleWhereUniqueInput, 'id' | 'slug'>;
 
-    @Field(() => ScaleUpdateWithoutModelInput, {nullable:true})
-    @Type(() => ScaleUpdateWithoutModelInput)
-    update?: ScaleUpdateWithoutModelInput;
+    @Field(() => ScaleUpdateToOneWithWhereWithoutModelInput, {nullable:true})
+    @Type(() => ScaleUpdateToOneWithWhereWithoutModelInput)
+    update?: ScaleUpdateToOneWithWhereWithoutModelInput;
 }

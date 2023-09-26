@@ -2,8 +2,8 @@ import { Field } from '@nestjs/graphql';
 import { InputType } from '@nestjs/graphql';
 import { IntFilter } from '../prisma/int-filter.input';
 import { StringFilter } from '../prisma/string-filter.input';
-import { ModelRelationFilter } from '../model/model-relation-filter.input';
 import { IntNullableFilter } from '../prisma/int-nullable-filter.input';
+import { ModelNullableRelationFilter } from '../model/model-nullable-relation-filter.input';
 
 @InputType()
 export class ModelTagsWhereInput {
@@ -26,9 +26,9 @@ export class ModelTagsWhereInput {
     @Field(() => StringFilter, {nullable:true})
     title?: StringFilter;
 
-    @Field(() => ModelRelationFilter, {nullable:true})
-    Model?: ModelRelationFilter;
-
     @Field(() => IntNullableFilter, {nullable:true})
     modelId?: IntNullableFilter;
+
+    @Field(() => ModelNullableRelationFilter, {nullable:true})
+    Model?: ModelNullableRelationFilter;
 }

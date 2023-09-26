@@ -1,7 +1,7 @@
 import { GalleryCategory } from './gallery_category';
 import { GalleryTag } from './gallery_tag';
 import { GalleryImage } from './gallery_image';
-import { Visibility } from '../.pnpm/@prisma+client@4.10.1_prisma@4.10.1/node_modules/@prisma/client';
+import { Visibility } from '@prisma/client';
 import { ApiProperty } from '@nestjs/swagger';
 
 export class Gallery {

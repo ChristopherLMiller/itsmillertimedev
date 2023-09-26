@@ -5,6 +5,7 @@ import { Type } from 'class-transformer';
 import { PostCreateOrConnectWithoutFeaturedImageInput } from './post-create-or-connect-without-featured-image.input';
 import { PostUpsertWithWhereUniqueWithoutFeaturedImageInput } from './post-upsert-with-where-unique-without-featured-image.input';
 import { PostCreateManyFeaturedImageInputEnvelope } from './post-create-many-featured-image-input-envelope.input';
+import { Prisma } from '@prisma/client';
 import { PostWhereUniqueInput } from './post-where-unique.input';
 import { PostUpdateWithWhereUniqueWithoutFeaturedImageInput } from './post-update-with-where-unique-without-featured-image.input';
 import { PostUpdateManyWithWhereWithoutFeaturedImageInput } from './post-update-many-with-where-without-featured-image.input';
@@ -31,19 +32,19 @@ export class PostUpdateManyWithoutFeaturedImageNestedInput {
 
     @Field(() => [PostWhereUniqueInput], {nullable:true})
     @Type(() => PostWhereUniqueInput)
-    set?: Array<PostWhereUniqueInput>;
+    set?: Array<Prisma.AtLeast<PostWhereUniqueInput, 'id' | 'slug'>>;
 
     @Field(() => [PostWhereUniqueInput], {nullable:true})
     @Type(() => PostWhereUniqueInput)
-    disconnect?: Array<PostWhereUniqueInput>;
+    disconnect?: Array<Prisma.AtLeast<PostWhereUniqueInput, 'id' | 'slug'>>;
 
     @Field(() => [PostWhereUniqueInput], {nullable:true})
     @Type(() => PostWhereUniqueInput)
-    delete?: Array<PostWhereUniqueInput>;
+    delete?: Array<Prisma.AtLeast<PostWhereUniqueInput, 'id' | 'slug'>>;
 
     @Field(() => [PostWhereUniqueInput], {nullable:true})
     @Type(() => PostWhereUniqueInput)
-    connect?: Array<PostWhereUniqueInput>;
+    connect?: Array<Prisma.AtLeast<PostWhereUniqueInput, 'id' | 'slug'>>;
 
     @Field(() => [PostUpdateWithWhereUniqueWithoutFeaturedImageInput], {nullable:true})
     @Type(() => PostUpdateWithWhereUniqueWithoutFeaturedImageInput)

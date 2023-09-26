@@ -1,5 +1,6 @@
 import { Field } from '@nestjs/graphql';
 import { ArgsType } from '@nestjs/graphql';
+import { Prisma } from '@prisma/client';
 import { GalleryCategoryWhereUniqueInput } from './gallery-category-where-unique.input';
 import { Type } from 'class-transformer';
 import { GalleryCategoryCreateInput } from './gallery-category-create.input';
@@ -10,7 +11,7 @@ export class UpsertOneGalleryCategoryArgs {
 
     @Field(() => GalleryCategoryWhereUniqueInput, {nullable:false})
     @Type(() => GalleryCategoryWhereUniqueInput)
-    where!: GalleryCategoryWhereUniqueInput;
+    where!: Prisma.AtLeast<GalleryCategoryWhereUniqueInput, 'id' | 'slug'>;
 
     @Field(() => GalleryCategoryCreateInput, {nullable:false})
     @Type(() => GalleryCategoryCreateInput)

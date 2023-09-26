@@ -1,6 +1,7 @@
 import { Field } from '@nestjs/graphql';
 import { InputType } from '@nestjs/graphql';
 import { SortOrder } from '../prisma/sort-order.enum';
+import { SortOrderInput } from '../prisma/sort-order.input';
 import { ModelTagsCountOrderByAggregateInput } from './model-tags-count-order-by-aggregate.input';
 import { ModelTagsAvgOrderByAggregateInput } from './model-tags-avg-order-by-aggregate.input';
 import { ModelTagsMaxOrderByAggregateInput } from './model-tags-max-order-by-aggregate.input';
@@ -19,8 +20,8 @@ export class ModelTagsOrderByWithAggregationInput {
     @Field(() => SortOrder, {nullable:true})
     title?: keyof typeof SortOrder;
 
-    @Field(() => SortOrder, {nullable:true})
-    modelId?: keyof typeof SortOrder;
+    @Field(() => SortOrderInput, {nullable:true})
+    modelId?: SortOrderInput;
 
     @Field(() => ModelTagsCountOrderByAggregateInput, {nullable:true})
     _count?: ModelTagsCountOrderByAggregateInput;

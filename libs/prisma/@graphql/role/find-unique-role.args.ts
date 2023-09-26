@@ -1,5 +1,6 @@
 import { Field } from '@nestjs/graphql';
 import { ArgsType } from '@nestjs/graphql';
+import { Prisma } from '@prisma/client';
 import { RoleWhereUniqueInput } from './role-where-unique.input';
 import { Type } from 'class-transformer';
 
@@ -8,5 +9,5 @@ export class FindUniqueRoleArgs {
 
     @Field(() => RoleWhereUniqueInput, {nullable:false})
     @Type(() => RoleWhereUniqueInput)
-    where!: RoleWhereUniqueInput;
+    where!: Prisma.AtLeast<RoleWhereUniqueInput, 'id'>;
 }

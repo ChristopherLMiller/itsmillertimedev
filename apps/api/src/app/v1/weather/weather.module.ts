@@ -1,5 +1,6 @@
 import { HttpModule } from '@nestjs/axios';
-import { CacheModule, Module } from '@nestjs/common';
+import { CacheModule } from '@nestjs/cache-manager';
+import { Module } from '@nestjs/common';
 import { WeatherController } from './weather.controller';
 import { WeatherService } from './weather.service';
 

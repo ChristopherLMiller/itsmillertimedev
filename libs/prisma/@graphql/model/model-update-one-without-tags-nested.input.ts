@@ -4,8 +4,10 @@ import { ModelCreateWithoutTagsInput } from './model-create-without-tags.input';
 import { Type } from 'class-transformer';
 import { ModelCreateOrConnectWithoutTagsInput } from './model-create-or-connect-without-tags.input';
 import { ModelUpsertWithoutTagsInput } from './model-upsert-without-tags.input';
+import { ModelWhereInput } from './model-where.input';
+import { Prisma } from '@prisma/client';
 import { ModelWhereUniqueInput } from './model-where-unique.input';
-import { ModelUpdateWithoutTagsInput } from './model-update-without-tags.input';
+import { ModelUpdateToOneWithWhereWithoutTagsInput } from './model-update-to-one-with-where-without-tags.input';
 
 @InputType()
 export class ModelUpdateOneWithoutTagsNestedInput {
@@ -22,17 +24,19 @@ export class ModelUpdateOneWithoutTagsNestedInput {
     @Type(() => ModelUpsertWithoutTagsInput)
     upsert?: ModelUpsertWithoutTagsInput;
 
-    @Field(() => Boolean, {nullable:true})
-    disconnect?: boolean;
+    @Field(() => ModelWhereInput, {nullable:true})
+    @Type(() => ModelWhereInput)
+    disconnect?: ModelWhereInput;
 
-    @Field(() => Boolean, {nullable:true})
-    delete?: boolean;
+    @Field(() => ModelWhereInput, {nullable:true})
+    @Type(() => ModelWhereInput)
+    delete?: ModelWhereInput;
 
     @Field(() => ModelWhereUniqueInput, {nullable:true})
     @Type(() => ModelWhereUniqueInput)
-    connect?: ModelWhereUniqueInput;
+    connect?: Prisma.AtLeast<ModelWhereUniqueInput, 'id' | 'slug'>;
 
-    @Field(() => ModelUpdateWithoutTagsInput, {nullable:true})
-    @Type(() => ModelUpdateWithoutTagsInput)
-    update?: ModelUpdateWithoutTagsInput;
+    @Field(() => ModelUpdateToOneWithWhereWithoutTagsInput, {nullable:true})
+    @Type(() => ModelUpdateToOneWithWhereWithoutTagsInput)
+    update?: ModelUpdateToOneWithWhereWithoutTagsInput;
 }

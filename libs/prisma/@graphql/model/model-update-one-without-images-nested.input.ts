@@ -4,8 +4,10 @@ import { ModelCreateWithoutImagesInput } from './model-create-without-images.inp
 import { Type } from 'class-transformer';
 import { ModelCreateOrConnectWithoutImagesInput } from './model-create-or-connect-without-images.input';
 import { ModelUpsertWithoutImagesInput } from './model-upsert-without-images.input';
+import { ModelWhereInput } from './model-where.input';
+import { Prisma } from '@prisma/client';
 import { ModelWhereUniqueInput } from './model-where-unique.input';
-import { ModelUpdateWithoutImagesInput } from './model-update-without-images.input';
+import { ModelUpdateToOneWithWhereWithoutImagesInput } from './model-update-to-one-with-where-without-images.input';
 
 @InputType()
 export class ModelUpdateOneWithoutImagesNestedInput {
@@ -22,17 +24,19 @@ export class ModelUpdateOneWithoutImagesNestedInput {
     @Type(() => ModelUpsertWithoutImagesInput)
     upsert?: ModelUpsertWithoutImagesInput;
 
-    @Field(() => Boolean, {nullable:true})
-    disconnect?: boolean;
+    @Field(() => ModelWhereInput, {nullable:true})
+    @Type(() => ModelWhereInput)
+    disconnect?: ModelWhereInput;
 
-    @Field(() => Boolean, {nullable:true})
-    delete?: boolean;
+    @Field(() => ModelWhereInput, {nullable:true})
+    @Type(() => ModelWhereInput)
+    delete?: ModelWhereInput;
 
     @Field(() => ModelWhereUniqueInput, {nullable:true})
     @Type(() => ModelWhereUniqueInput)
-    connect?: ModelWhereUniqueInput;
+    connect?: Prisma.AtLeast<ModelWhereUniqueInput, 'id' | 'slug'>;
 
-    @Field(() => ModelUpdateWithoutImagesInput, {nullable:true})
-    @Type(() => ModelUpdateWithoutImagesInput)
-    update?: ModelUpdateWithoutImagesInput;
+    @Field(() => ModelUpdateToOneWithWhereWithoutImagesInput, {nullable:true})
+    @Type(() => ModelUpdateToOneWithWhereWithoutImagesInput)
+    update?: ModelUpdateToOneWithWhereWithoutImagesInput;
 }

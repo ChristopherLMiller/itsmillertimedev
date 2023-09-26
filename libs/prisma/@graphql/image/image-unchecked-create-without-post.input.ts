@@ -52,9 +52,9 @@ export class ImageUncheckedCreateWithoutPostInput {
     @Field(() => Date, {nullable:true})
     updatedAt?: Date | string;
 
-    @Field(() => PageUncheckedCreateNestedManyWithoutFeaturedImageInput, {nullable:true})
-    Page?: PageUncheckedCreateNestedManyWithoutFeaturedImageInput;
-
     @Field(() => Int, {nullable:true})
     modelId?: number;
+
+    @Field(() => PageUncheckedCreateNestedManyWithoutFeaturedImageInput, {nullable:true})
+    Page?: PageUncheckedCreateNestedManyWithoutFeaturedImageInput;
 }

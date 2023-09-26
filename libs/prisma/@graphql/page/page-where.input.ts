@@ -4,8 +4,8 @@ import { IntFilter } from '../prisma/int-filter.input';
 import { StringFilter } from '../prisma/string-filter.input';
 import { StringNullableFilter } from '../prisma/string-nullable-filter.input';
 import { DateTimeFilter } from '../prisma/date-time-filter.input';
-import { ImageRelationFilter } from '../image/image-relation-filter.input';
 import { BoolFilter } from '../prisma/bool-filter.input';
+import { ImageNullableRelationFilter } from '../image/image-nullable-relation-filter.input';
 
 @InputType()
 export class PageWhereInput {
@@ -40,12 +40,12 @@ export class PageWhereInput {
     @Field(() => DateTimeFilter, {nullable:true})
     updatedAt?: DateTimeFilter;
 
-    @Field(() => ImageRelationFilter, {nullable:true})
-    featuredImage?: ImageRelationFilter;
-
     @Field(() => StringNullableFilter, {nullable:true})
     imagePublic_id?: StringNullableFilter;
 
     @Field(() => BoolFilter, {nullable:true})
     isPublic?: BoolFilter;
+
+    @Field(() => ImageNullableRelationFilter, {nullable:true})
+    featuredImage?: ImageNullableRelationFilter;
 }

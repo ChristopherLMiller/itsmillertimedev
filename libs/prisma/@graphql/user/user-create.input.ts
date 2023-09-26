@@ -1,7 +1,7 @@
 import { Field } from '@nestjs/graphql';
 import { InputType } from '@nestjs/graphql';
-import { RoleCreateNestedOneWithoutUserInput } from '../role/role-create-nested-one-without-user.input';
 import { GraphQLJSON } from 'graphql-type-json';
+import { RoleCreateNestedOneWithoutUserInput } from '../role/role-create-nested-one-without-user.input';
 
 @InputType()
 export class UserCreateInput {
@@ -12,9 +12,9 @@ export class UserCreateInput {
     @Field(() => String, {nullable:false})
     email!: string;
 
-    @Field(() => RoleCreateNestedOneWithoutUserInput, {nullable:false})
-    role!: RoleCreateNestedOneWithoutUserInput;
-
     @Field(() => GraphQLJSON, {nullable:true})
     meta?: any;
+
+    @Field(() => RoleCreateNestedOneWithoutUserInput, {nullable:false})
+    role!: RoleCreateNestedOneWithoutUserInput;
 }

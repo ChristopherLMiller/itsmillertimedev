@@ -2,7 +2,7 @@ import { Field } from '@nestjs/graphql';
 import { ObjectType } from '@nestjs/graphql';
 import { ID } from '@nestjs/graphql';
 import { Post } from '../post/post.model';
-import { PostCategoryCount } from '../post/post-category-count.output';
+import { PostCategoryCount } from './post-category-count.output';
 
 @ObjectType()
 export class PostCategory {

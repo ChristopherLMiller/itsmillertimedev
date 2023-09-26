@@ -2,11 +2,11 @@ import { Field } from '@nestjs/graphql';
 import { ObjectType } from '@nestjs/graphql';
 import { ID } from '@nestjs/graphql';
 import { Visibility } from '../prisma/visibility.enum';
+import { Int } from '@nestjs/graphql';
 import { ModelTags } from '../model-tags/model-tags.model';
 import { Image } from '../image/image.model';
 import { Manufacturer } from '../manufacturer/manufacturer.model';
 import { Scale } from '../scale/scale.model';
-import { Int } from '@nestjs/graphql';
 import { ModelCount } from './model-count.output';
 
 @ObjectType()
@@ -42,18 +42,6 @@ export class Model {
     @Field(() => Date, {nullable:false})
     updatedAt!: Date;
 
-    @Field(() => [ModelTags], {nullable:true})
-    tags?: Array<ModelTags>;
-
-    @Field(() => [Image], {nullable:true})
-    images?: Array<Image>;
-
-    @Field(() => Manufacturer, {nullable:false})
-    manufacturer?: Manufacturer;
-
-    @Field(() => Scale, {nullable:false})
-    scale?: Scale;
-
     @Field(() => String, {nullable:true})
     clockifyProjectId!: string | null;
 
@@ -74,6 +62,18 @@ export class Model {
 
     @Field(() => Int, {nullable:false})
     scaleId!: number;
+
+    @Field(() => [ModelTags], {nullable:true})
+    tags?: Array<ModelTags>;
+
+    @Field(() => [Image], {nullable:true})
+    images?: Array<Image>;
+
+    @Field(() => Manufacturer, {nullable:false})
+    manufacturer?: Manufacturer;
+
+    @Field(() => Scale, {nullable:false})
+    scale?: Scale;
 
     @Field(() => ModelCount, {nullable:false})
     _count?: ModelCount;

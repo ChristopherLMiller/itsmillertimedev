@@ -5,6 +5,7 @@ import { Type } from 'class-transformer';
 import { GalleryCategoryCreateOrConnectWithoutGalleryInput } from './gallery-category-create-or-connect-without-gallery.input';
 import { GalleryCategoryUpsertWithWhereUniqueWithoutGalleryInput } from './gallery-category-upsert-with-where-unique-without-gallery.input';
 import { GalleryCategoryCreateManyGalleryInputEnvelope } from './gallery-category-create-many-gallery-input-envelope.input';
+import { Prisma } from '@prisma/client';
 import { GalleryCategoryWhereUniqueInput } from './gallery-category-where-unique.input';
 import { GalleryCategoryUpdateWithWhereUniqueWithoutGalleryInput } from './gallery-category-update-with-where-unique-without-gallery.input';
 import { GalleryCategoryUpdateManyWithWhereWithoutGalleryInput } from './gallery-category-update-many-with-where-without-gallery.input';
@@ -31,19 +32,19 @@ export class GalleryCategoryUpdateManyWithoutGalleryNestedInput {
 
     @Field(() => [GalleryCategoryWhereUniqueInput], {nullable:true})
     @Type(() => GalleryCategoryWhereUniqueInput)
-    set?: Array<GalleryCategoryWhereUniqueInput>;
+    set?: Array<Prisma.AtLeast<GalleryCategoryWhereUniqueInput, 'id' | 'slug'>>;
 
     @Field(() => [GalleryCategoryWhereUniqueInput], {nullable:true})
     @Type(() => GalleryCategoryWhereUniqueInput)
-    disconnect?: Array<GalleryCategoryWhereUniqueInput>;
+    disconnect?: Array<Prisma.AtLeast<GalleryCategoryWhereUniqueInput, 'id' | 'slug'>>;
 
     @Field(() => [GalleryCategoryWhereUniqueInput], {nullable:true})
     @Type(() => GalleryCategoryWhereUniqueInput)
-    delete?: Array<GalleryCategoryWhereUniqueInput>;
+    delete?: Array<Prisma.AtLeast<GalleryCategoryWhereUniqueInput, 'id' | 'slug'>>;
 
     @Field(() => [GalleryCategoryWhereUniqueInput], {nullable:true})
     @Type(() => GalleryCategoryWhereUniqueInput)
-    connect?: Array<GalleryCategoryWhereUniqueInput>;
+    connect?: Array<Prisma.AtLeast<GalleryCategoryWhereUniqueInput, 'id' | 'slug'>>;
 
     @Field(() => [GalleryCategoryUpdateWithWhereUniqueWithoutGalleryInput], {nullable:true})
     @Type(() => GalleryCategoryUpdateWithWhereUniqueWithoutGalleryInput)

@@ -56,9 +56,9 @@ export class ImageUncheckedUpdateWithoutPostInput {
     @Field(() => DateTimeFieldUpdateOperationsInput, {nullable:true})
     updatedAt?: DateTimeFieldUpdateOperationsInput;
 
-    @Field(() => PageUncheckedUpdateManyWithoutFeaturedImageNestedInput, {nullable:true})
-    Page?: PageUncheckedUpdateManyWithoutFeaturedImageNestedInput;
-
     @Field(() => NullableIntFieldUpdateOperationsInput, {nullable:true})
     modelId?: NullableIntFieldUpdateOperationsInput;
+
+    @Field(() => PageUncheckedUpdateManyWithoutFeaturedImageNestedInput, {nullable:true})
+    Page?: PageUncheckedUpdateManyWithoutFeaturedImageNestedInput;
 }

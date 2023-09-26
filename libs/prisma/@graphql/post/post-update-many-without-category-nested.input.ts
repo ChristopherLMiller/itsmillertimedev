@@ -5,6 +5,7 @@ import { Type } from 'class-transformer';
 import { PostCreateOrConnectWithoutCategoryInput } from './post-create-or-connect-without-category.input';
 import { PostUpsertWithWhereUniqueWithoutCategoryInput } from './post-upsert-with-where-unique-without-category.input';
 import { PostCreateManyCategoryInputEnvelope } from './post-create-many-category-input-envelope.input';
+import { Prisma } from '@prisma/client';
 import { PostWhereUniqueInput } from './post-where-unique.input';
 import { PostUpdateWithWhereUniqueWithoutCategoryInput } from './post-update-with-where-unique-without-category.input';
 import { PostUpdateManyWithWhereWithoutCategoryInput } from './post-update-many-with-where-without-category.input';
@@ -31,19 +32,19 @@ export class PostUpdateManyWithoutCategoryNestedInput {
 
     @Field(() => [PostWhereUniqueInput], {nullable:true})
     @Type(() => PostWhereUniqueInput)
-    set?: Array<PostWhereUniqueInput>;
+    set?: Array<Prisma.AtLeast<PostWhereUniqueInput, 'id' | 'slug'>>;
 
     @Field(() => [PostWhereUniqueInput], {nullable:true})
     @Type(() => PostWhereUniqueInput)
-    disconnect?: Array<PostWhereUniqueInput>;
+    disconnect?: Array<Prisma.AtLeast<PostWhereUniqueInput, 'id' | 'slug'>>;
 
     @Field(() => [PostWhereUniqueInput], {nullable:true})
     @Type(() => PostWhereUniqueInput)
-    delete?: Array<PostWhereUniqueInput>;
+    delete?: Array<Prisma.AtLeast<PostWhereUniqueInput, 'id' | 'slug'>>;
 
     @Field(() => [PostWhereUniqueInput], {nullable:true})
     @Type(() => PostWhereUniqueInput)
-    connect?: Array<PostWhereUniqueInput>;
+    connect?: Array<Prisma.AtLeast<PostWhereUniqueInput, 'id' | 'slug'>>;
 
     @Field(() => [PostUpdateWithWhereUniqueWithoutCategoryInput], {nullable:true})
     @Type(() => PostUpdateWithWhereUniqueWithoutCategoryInput)

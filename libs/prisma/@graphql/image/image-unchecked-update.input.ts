@@ -57,12 +57,12 @@ export class ImageUncheckedUpdateInput {
     @Field(() => DateTimeFieldUpdateOperationsInput, {nullable:true})
     updatedAt?: DateTimeFieldUpdateOperationsInput;
 
+    @Field(() => NullableIntFieldUpdateOperationsInput, {nullable:true})
+    modelId?: NullableIntFieldUpdateOperationsInput;
+
     @Field(() => PostUncheckedUpdateManyWithoutFeaturedImageNestedInput, {nullable:true})
     Post?: PostUncheckedUpdateManyWithoutFeaturedImageNestedInput;
 
     @Field(() => PageUncheckedUpdateManyWithoutFeaturedImageNestedInput, {nullable:true})
     Page?: PageUncheckedUpdateManyWithoutFeaturedImageNestedInput;
-
-    @Field(() => NullableIntFieldUpdateOperationsInput, {nullable:true})
-    modelId?: NullableIntFieldUpdateOperationsInput;
 }

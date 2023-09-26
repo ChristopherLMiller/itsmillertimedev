@@ -3,6 +3,7 @@ import { ArgsType } from '@nestjs/graphql';
 import { PostWhereInput } from './post-where.input';
 import { Type } from 'class-transformer';
 import { PostOrderByWithRelationInput } from './post-order-by-with-relation.input';
+import { Prisma } from '@prisma/client';
 import { PostWhereUniqueInput } from './post-where-unique.input';
 import { Int } from '@nestjs/graphql';
 import { PostCountAggregateInput } from './post-count-aggregate.input';
@@ -22,7 +23,7 @@ export class PostAggregateArgs {
     orderBy?: Array<PostOrderByWithRelationInput>;
 
     @Field(() => PostWhereUniqueInput, {nullable:true})
-    cursor?: PostWhereUniqueInput;
+    cursor?: Prisma.AtLeast<PostWhereUniqueInput, 'id' | 'slug'>;
 
     @Field(() => Int, {nullable:true})
     take?: number;

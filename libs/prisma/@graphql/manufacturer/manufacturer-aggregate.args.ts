@@ -3,6 +3,7 @@ import { ArgsType } from '@nestjs/graphql';
 import { ManufacturerWhereInput } from './manufacturer-where.input';
 import { Type } from 'class-transformer';
 import { ManufacturerOrderByWithRelationInput } from './manufacturer-order-by-with-relation.input';
+import { Prisma } from '@prisma/client';
 import { ManufacturerWhereUniqueInput } from './manufacturer-where-unique.input';
 import { Int } from '@nestjs/graphql';
 import { ManufacturerCountAggregateInput } from './manufacturer-count-aggregate.input';
@@ -22,7 +23,7 @@ export class ManufacturerAggregateArgs {
     orderBy?: Array<ManufacturerOrderByWithRelationInput>;
 
     @Field(() => ManufacturerWhereUniqueInput, {nullable:true})
-    cursor?: ManufacturerWhereUniqueInput;
+    cursor?: Prisma.AtLeast<ManufacturerWhereUniqueInput, 'id' | 'slug'>;
 
     @Field(() => Int, {nullable:true})
     take?: number;

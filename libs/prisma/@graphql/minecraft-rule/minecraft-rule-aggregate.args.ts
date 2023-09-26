@@ -3,6 +3,7 @@ import { ArgsType } from '@nestjs/graphql';
 import { MinecraftRuleWhereInput } from './minecraft-rule-where.input';
 import { Type } from 'class-transformer';
 import { MinecraftRuleOrderByWithRelationInput } from './minecraft-rule-order-by-with-relation.input';
+import { Prisma } from '@prisma/client';
 import { MinecraftRuleWhereUniqueInput } from './minecraft-rule-where-unique.input';
 import { Int } from '@nestjs/graphql';
 import { MinecraftRuleCountAggregateInput } from './minecraft-rule-count-aggregate.input';
@@ -22,7 +23,7 @@ export class MinecraftRuleAggregateArgs {
     orderBy?: Array<MinecraftRuleOrderByWithRelationInput>;
 
     @Field(() => MinecraftRuleWhereUniqueInput, {nullable:true})
-    cursor?: MinecraftRuleWhereUniqueInput;
+    cursor?: Prisma.AtLeast<MinecraftRuleWhereUniqueInput, 'id'>;
 
     @Field(() => Int, {nullable:true})
     take?: number;

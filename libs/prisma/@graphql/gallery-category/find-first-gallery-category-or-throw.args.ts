@@ -3,6 +3,7 @@ import { ArgsType } from '@nestjs/graphql';
 import { GalleryCategoryWhereInput } from './gallery-category-where.input';
 import { Type } from 'class-transformer';
 import { GalleryCategoryOrderByWithRelationInput } from './gallery-category-order-by-with-relation.input';
+import { Prisma } from '@prisma/client';
 import { GalleryCategoryWhereUniqueInput } from './gallery-category-where-unique.input';
 import { Int } from '@nestjs/graphql';
 import { GalleryCategoryScalarFieldEnum } from './gallery-category-scalar-field.enum';
@@ -18,7 +19,7 @@ export class FindFirstGalleryCategoryOrThrowArgs {
     orderBy?: Array<GalleryCategoryOrderByWithRelationInput>;
 
     @Field(() => GalleryCategoryWhereUniqueInput, {nullable:true})
-    cursor?: GalleryCategoryWhereUniqueInput;
+    cursor?: Prisma.AtLeast<GalleryCategoryWhereUniqueInput, 'id' | 'slug'>;
 
     @Field(() => Int, {nullable:true})
     take?: number;

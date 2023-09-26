@@ -5,6 +5,7 @@ import { Type } from 'class-transformer';
 import { ModelTagsCreateOrConnectWithoutModelInput } from './model-tags-create-or-connect-without-model.input';
 import { ModelTagsUpsertWithWhereUniqueWithoutModelInput } from './model-tags-upsert-with-where-unique-without-model.input';
 import { ModelTagsCreateManyModelInputEnvelope } from './model-tags-create-many-model-input-envelope.input';
+import { Prisma } from '@prisma/client';
 import { ModelTagsWhereUniqueInput } from './model-tags-where-unique.input';
 import { ModelTagsUpdateWithWhereUniqueWithoutModelInput } from './model-tags-update-with-where-unique-without-model.input';
 import { ModelTagsUpdateManyWithWhereWithoutModelInput } from './model-tags-update-many-with-where-without-model.input';
@@ -31,19 +32,19 @@ export class ModelTagsUncheckedUpdateManyWithoutModelNestedInput {
 
     @Field(() => [ModelTagsWhereUniqueInput], {nullable:true})
     @Type(() => ModelTagsWhereUniqueInput)
-    set?: Array<ModelTagsWhereUniqueInput>;
+    set?: Array<Prisma.AtLeast<ModelTagsWhereUniqueInput, 'id' | 'slug'>>;
 
     @Field(() => [ModelTagsWhereUniqueInput], {nullable:true})
     @Type(() => ModelTagsWhereUniqueInput)
-    disconnect?: Array<ModelTagsWhereUniqueInput>;
+    disconnect?: Array<Prisma.AtLeast<ModelTagsWhereUniqueInput, 'id' | 'slug'>>;
 
     @Field(() => [ModelTagsWhereUniqueInput], {nullable:true})
     @Type(() => ModelTagsWhereUniqueInput)
-    delete?: Array<ModelTagsWhereUniqueInput>;
+    delete?: Array<Prisma.AtLeast<ModelTagsWhereUniqueInput, 'id' | 'slug'>>;
 
     @Field(() => [ModelTagsWhereUniqueInput], {nullable:true})
     @Type(() => ModelTagsWhereUniqueInput)
-    connect?: Array<ModelTagsWhereUniqueInput>;
+    connect?: Array<Prisma.AtLeast<ModelTagsWhereUniqueInput, 'id' | 'slug'>>;
 
     @Field(() => [ModelTagsUpdateWithWhereUniqueWithoutModelInput], {nullable:true})
     @Type(() => ModelTagsUpdateWithWhereUniqueWithoutModelInput)

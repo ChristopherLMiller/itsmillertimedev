@@ -1,6 +1,7 @@
 import { Field } from '@nestjs/graphql';
 import { InputType } from '@nestjs/graphql';
 import { SortOrder } from '../prisma/sort-order.enum';
+import { SortOrderInput } from '../prisma/sort-order.input';
 import { PostCountOrderByAggregateInput } from './post-count-order-by-aggregate.input';
 import { PostAvgOrderByAggregateInput } from './post-avg-order-by-aggregate.input';
 import { PostMaxOrderByAggregateInput } from './post-max-order-by-aggregate.input';
@@ -37,14 +38,14 @@ export class PostOrderByWithAggregationInput {
     @Field(() => SortOrder, {nullable:true})
     updatedAt?: keyof typeof SortOrder;
 
-    @Field(() => SortOrder, {nullable:true})
-    publishedAt?: keyof typeof SortOrder;
+    @Field(() => SortOrderInput, {nullable:true})
+    publishedAt?: SortOrderInput;
 
     @Field(() => SortOrder, {nullable:true})
     content?: keyof typeof SortOrder;
 
-    @Field(() => SortOrder, {nullable:true})
-    imagePublic_id?: keyof typeof SortOrder;
+    @Field(() => SortOrderInput, {nullable:true})
+    imagePublic_id?: SortOrderInput;
 
     @Field(() => SortOrder, {nullable:true})
     postCategoryId?: keyof typeof SortOrder;

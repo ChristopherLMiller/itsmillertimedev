@@ -4,8 +4,9 @@ import { PermissionCreateWithoutRolesInput } from './permission-create-without-r
 import { Type } from 'class-transformer';
 import { PermissionCreateOrConnectWithoutRolesInput } from './permission-create-or-connect-without-roles.input';
 import { PermissionUpsertWithoutRolesInput } from './permission-upsert-without-roles.input';
+import { Prisma } from '@prisma/client';
 import { PermissionWhereUniqueInput } from './permission-where-unique.input';
-import { PermissionUpdateWithoutRolesInput } from './permission-update-without-roles.input';
+import { PermissionUpdateToOneWithWhereWithoutRolesInput } from './permission-update-to-one-with-where-without-roles.input';
 
 @InputType()
 export class PermissionUpdateOneRequiredWithoutRolesNestedInput {
@@ -24,9 +25,9 @@ export class PermissionUpdateOneRequiredWithoutRolesNestedInput {
 
     @Field(() => PermissionWhereUniqueInput, {nullable:true})
     @Type(() => PermissionWhereUniqueInput)
-    connect?: PermissionWhereUniqueInput;
+    connect?: Prisma.AtLeast<PermissionWhereUniqueInput, 'id' | 'node'>;
 
-    @Field(() => PermissionUpdateWithoutRolesInput, {nullable:true})
-    @Type(() => PermissionUpdateWithoutRolesInput)
-    update?: PermissionUpdateWithoutRolesInput;
+    @Field(() => PermissionUpdateToOneWithWhereWithoutRolesInput, {nullable:true})
+    @Type(() => PermissionUpdateToOneWithWhereWithoutRolesInput)
+    update?: PermissionUpdateToOneWithWhereWithoutRolesInput;
 }

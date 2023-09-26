@@ -4,8 +4,9 @@ import { ManufacturerCreateWithoutModelInput } from './manufacturer-create-witho
 import { Type } from 'class-transformer';
 import { ManufacturerCreateOrConnectWithoutModelInput } from './manufacturer-create-or-connect-without-model.input';
 import { ManufacturerUpsertWithoutModelInput } from './manufacturer-upsert-without-model.input';
+import { Prisma } from '@prisma/client';
 import { ManufacturerWhereUniqueInput } from './manufacturer-where-unique.input';
-import { ManufacturerUpdateWithoutModelInput } from './manufacturer-update-without-model.input';
+import { ManufacturerUpdateToOneWithWhereWithoutModelInput } from './manufacturer-update-to-one-with-where-without-model.input';
 
 @InputType()
 export class ManufacturerUpdateOneRequiredWithoutModelNestedInput {
@@ -24,9 +25,9 @@ export class ManufacturerUpdateOneRequiredWithoutModelNestedInput {
 
     @Field(() => ManufacturerWhereUniqueInput, {nullable:true})
     @Type(() => ManufacturerWhereUniqueInput)
-    connect?: ManufacturerWhereUniqueInput;
+    connect?: Prisma.AtLeast<ManufacturerWhereUniqueInput, 'id' | 'slug'>;
 
-    @Field(() => ManufacturerUpdateWithoutModelInput, {nullable:true})
-    @Type(() => ManufacturerUpdateWithoutModelInput)
-    update?: ManufacturerUpdateWithoutModelInput;
+    @Field(() => ManufacturerUpdateToOneWithWhereWithoutModelInput, {nullable:true})
+    @Type(() => ManufacturerUpdateToOneWithWhereWithoutModelInput)
+    update?: ManufacturerUpdateToOneWithWhereWithoutModelInput;
 }

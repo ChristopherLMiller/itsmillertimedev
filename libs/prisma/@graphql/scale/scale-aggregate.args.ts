@@ -3,6 +3,7 @@ import { ArgsType } from '@nestjs/graphql';
 import { ScaleWhereInput } from './scale-where.input';
 import { Type } from 'class-transformer';
 import { ScaleOrderByWithRelationInput } from './scale-order-by-with-relation.input';
+import { Prisma } from '@prisma/client';
 import { ScaleWhereUniqueInput } from './scale-where-unique.input';
 import { Int } from '@nestjs/graphql';
 import { ScaleCountAggregateInput } from './scale-count-aggregate.input';
@@ -22,7 +23,7 @@ export class ScaleAggregateArgs {
     orderBy?: Array<ScaleOrderByWithRelationInput>;
 
     @Field(() => ScaleWhereUniqueInput, {nullable:true})
-    cursor?: ScaleWhereUniqueInput;
+    cursor?: Prisma.AtLeast<ScaleWhereUniqueInput, 'id' | 'slug'>;
 
     @Field(() => Int, {nullable:true})
     take?: number;

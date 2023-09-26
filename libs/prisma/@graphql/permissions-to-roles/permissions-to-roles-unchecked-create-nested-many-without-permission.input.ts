@@ -4,6 +4,7 @@ import { PermissionsToRolesCreateWithoutPermissionInput } from './permissions-to
 import { Type } from 'class-transformer';
 import { PermissionsToRolesCreateOrConnectWithoutPermissionInput } from './permissions-to-roles-create-or-connect-without-permission.input';
 import { PermissionsToRolesCreateManyPermissionInputEnvelope } from './permissions-to-roles-create-many-permission-input-envelope.input';
+import { Prisma } from '@prisma/client';
 import { PermissionsToRolesWhereUniqueInput } from './permissions-to-roles-where-unique.input';
 
 @InputType()
@@ -23,5 +24,5 @@ export class PermissionsToRolesUncheckedCreateNestedManyWithoutPermissionInput {
 
     @Field(() => [PermissionsToRolesWhereUniqueInput], {nullable:true})
     @Type(() => PermissionsToRolesWhereUniqueInput)
-    connect?: Array<PermissionsToRolesWhereUniqueInput>;
+    connect?: Array<Prisma.AtLeast<PermissionsToRolesWhereUniqueInput, 'roleId_permissionId'>>;
 }

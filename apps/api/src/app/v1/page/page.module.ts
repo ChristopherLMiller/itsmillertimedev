@@ -1,4 +1,5 @@
-import { CacheModule, Module } from '@nestjs/common';
+import { CacheModule } from '@nestjs/cache-manager';
+import { Module } from '@nestjs/common';
 import { PageController } from './page.controller';
 import { PageService } from './page.service';
 

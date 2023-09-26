@@ -1,6 +1,7 @@
 import { Field } from '@nestjs/graphql';
 import { InputType } from '@nestjs/graphql';
 import { SortOrder } from '../prisma/sort-order.enum';
+import { SortOrderInput } from '../prisma/sort-order.input';
 import { GalleryCategoryCountOrderByAggregateInput } from './gallery-category-count-order-by-aggregate.input';
 import { GalleryCategoryAvgOrderByAggregateInput } from './gallery-category-avg-order-by-aggregate.input';
 import { GalleryCategoryMaxOrderByAggregateInput } from './gallery-category-max-order-by-aggregate.input';
@@ -19,8 +20,8 @@ export class GalleryCategoryOrderByWithAggregationInput {
     @Field(() => SortOrder, {nullable:true})
     slug?: keyof typeof SortOrder;
 
-    @Field(() => SortOrder, {nullable:true})
-    galleryId?: keyof typeof SortOrder;
+    @Field(() => SortOrderInput, {nullable:true})
+    galleryId?: SortOrderInput;
 
     @Field(() => GalleryCategoryCountOrderByAggregateInput, {nullable:true})
     _count?: GalleryCategoryCountOrderByAggregateInput;

@@ -27,12 +27,12 @@ export class Page {
     @Field(() => Date, {nullable:false})
     updatedAt!: Date;
 
-    @Field(() => Image, {nullable:true})
-    featuredImage?: Image | null;
-
     @Field(() => String, {nullable:true})
     imagePublic_id!: string | null;
 
     @Field(() => Boolean, {nullable:false})
     isPublic!: boolean;
+
+    @Field(() => Image, {nullable:true})
+    featuredImage?: Image | null;
 }

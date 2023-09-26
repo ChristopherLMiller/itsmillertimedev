@@ -1,4 +1,5 @@
-import { CacheInterceptor, CacheModule, Logger, Module } from '@nestjs/common';
+import { CacheInterceptor, CacheModule } from '@nestjs/cache-manager';
+import { Logger, Module } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
 import { APP_GUARD, APP_INTERCEPTOR } from '@nestjs/core';
 import { DevtoolsModule } from '@nestjs/devtools-integration';
@@ -8,7 +9,6 @@ import { config } from '../../config';
 import { supabaseAuthGuard } from '../common/guards/supabaseAuth.guard';
 import { UserInterceptor } from '../common/interceptors/user.interceptor';
 import { PrismaModule } from '../common/prisma/prisma.module';
-import { AdminJSModule } from './admin/admin-js.module';
 import { AuthModule } from './auth/auth.module';
 import { SettingsModule } from './settings/settings.module';
 import { V1Module } from './v1/v1.module';
@@ -48,7 +48,7 @@ import { V1Module } from './v1/v1.module';
     }),
     V1Module,
     AuthModule,
-    AdminJSModule,
+    //AdminJSModule,
   ],
   providers: [
     {

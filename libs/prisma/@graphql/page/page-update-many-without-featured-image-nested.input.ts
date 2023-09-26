@@ -5,6 +5,7 @@ import { Type } from 'class-transformer';
 import { PageCreateOrConnectWithoutFeaturedImageInput } from './page-create-or-connect-without-featured-image.input';
 import { PageUpsertWithWhereUniqueWithoutFeaturedImageInput } from './page-upsert-with-where-unique-without-featured-image.input';
 import { PageCreateManyFeaturedImageInputEnvelope } from './page-create-many-featured-image-input-envelope.input';
+import { Prisma } from '@prisma/client';
 import { PageWhereUniqueInput } from './page-where-unique.input';
 import { PageUpdateWithWhereUniqueWithoutFeaturedImageInput } from './page-update-with-where-unique-without-featured-image.input';
 import { PageUpdateManyWithWhereWithoutFeaturedImageInput } from './page-update-many-with-where-without-featured-image.input';
@@ -31,19 +32,19 @@ export class PageUpdateManyWithoutFeaturedImageNestedInput {
 
     @Field(() => [PageWhereUniqueInput], {nullable:true})
     @Type(() => PageWhereUniqueInput)
-    set?: Array<PageWhereUniqueInput>;
+    set?: Array<Prisma.AtLeast<PageWhereUniqueInput, 'id' | 'slug'>>;
 
     @Field(() => [PageWhereUniqueInput], {nullable:true})
     @Type(() => PageWhereUniqueInput)
-    disconnect?: Array<PageWhereUniqueInput>;
+    disconnect?: Array<Prisma.AtLeast<PageWhereUniqueInput, 'id' | 'slug'>>;
 
     @Field(() => [PageWhereUniqueInput], {nullable:true})
     @Type(() => PageWhereUniqueInput)
-    delete?: Array<PageWhereUniqueInput>;
+    delete?: Array<Prisma.AtLeast<PageWhereUniqueInput, 'id' | 'slug'>>;
 
     @Field(() => [PageWhereUniqueInput], {nullable:true})
     @Type(() => PageWhereUniqueInput)
-    connect?: Array<PageWhereUniqueInput>;
+    connect?: Array<Prisma.AtLeast<PageWhereUniqueInput, 'id' | 'slug'>>;
 
     @Field(() => [PageUpdateWithWhereUniqueWithoutFeaturedImageInput], {nullable:true})
     @Type(() => PageUpdateWithWhereUniqueWithoutFeaturedImageInput)

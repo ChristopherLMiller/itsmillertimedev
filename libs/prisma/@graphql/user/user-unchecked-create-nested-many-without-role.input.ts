@@ -4,6 +4,7 @@ import { UserCreateWithoutRoleInput } from './user-create-without-role.input';
 import { Type } from 'class-transformer';
 import { UserCreateOrConnectWithoutRoleInput } from './user-create-or-connect-without-role.input';
 import { UserCreateManyRoleInputEnvelope } from './user-create-many-role-input-envelope.input';
+import { Prisma } from '@prisma/client';
 import { UserWhereUniqueInput } from './user-where-unique.input';
 
 @InputType()
@@ -23,5 +24,5 @@ export class UserUncheckedCreateNestedManyWithoutRoleInput {
 
     @Field(() => [UserWhereUniqueInput], {nullable:true})
     @Type(() => UserWhereUniqueInput)
-    connect?: Array<UserWhereUniqueInput>;
+    connect?: Array<Prisma.AtLeast<UserWhereUniqueInput, 'id' | 'supabaseId'>>;
 }

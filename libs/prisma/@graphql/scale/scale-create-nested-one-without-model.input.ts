@@ -3,6 +3,7 @@ import { InputType } from '@nestjs/graphql';
 import { ScaleCreateWithoutModelInput } from './scale-create-without-model.input';
 import { Type } from 'class-transformer';
 import { ScaleCreateOrConnectWithoutModelInput } from './scale-create-or-connect-without-model.input';
+import { Prisma } from '@prisma/client';
 import { ScaleWhereUniqueInput } from './scale-where-unique.input';
 
 @InputType()
@@ -18,5 +19,5 @@ export class ScaleCreateNestedOneWithoutModelInput {
 
     @Field(() => ScaleWhereUniqueInput, {nullable:true})
     @Type(() => ScaleWhereUniqueInput)
-    connect?: ScaleWhereUniqueInput;
+    connect?: Prisma.AtLeast<ScaleWhereUniqueInput, 'id' | 'slug'>;
 }

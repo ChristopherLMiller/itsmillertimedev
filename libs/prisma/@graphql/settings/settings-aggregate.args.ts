@@ -3,6 +3,7 @@ import { ArgsType } from '@nestjs/graphql';
 import { SettingsWhereInput } from './settings-where.input';
 import { Type } from 'class-transformer';
 import { SettingsOrderByWithRelationInput } from './settings-order-by-with-relation.input';
+import { Prisma } from '@prisma/client';
 import { SettingsWhereUniqueInput } from './settings-where-unique.input';
 import { Int } from '@nestjs/graphql';
 import { SettingsCountAggregateInput } from './settings-count-aggregate.input';
@@ -22,7 +23,7 @@ export class SettingsAggregateArgs {
     orderBy?: Array<SettingsOrderByWithRelationInput>;
 
     @Field(() => SettingsWhereUniqueInput, {nullable:true})
-    cursor?: SettingsWhereUniqueInput;
+    cursor?: Prisma.AtLeast<SettingsWhereUniqueInput, 'id' | 'key'>;
 
     @Field(() => Int, {nullable:true})
     take?: number;

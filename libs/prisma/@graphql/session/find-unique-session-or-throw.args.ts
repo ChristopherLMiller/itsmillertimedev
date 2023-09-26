@@ -1,5 +1,6 @@
 import { Field } from '@nestjs/graphql';
 import { ArgsType } from '@nestjs/graphql';
+import { Prisma } from '@prisma/client';
 import { SessionWhereUniqueInput } from './session-where-unique.input';
 import { Type } from 'class-transformer';
 
@@ -8,5 +9,5 @@ export class FindUniqueSessionOrThrowArgs {
 
     @Field(() => SessionWhereUniqueInput, {nullable:false})
     @Type(() => SessionWhereUniqueInput)
-    where!: SessionWhereUniqueInput;
+    where!: Prisma.AtLeast<SessionWhereUniqueInput, 'id' | 'sid'>;
 }

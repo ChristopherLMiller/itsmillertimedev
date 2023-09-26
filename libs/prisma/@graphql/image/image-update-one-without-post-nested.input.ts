@@ -4,8 +4,10 @@ import { ImageCreateWithoutPostInput } from './image-create-without-post.input';
 import { Type } from 'class-transformer';
 import { ImageCreateOrConnectWithoutPostInput } from './image-create-or-connect-without-post.input';
 import { ImageUpsertWithoutPostInput } from './image-upsert-without-post.input';
+import { ImageWhereInput } from './image-where.input';
+import { Prisma } from '@prisma/client';
 import { ImageWhereUniqueInput } from './image-where-unique.input';
-import { ImageUpdateWithoutPostInput } from './image-update-without-post.input';
+import { ImageUpdateToOneWithWhereWithoutPostInput } from './image-update-to-one-with-where-without-post.input';
 
 @InputType()
 export class ImageUpdateOneWithoutPostNestedInput {
@@ -22,17 +24,19 @@ export class ImageUpdateOneWithoutPostNestedInput {
     @Type(() => ImageUpsertWithoutPostInput)
     upsert?: ImageUpsertWithoutPostInput;
 
-    @Field(() => Boolean, {nullable:true})
-    disconnect?: boolean;
+    @Field(() => ImageWhereInput, {nullable:true})
+    @Type(() => ImageWhereInput)
+    disconnect?: ImageWhereInput;
 
-    @Field(() => Boolean, {nullable:true})
-    delete?: boolean;
+    @Field(() => ImageWhereInput, {nullable:true})
+    @Type(() => ImageWhereInput)
+    delete?: ImageWhereInput;
 
     @Field(() => ImageWhereUniqueInput, {nullable:true})
     @Type(() => ImageWhereUniqueInput)
-    connect?: ImageWhereUniqueInput;
+    connect?: Prisma.AtLeast<ImageWhereUniqueInput, 'public_id'>;
 
-    @Field(() => ImageUpdateWithoutPostInput, {nullable:true})
-    @Type(() => ImageUpdateWithoutPostInput)
-    update?: ImageUpdateWithoutPostInput;
+    @Field(() => ImageUpdateToOneWithWhereWithoutPostInput, {nullable:true})
+    @Type(() => ImageUpdateToOneWithWhereWithoutPostInput)
+    update?: ImageUpdateToOneWithWhereWithoutPostInput;
 }

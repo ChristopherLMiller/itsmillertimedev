@@ -56,14 +56,14 @@ export class Image {
     @Field(() => Date, {nullable:false})
     updatedAt!: Date;
 
+    @Field(() => Int, {nullable:true})
+    modelId!: number | null;
+
     @Field(() => [Post], {nullable:true})
     Post?: Array<Post>;
 
     @Field(() => [Page], {nullable:true})
     Page?: Array<Page>;
-
-    @Field(() => Int, {nullable:true})
-    modelId!: number | null;
 
     @Field(() => Model, {nullable:true})
     Model?: Model | null;

@@ -1,8 +1,5 @@
 import { Gallery } from './gallery';
-import {
-  PublicationStatus,
-  Visibility,
-} from '../.pnpm/@prisma+client@4.10.1_prisma@4.10.1/node_modules/@prisma/client';
+import { PublicationStatus, Visibility } from '@prisma/client';
 import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
 
 export class GalleryImage {

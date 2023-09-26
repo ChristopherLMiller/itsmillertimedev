@@ -38,12 +38,6 @@ export class ModelUncheckedCreateWithoutScaleInput {
     @Field(() => Date, {nullable:true})
     updatedAt?: Date | string;
 
-    @Field(() => ModelTagsUncheckedCreateNestedManyWithoutModelInput, {nullable:true})
-    tags?: ModelTagsUncheckedCreateNestedManyWithoutModelInput;
-
-    @Field(() => ImageUncheckedCreateNestedManyWithoutModelInput, {nullable:true})
-    images?: ImageUncheckedCreateNestedManyWithoutModelInput;
-
     @Field(() => String, {nullable:true})
     clockifyProjectId?: string;
 
@@ -61,4 +55,10 @@ export class ModelUncheckedCreateWithoutScaleInput {
 
     @Field(() => Int, {nullable:false})
     manufacturerId!: number;
+
+    @Field(() => ModelTagsUncheckedCreateNestedManyWithoutModelInput, {nullable:true})
+    tags?: ModelTagsUncheckedCreateNestedManyWithoutModelInput;
+
+    @Field(() => ImageUncheckedCreateNestedManyWithoutModelInput, {nullable:true})
+    images?: ImageUncheckedCreateNestedManyWithoutModelInput;
 }

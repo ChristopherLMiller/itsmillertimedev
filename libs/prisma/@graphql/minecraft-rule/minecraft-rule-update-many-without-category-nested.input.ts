@@ -5,6 +5,7 @@ import { Type } from 'class-transformer';
 import { MinecraftRuleCreateOrConnectWithoutCategoryInput } from './minecraft-rule-create-or-connect-without-category.input';
 import { MinecraftRuleUpsertWithWhereUniqueWithoutCategoryInput } from './minecraft-rule-upsert-with-where-unique-without-category.input';
 import { MinecraftRuleCreateManyCategoryInputEnvelope } from './minecraft-rule-create-many-category-input-envelope.input';
+import { Prisma } from '@prisma/client';
 import { MinecraftRuleWhereUniqueInput } from './minecraft-rule-where-unique.input';
 import { MinecraftRuleUpdateWithWhereUniqueWithoutCategoryInput } from './minecraft-rule-update-with-where-unique-without-category.input';
 import { MinecraftRuleUpdateManyWithWhereWithoutCategoryInput } from './minecraft-rule-update-many-with-where-without-category.input';
@@ -31,19 +32,19 @@ export class MinecraftRuleUpdateManyWithoutCategoryNestedInput {
 
     @Field(() => [MinecraftRuleWhereUniqueInput], {nullable:true})
     @Type(() => MinecraftRuleWhereUniqueInput)
-    set?: Array<MinecraftRuleWhereUniqueInput>;
+    set?: Array<Prisma.AtLeast<MinecraftRuleWhereUniqueInput, 'id'>>;
 
     @Field(() => [MinecraftRuleWhereUniqueInput], {nullable:true})
     @Type(() => MinecraftRuleWhereUniqueInput)
-    disconnect?: Array<MinecraftRuleWhereUniqueInput>;
+    disconnect?: Array<Prisma.AtLeast<MinecraftRuleWhereUniqueInput, 'id'>>;
 
     @Field(() => [MinecraftRuleWhereUniqueInput], {nullable:true})
     @Type(() => MinecraftRuleWhereUniqueInput)
-    delete?: Array<MinecraftRuleWhereUniqueInput>;
+    delete?: Array<Prisma.AtLeast<MinecraftRuleWhereUniqueInput, 'id'>>;
 
     @Field(() => [MinecraftRuleWhereUniqueInput], {nullable:true})
     @Type(() => MinecraftRuleWhereUniqueInput)
-    connect?: Array<MinecraftRuleWhereUniqueInput>;
+    connect?: Array<Prisma.AtLeast<MinecraftRuleWhereUniqueInput, 'id'>>;
 
     @Field(() => [MinecraftRuleUpdateWithWhereUniqueWithoutCategoryInput], {nullable:true})
     @Type(() => MinecraftRuleUpdateWithWhereUniqueWithoutCategoryInput)

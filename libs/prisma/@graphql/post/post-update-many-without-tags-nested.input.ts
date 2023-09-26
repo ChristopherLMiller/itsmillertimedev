@@ -4,6 +4,7 @@ import { PostCreateWithoutTagsInput } from './post-create-without-tags.input';
 import { Type } from 'class-transformer';
 import { PostCreateOrConnectWithoutTagsInput } from './post-create-or-connect-without-tags.input';
 import { PostUpsertWithWhereUniqueWithoutTagsInput } from './post-upsert-with-where-unique-without-tags.input';
+import { Prisma } from '@prisma/client';
 import { PostWhereUniqueInput } from './post-where-unique.input';
 import { PostUpdateWithWhereUniqueWithoutTagsInput } from './post-update-with-where-unique-without-tags.input';
 import { PostUpdateManyWithWhereWithoutTagsInput } from './post-update-many-with-where-without-tags.input';
@@ -26,19 +27,19 @@ export class PostUpdateManyWithoutTagsNestedInput {
 
     @Field(() => [PostWhereUniqueInput], {nullable:true})
     @Type(() => PostWhereUniqueInput)
-    set?: Array<PostWhereUniqueInput>;
+    set?: Array<Prisma.AtLeast<PostWhereUniqueInput, 'id' | 'slug'>>;
 
     @Field(() => [PostWhereUniqueInput], {nullable:true})
     @Type(() => PostWhereUniqueInput)
-    disconnect?: Array<PostWhereUniqueInput>;
+    disconnect?: Array<Prisma.AtLeast<PostWhereUniqueInput, 'id' | 'slug'>>;
 
     @Field(() => [PostWhereUniqueInput], {nullable:true})
     @Type(() => PostWhereUniqueInput)
-    delete?: Array<PostWhereUniqueInput>;
+    delete?: Array<Prisma.AtLeast<PostWhereUniqueInput, 'id' | 'slug'>>;
 
     @Field(() => [PostWhereUniqueInput], {nullable:true})
     @Type(() => PostWhereUniqueInput)
-    connect?: Array<PostWhereUniqueInput>;
+    connect?: Array<Prisma.AtLeast<PostWhereUniqueInput, 'id' | 'slug'>>;
 
     @Field(() => [PostUpdateWithWhereUniqueWithoutTagsInput], {nullable:true})
     @Type(() => PostUpdateWithWhereUniqueWithoutTagsInput)

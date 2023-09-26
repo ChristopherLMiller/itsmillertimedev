@@ -3,6 +3,7 @@ import { ArgsType } from '@nestjs/graphql';
 import { ModelTagsWhereInput } from './model-tags-where.input';
 import { Type } from 'class-transformer';
 import { ModelTagsOrderByWithRelationInput } from './model-tags-order-by-with-relation.input';
+import { Prisma } from '@prisma/client';
 import { ModelTagsWhereUniqueInput } from './model-tags-where-unique.input';
 import { Int } from '@nestjs/graphql';
 import { ModelTagsCountAggregateInput } from './model-tags-count-aggregate.input';
@@ -22,7 +23,7 @@ export class ModelTagsAggregateArgs {
     orderBy?: Array<ModelTagsOrderByWithRelationInput>;
 
     @Field(() => ModelTagsWhereUniqueInput, {nullable:true})
-    cursor?: ModelTagsWhereUniqueInput;
+    cursor?: Prisma.AtLeast<ModelTagsWhereUniqueInput, 'id' | 'slug'>;
 
     @Field(() => Int, {nullable:true})
     take?: number;

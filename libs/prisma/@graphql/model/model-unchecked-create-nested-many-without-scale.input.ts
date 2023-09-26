@@ -4,6 +4,7 @@ import { ModelCreateWithoutScaleInput } from './model-create-without-scale.input
 import { Type } from 'class-transformer';
 import { ModelCreateOrConnectWithoutScaleInput } from './model-create-or-connect-without-scale.input';
 import { ModelCreateManyScaleInputEnvelope } from './model-create-many-scale-input-envelope.input';
+import { Prisma } from '@prisma/client';
 import { ModelWhereUniqueInput } from './model-where-unique.input';
 
 @InputType()
@@ -23,5 +24,5 @@ export class ModelUncheckedCreateNestedManyWithoutScaleInput {
 
     @Field(() => [ModelWhereUniqueInput], {nullable:true})
     @Type(() => ModelWhereUniqueInput)
-    connect?: Array<ModelWhereUniqueInput>;
+    connect?: Array<Prisma.AtLeast<ModelWhereUniqueInput, 'id' | 'slug'>>;
 }

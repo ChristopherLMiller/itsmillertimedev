@@ -3,6 +3,7 @@ import { ArgsType } from '@nestjs/graphql';
 import { UserWhereInput } from './user-where.input';
 import { Type } from 'class-transformer';
 import { UserOrderByWithRelationInput } from './user-order-by-with-relation.input';
+import { Prisma } from '@prisma/client';
 import { UserWhereUniqueInput } from './user-where-unique.input';
 import { Int } from '@nestjs/graphql';
 import { UserCountAggregateInput } from './user-count-aggregate.input';
@@ -22,7 +23,7 @@ export class UserAggregateArgs {
     orderBy?: Array<UserOrderByWithRelationInput>;
 
     @Field(() => UserWhereUniqueInput, {nullable:true})
-    cursor?: UserWhereUniqueInput;
+    cursor?: Prisma.AtLeast<UserWhereUniqueInput, 'id' | 'supabaseId'>;
 
     @Field(() => Int, {nullable:true})
     take?: number;

@@ -2,6 +2,7 @@ import { Field } from '@nestjs/graphql';
 import { ArgsType } from '@nestjs/graphql';
 import { ModelUpdateInput } from './model-update.input';
 import { Type } from 'class-transformer';
+import { Prisma } from '@prisma/client';
 import { ModelWhereUniqueInput } from './model-where-unique.input';
 
 @ArgsType()
@@ -13,5 +14,5 @@ export class UpdateOneModelArgs {
 
     @Field(() => ModelWhereUniqueInput, {nullable:false})
     @Type(() => ModelWhereUniqueInput)
-    where!: ModelWhereUniqueInput;
+    where!: Prisma.AtLeast<ModelWhereUniqueInput, 'id' | 'slug'>;
 }

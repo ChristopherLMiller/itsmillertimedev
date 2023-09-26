@@ -4,8 +4,9 @@ import { MinecraftRuleCategoryCreateWithoutMinecraftRulesInput } from './minecra
 import { Type } from 'class-transformer';
 import { MinecraftRuleCategoryCreateOrConnectWithoutMinecraftRulesInput } from './minecraft-rule-category-create-or-connect-without-minecraft-rules.input';
 import { MinecraftRuleCategoryUpsertWithoutMinecraftRulesInput } from './minecraft-rule-category-upsert-without-minecraft-rules.input';
+import { Prisma } from '@prisma/client';
 import { MinecraftRuleCategoryWhereUniqueInput } from './minecraft-rule-category-where-unique.input';
-import { MinecraftRuleCategoryUpdateWithoutMinecraftRulesInput } from './minecraft-rule-category-update-without-minecraft-rules.input';
+import { MinecraftRuleCategoryUpdateToOneWithWhereWithoutMinecraftRulesInput } from './minecraft-rule-category-update-to-one-with-where-without-minecraft-rules.input';
 
 @InputType()
 export class MinecraftRuleCategoryUpdateOneRequiredWithoutMinecraftRulesNestedInput {
@@ -24,9 +25,9 @@ export class MinecraftRuleCategoryUpdateOneRequiredWithoutMinecraftRulesNestedIn
 
     @Field(() => MinecraftRuleCategoryWhereUniqueInput, {nullable:true})
     @Type(() => MinecraftRuleCategoryWhereUniqueInput)
-    connect?: MinecraftRuleCategoryWhereUniqueInput;
+    connect?: Prisma.AtLeast<MinecraftRuleCategoryWhereUniqueInput, 'id' | 'name'>;
 
-    @Field(() => MinecraftRuleCategoryUpdateWithoutMinecraftRulesInput, {nullable:true})
-    @Type(() => MinecraftRuleCategoryUpdateWithoutMinecraftRulesInput)
-    update?: MinecraftRuleCategoryUpdateWithoutMinecraftRulesInput;
+    @Field(() => MinecraftRuleCategoryUpdateToOneWithWhereWithoutMinecraftRulesInput, {nullable:true})
+    @Type(() => MinecraftRuleCategoryUpdateToOneWithWhereWithoutMinecraftRulesInput)
+    update?: MinecraftRuleCategoryUpdateToOneWithWhereWithoutMinecraftRulesInput;
 }

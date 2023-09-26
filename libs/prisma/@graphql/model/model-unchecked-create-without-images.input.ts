@@ -37,9 +37,6 @@ export class ModelUncheckedCreateWithoutImagesInput {
     @Field(() => Date, {nullable:true})
     updatedAt?: Date | string;
 
-    @Field(() => ModelTagsUncheckedCreateNestedManyWithoutModelInput, {nullable:true})
-    tags?: ModelTagsUncheckedCreateNestedManyWithoutModelInput;
-
     @Field(() => String, {nullable:true})
     clockifyProjectId?: string;
 
@@ -60,4 +57,7 @@ export class ModelUncheckedCreateWithoutImagesInput {
 
     @Field(() => Int, {nullable:false})
     scaleId!: number;
+
+    @Field(() => ModelTagsUncheckedCreateNestedManyWithoutModelInput, {nullable:true})
+    tags?: ModelTagsUncheckedCreateNestedManyWithoutModelInput;
 }

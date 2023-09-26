@@ -2,7 +2,7 @@ import { Field } from '@nestjs/graphql';
 import { ObjectType } from '@nestjs/graphql';
 import { ID } from '@nestjs/graphql';
 import { MinecraftRule } from '../minecraft-rule/minecraft-rule.model';
-import { MinecraftRuleCategoryCount } from '../minecraft-rule/minecraft-rule-category-count.output';
+import { MinecraftRuleCategoryCount } from './minecraft-rule-category-count.output';
 
 @ObjectType()
 export class MinecraftRuleCategory {

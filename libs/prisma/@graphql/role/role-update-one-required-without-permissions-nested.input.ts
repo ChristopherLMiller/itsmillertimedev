@@ -4,8 +4,9 @@ import { RoleCreateWithoutPermissionsInput } from './role-create-without-permiss
 import { Type } from 'class-transformer';
 import { RoleCreateOrConnectWithoutPermissionsInput } from './role-create-or-connect-without-permissions.input';
 import { RoleUpsertWithoutPermissionsInput } from './role-upsert-without-permissions.input';
+import { Prisma } from '@prisma/client';
 import { RoleWhereUniqueInput } from './role-where-unique.input';
-import { RoleUpdateWithoutPermissionsInput } from './role-update-without-permissions.input';
+import { RoleUpdateToOneWithWhereWithoutPermissionsInput } from './role-update-to-one-with-where-without-permissions.input';
 
 @InputType()
 export class RoleUpdateOneRequiredWithoutPermissionsNestedInput {
@@ -24,9 +25,9 @@ export class RoleUpdateOneRequiredWithoutPermissionsNestedInput {
 
     @Field(() => RoleWhereUniqueInput, {nullable:true})
     @Type(() => RoleWhereUniqueInput)
-    connect?: RoleWhereUniqueInput;
+    connect?: Prisma.AtLeast<RoleWhereUniqueInput, 'id'>;
 
-    @Field(() => RoleUpdateWithoutPermissionsInput, {nullable:true})
-    @Type(() => RoleUpdateWithoutPermissionsInput)
-    update?: RoleUpdateWithoutPermissionsInput;
+    @Field(() => RoleUpdateToOneWithWhereWithoutPermissionsInput, {nullable:true})
+    @Type(() => RoleUpdateToOneWithWhereWithoutPermissionsInput)
+    update?: RoleUpdateToOneWithWhereWithoutPermissionsInput;
 }

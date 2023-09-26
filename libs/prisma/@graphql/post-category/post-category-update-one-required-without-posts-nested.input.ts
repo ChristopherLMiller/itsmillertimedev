@@ -4,8 +4,9 @@ import { PostCategoryCreateWithoutPostsInput } from './post-category-create-with
 import { Type } from 'class-transformer';
 import { PostCategoryCreateOrConnectWithoutPostsInput } from './post-category-create-or-connect-without-posts.input';
 import { PostCategoryUpsertWithoutPostsInput } from './post-category-upsert-without-posts.input';
+import { Prisma } from '@prisma/client';
 import { PostCategoryWhereUniqueInput } from './post-category-where-unique.input';
-import { PostCategoryUpdateWithoutPostsInput } from './post-category-update-without-posts.input';
+import { PostCategoryUpdateToOneWithWhereWithoutPostsInput } from './post-category-update-to-one-with-where-without-posts.input';
 
 @InputType()
 export class PostCategoryUpdateOneRequiredWithoutPostsNestedInput {
@@ -24,9 +25,9 @@ export class PostCategoryUpdateOneRequiredWithoutPostsNestedInput {
 
     @Field(() => PostCategoryWhereUniqueInput, {nullable:true})
     @Type(() => PostCategoryWhereUniqueInput)
-    connect?: PostCategoryWhereUniqueInput;
+    connect?: Prisma.AtLeast<PostCategoryWhereUniqueInput, 'id' | 'slug'>;
 
-    @Field(() => PostCategoryUpdateWithoutPostsInput, {nullable:true})
-    @Type(() => PostCategoryUpdateWithoutPostsInput)
-    update?: PostCategoryUpdateWithoutPostsInput;
+    @Field(() => PostCategoryUpdateToOneWithWhereWithoutPostsInput, {nullable:true})
+    @Type(() => PostCategoryUpdateToOneWithWhereWithoutPostsInput)
+    update?: PostCategoryUpdateToOneWithWhereWithoutPostsInput;
 }

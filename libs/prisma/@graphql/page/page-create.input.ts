@@ -23,9 +23,9 @@ export class PageCreateInput {
     @Field(() => Date, {nullable:true})
     updatedAt?: Date | string;
 
-    @Field(() => ImageCreateNestedOneWithoutPageInput, {nullable:true})
-    featuredImage?: ImageCreateNestedOneWithoutPageInput;
-
     @Field(() => Boolean, {nullable:false})
     isPublic!: boolean;
+
+    @Field(() => ImageCreateNestedOneWithoutPageInput, {nullable:true})
+    featuredImage?: ImageCreateNestedOneWithoutPageInput;
 }

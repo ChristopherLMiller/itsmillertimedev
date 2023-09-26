@@ -4,6 +4,7 @@ import { MinecraftRuleCreateWithoutCategoryInput } from './minecraft-rule-create
 import { Type } from 'class-transformer';
 import { MinecraftRuleCreateOrConnectWithoutCategoryInput } from './minecraft-rule-create-or-connect-without-category.input';
 import { MinecraftRuleCreateManyCategoryInputEnvelope } from './minecraft-rule-create-many-category-input-envelope.input';
+import { Prisma } from '@prisma/client';
 import { MinecraftRuleWhereUniqueInput } from './minecraft-rule-where-unique.input';
 
 @InputType()
@@ -23,5 +24,5 @@ export class MinecraftRuleCreateNestedManyWithoutCategoryInput {
 
     @Field(() => [MinecraftRuleWhereUniqueInput], {nullable:true})
     @Type(() => MinecraftRuleWhereUniqueInput)
-    connect?: Array<MinecraftRuleWhereUniqueInput>;
+    connect?: Array<Prisma.AtLeast<MinecraftRuleWhereUniqueInput, 'id'>>;
 }

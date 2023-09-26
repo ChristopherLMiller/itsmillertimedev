@@ -3,6 +3,7 @@ import { InputType } from '@nestjs/graphql';
 import { GalleryCreateWithoutTagsInput } from './gallery-create-without-tags.input';
 import { Type } from 'class-transformer';
 import { GalleryCreateOrConnectWithoutTagsInput } from './gallery-create-or-connect-without-tags.input';
+import { Prisma } from '@prisma/client';
 import { GalleryWhereUniqueInput } from './gallery-where-unique.input';
 
 @InputType()
@@ -18,5 +19,5 @@ export class GalleryCreateNestedOneWithoutTagsInput {
 
     @Field(() => GalleryWhereUniqueInput, {nullable:true})
     @Type(() => GalleryWhereUniqueInput)
-    connect?: GalleryWhereUniqueInput;
+    connect?: Prisma.AtLeast<GalleryWhereUniqueInput, 'id' | 'slug'>;
 }

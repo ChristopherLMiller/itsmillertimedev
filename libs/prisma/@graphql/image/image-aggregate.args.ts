@@ -3,6 +3,7 @@ import { ArgsType } from '@nestjs/graphql';
 import { ImageWhereInput } from './image-where.input';
 import { Type } from 'class-transformer';
 import { ImageOrderByWithRelationInput } from './image-order-by-with-relation.input';
+import { Prisma } from '@prisma/client';
 import { ImageWhereUniqueInput } from './image-where-unique.input';
 import { Int } from '@nestjs/graphql';
 import { ImageCountAggregateInput } from './image-count-aggregate.input';
@@ -22,7 +23,7 @@ export class ImageAggregateArgs {
     orderBy?: Array<ImageOrderByWithRelationInput>;
 
     @Field(() => ImageWhereUniqueInput, {nullable:true})
-    cursor?: ImageWhereUniqueInput;
+    cursor?: Prisma.AtLeast<ImageWhereUniqueInput, 'public_id'>;
 
     @Field(() => Int, {nullable:true})
     take?: number;

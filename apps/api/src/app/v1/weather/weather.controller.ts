@@ -7,13 +7,14 @@ import {
 } from '@itsmillertimedev/data';
 import { Controller, Get, Query, UseGuards } from '@nestjs/common';
 import { ApiResponse, ApiSecurity, ApiTags } from '@nestjs/swagger';
-import { BasicAuthGuard } from '../../../common/guards/basicAuth.guard';
+import { PermissionsPublic } from 'apps/api/src/common/decorators/auth.decorator';
+import { supabaseAuthGuard } from '../../../common/guards/supabaseAuth.guard';
 import { WeatherService } from './weather.service';
 
 @Controller({ version: '1', path: 'weather' })
 @ApiTags('Weather')
 @ApiSecurity('x-api-key')
-@UseGuards(BasicAuthGuard)
+@UseGuards(supabaseAuthGuard)
 export class WeatherController {
   constructor(private weatherService: WeatherService) {}
 
@@ -28,9 +29,10 @@ export class WeatherController {
     description:
       'Forbidden, invalid api key supplied or not authorized to access this resource',
   })
+  @PermissionsPublic()
   async getCurrentWeather(
     @Query('lat') lat: string,
-    @Query('lon') lon: string
+    @Query('lon') lon: string,
   ): Response<CurrentWeather> {
     return await this.weatherService.getCurrentWeather({ lat, lon });
   }
@@ -46,9 +48,10 @@ export class WeatherController {
     description:
       'Forbidden, invalid api key supplied or not authorized to access this resource',
   })
+  @PermissionsPublic()
   async getMinutelyForecast(
     @Query('lat') lat: string,
-    @Query('lon') lon: string
+    @Query('lon') lon: string,
   ): Response<MinutelyForecast> {
     return await this.weatherService.getMinutelyForecast({ lat, lon });
   }
@@ -64,9 +67,10 @@ export class WeatherController {
     description:
       'Forbidden, invalid api key supplied or not authorized to access this resource',
   })
+  @PermissionsPublic()
   async getHourlyForecast(
     @Query('lat') lat: string,
-    @Query('lon') lon: string
+    @Query('lon') lon: string,
   ): Response<HourlyForecast> {
     return await this.weatherService.getHourlyForecast({ lat, lon });
   }
@@ -82,9 +86,10 @@ export class WeatherController {
     description:
       'Forbidden, invalid api key supplied or not authorized to access this resource',
   })
+  @PermissionsPublic()
   async getDailyForecast(
     @Query('lat') lat: string,
-    @Query('lon') lon: string
+    @Query('lon') lon: string,
   ): Response<DailyForecast> {
     return await this.weatherService.getDailyForecast({ lat, lon });
   }
@@ -100,9 +105,10 @@ export class WeatherController {
     description:
       'Forbidden, invalid api key supplied or not authorized to access this resource',
   })
+  @PermissionsPublic()
   async getAlerts(
     @Query('lat') lat: string,
-    @Query('lon') lon: string
+    @Query('lon') lon: string,
   ): Response<any> {
     return await this.weatherService.getAlerts({ lat, lon });
   }

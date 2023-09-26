@@ -18,13 +18,14 @@ import {
   ApiTags,
 } from '@nestjs/swagger';
 import { PostCategory, Prisma } from '@prisma/client';
-import { BasicAuthGuard } from '../../../../common/guards/basicAuth.guard';
+import { PermissionsPublic } from '../../../../common/decorators/auth.decorator';
+import { supabaseAuthGuard } from '../../../../common/guards/supabaseAuth.guard';
 import { PostCategoryService } from './post-category.service';
 
 @Controller({ version: '1', path: 'post-category' })
 @ApiTags('Post', 'Post Category')
-@UseGuards(BasicAuthGuard)
 @ApiSecurity('x-api-key')
+@UseGuards(supabaseAuthGuard)
 export class PostCategoryController {
   constructor(private readonly postCategoryService: PostCategoryService) {}
 
@@ -37,7 +38,7 @@ export class PostCategoryController {
   })
   @ApiResponse({ status: 403, description: 'Forbidden' })
   async create(
-    @Body() createPostCategoryDto: PostCategory
+    @Body() createPostCategoryDto: PostCategory,
   ): Response<PostCategory | Prisma.BatchPayload> {
     return {
       data: await this.postCategoryService.create(createPostCategoryDto),
@@ -53,6 +54,7 @@ export class PostCategoryController {
     description: 'Object containing all categories',
   })
   @ApiResponse({ status: 403, description: 'Forbidden' })
+  @PermissionsPublic()
   async findAll(): Response<PostCategory[]> {
     return { data: await this.postCategoryService.findAll(), meta: {} };
   }
@@ -66,6 +68,7 @@ export class PostCategoryController {
     description: 'Object containing a singular category',
   })
   @ApiResponse({ status: 403, description: 'Forbidden' })
+  @PermissionsPublic()
   async findOne(@Param('slug') slug: string) {
     return {
       data: await this.postCategoryService.findOne(slug),
@@ -84,7 +87,7 @@ export class PostCategoryController {
   @ApiResponse({ status: 403, description: 'Forbidden' })
   async update(
     @Param('slug') slug: string,
-    @Body() updatePostCategoryDto: PostCategory
+    @Body() updatePostCategoryDto: PostCategory,
   ): Response<PostCategory> {
     return {
       data: await this.postCategoryService.update(slug, updatePostCategoryDto),

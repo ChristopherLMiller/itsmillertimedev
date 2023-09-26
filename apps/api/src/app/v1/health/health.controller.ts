@@ -1,8 +1,10 @@
 import { Controller, Get } from '@nestjs/common';
+import { PermissionsPublic } from '../../../common/decorators/auth.decorator';
 
 @Controller({ version: '1', path: 'health' })
 export class HealthController {
   @Get('/status')
+  @PermissionsPublic()
   getAppStatus() {
     const healthcheck = {
       uptime: process.uptime(),
@@ -11,6 +13,6 @@ export class HealthController {
       timestamp: Date.now(),
     };
 
-    return healthcheck;
+    return { data: healthcheck };
   }
 }

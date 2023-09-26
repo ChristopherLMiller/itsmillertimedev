@@ -18,13 +18,14 @@ import {
   ApiTags,
 } from '@nestjs/swagger';
 import { PostTag, Prisma } from '@prisma/client';
-import { BasicAuthGuard } from '../../../../common/guards/basicAuth.guard';
+import { PermissionsPublic } from '../../../../common/decorators/auth.decorator';
+import { supabaseAuthGuard } from '../../../../common/guards/supabaseAuth.guard';
 import { PostTagService } from './post-tag.service';
 
 @Controller({ version: '1', path: 'post-tag' })
 @ApiTags('Post', 'Post Tag')
-@UseGuards(BasicAuthGuard)
 @ApiSecurity('x-api-key')
+@UseGuards(supabaseAuthGuard)
 export class PostTagController {
   constructor(private readonly postTagService: PostTagService) {}
 
@@ -37,7 +38,7 @@ export class PostTagController {
   })
   @ApiResponse({ status: 403, description: 'Forbidden' })
   async create(
-    @Body() createPostTagDto: PostTag
+    @Body() createPostTagDto: PostTag,
   ): Response<PostTag | Prisma.BatchPayload> {
     return {
       data: await this.postTagService.create(createPostTagDto),
@@ -53,6 +54,7 @@ export class PostTagController {
     description: 'Object containing all tag',
   })
   @ApiResponse({ status: 403, description: 'Forbidden' })
+  @PermissionsPublic()
   async findAll(): Response<PostTag[]> {
     return { data: await this.postTagService.findAll(), meta: {} };
   }
@@ -66,6 +68,7 @@ export class PostTagController {
     description: 'Object containing a singular Tag',
   })
   @ApiResponse({ status: 403, description: 'Forbidden' })
+  @PermissionsPublic()
   async findOne(@Param('slug') slug: string): Response<PostTag> {
     return { data: await this.postTagService.findOne(slug), meta: { slug } };
   }
@@ -81,7 +84,7 @@ export class PostTagController {
   @ApiResponse({ status: 403, description: 'Forbidden' })
   async update(
     @Param('slug') slug: string,
-    @Body() updatePostTagDto: PostTag
+    @Body() updatePostTagDto: PostTag,
   ): Response<PostTag> {
     return {
       data: await this.postTagService.update(slug, updatePostTagDto),

@@ -5,6 +5,7 @@ import { Type } from 'class-transformer';
 import { ModelCreateOrConnectWithoutScaleInput } from './model-create-or-connect-without-scale.input';
 import { ModelUpsertWithWhereUniqueWithoutScaleInput } from './model-upsert-with-where-unique-without-scale.input';
 import { ModelCreateManyScaleInputEnvelope } from './model-create-many-scale-input-envelope.input';
+import { Prisma } from '@prisma/client';
 import { ModelWhereUniqueInput } from './model-where-unique.input';
 import { ModelUpdateWithWhereUniqueWithoutScaleInput } from './model-update-with-where-unique-without-scale.input';
 import { ModelUpdateManyWithWhereWithoutScaleInput } from './model-update-many-with-where-without-scale.input';
@@ -31,19 +32,19 @@ export class ModelUncheckedUpdateManyWithoutScaleNestedInput {
 
     @Field(() => [ModelWhereUniqueInput], {nullable:true})
     @Type(() => ModelWhereUniqueInput)
-    set?: Array<ModelWhereUniqueInput>;
+    set?: Array<Prisma.AtLeast<ModelWhereUniqueInput, 'id' | 'slug'>>;
 
     @Field(() => [ModelWhereUniqueInput], {nullable:true})
     @Type(() => ModelWhereUniqueInput)
-    disconnect?: Array<ModelWhereUniqueInput>;
+    disconnect?: Array<Prisma.AtLeast<ModelWhereUniqueInput, 'id' | 'slug'>>;
 
     @Field(() => [ModelWhereUniqueInput], {nullable:true})
     @Type(() => ModelWhereUniqueInput)
-    delete?: Array<ModelWhereUniqueInput>;
+    delete?: Array<Prisma.AtLeast<ModelWhereUniqueInput, 'id' | 'slug'>>;
 
     @Field(() => [ModelWhereUniqueInput], {nullable:true})
     @Type(() => ModelWhereUniqueInput)
-    connect?: Array<ModelWhereUniqueInput>;
+    connect?: Array<Prisma.AtLeast<ModelWhereUniqueInput, 'id' | 'slug'>>;
 
     @Field(() => [ModelUpdateWithWhereUniqueWithoutScaleInput], {nullable:true})
     @Type(() => ModelUpdateWithWhereUniqueWithoutScaleInput)

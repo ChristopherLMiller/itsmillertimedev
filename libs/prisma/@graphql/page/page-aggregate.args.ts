@@ -3,6 +3,7 @@ import { ArgsType } from '@nestjs/graphql';
 import { PageWhereInput } from './page-where.input';
 import { Type } from 'class-transformer';
 import { PageOrderByWithRelationInput } from './page-order-by-with-relation.input';
+import { Prisma } from '@prisma/client';
 import { PageWhereUniqueInput } from './page-where-unique.input';
 import { Int } from '@nestjs/graphql';
 import { PageCountAggregateInput } from './page-count-aggregate.input';
@@ -22,7 +23,7 @@ export class PageAggregateArgs {
     orderBy?: Array<PageOrderByWithRelationInput>;
 
     @Field(() => PageWhereUniqueInput, {nullable:true})
-    cursor?: PageWhereUniqueInput;
+    cursor?: Prisma.AtLeast<PageWhereUniqueInput, 'id' | 'slug'>;
 
     @Field(() => Int, {nullable:true})
     take?: number;

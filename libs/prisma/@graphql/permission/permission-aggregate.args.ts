@@ -3,6 +3,7 @@ import { ArgsType } from '@nestjs/graphql';
 import { PermissionWhereInput } from './permission-where.input';
 import { Type } from 'class-transformer';
 import { PermissionOrderByWithRelationInput } from './permission-order-by-with-relation.input';
+import { Prisma } from '@prisma/client';
 import { PermissionWhereUniqueInput } from './permission-where-unique.input';
 import { Int } from '@nestjs/graphql';
 import { PermissionCountAggregateInput } from './permission-count-aggregate.input';
@@ -22,7 +23,7 @@ export class PermissionAggregateArgs {
     orderBy?: Array<PermissionOrderByWithRelationInput>;
 
     @Field(() => PermissionWhereUniqueInput, {nullable:true})
-    cursor?: PermissionWhereUniqueInput;
+    cursor?: Prisma.AtLeast<PermissionWhereUniqueInput, 'id' | 'node'>;
 
     @Field(() => Int, {nullable:true})
     take?: number;

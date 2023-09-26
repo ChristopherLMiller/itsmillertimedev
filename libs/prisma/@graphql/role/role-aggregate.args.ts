@@ -3,6 +3,7 @@ import { ArgsType } from '@nestjs/graphql';
 import { RoleWhereInput } from './role-where.input';
 import { Type } from 'class-transformer';
 import { RoleOrderByWithRelationInput } from './role-order-by-with-relation.input';
+import { Prisma } from '@prisma/client';
 import { RoleWhereUniqueInput } from './role-where-unique.input';
 import { Int } from '@nestjs/graphql';
 import { RoleCountAggregateInput } from './role-count-aggregate.input';
@@ -22,7 +23,7 @@ export class RoleAggregateArgs {
     orderBy?: Array<RoleOrderByWithRelationInput>;
 
     @Field(() => RoleWhereUniqueInput, {nullable:true})
-    cursor?: RoleWhereUniqueInput;
+    cursor?: Prisma.AtLeast<RoleWhereUniqueInput, 'id'>;
 
     @Field(() => Int, {nullable:true})
     take?: number;

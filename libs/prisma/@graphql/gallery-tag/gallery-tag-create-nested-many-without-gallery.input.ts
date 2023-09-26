@@ -4,6 +4,7 @@ import { GalleryTagCreateWithoutGalleryInput } from './gallery-tag-create-withou
 import { Type } from 'class-transformer';
 import { GalleryTagCreateOrConnectWithoutGalleryInput } from './gallery-tag-create-or-connect-without-gallery.input';
 import { GalleryTagCreateManyGalleryInputEnvelope } from './gallery-tag-create-many-gallery-input-envelope.input';
+import { Prisma } from '@prisma/client';
 import { GalleryTagWhereUniqueInput } from './gallery-tag-where-unique.input';
 
 @InputType()
@@ -23,5 +24,5 @@ export class GalleryTagCreateNestedManyWithoutGalleryInput {
 
     @Field(() => [GalleryTagWhereUniqueInput], {nullable:true})
     @Type(() => GalleryTagWhereUniqueInput)
-    connect?: Array<GalleryTagWhereUniqueInput>;
+    connect?: Array<Prisma.AtLeast<GalleryTagWhereUniqueInput, 'id' | 'slug'>>;
 }

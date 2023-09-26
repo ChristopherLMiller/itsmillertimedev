@@ -1,5 +1,6 @@
 import { Field } from '@nestjs/graphql';
 import { InputType } from '@nestjs/graphql';
+import { Prisma } from '@prisma/client';
 import { MinecraftRuleWhereUniqueInput } from './minecraft-rule-where-unique.input';
 import { Type } from 'class-transformer';
 import { MinecraftRuleCreateWithoutCategoryInput } from './minecraft-rule-create-without-category.input';
@@ -9,7 +10,7 @@ export class MinecraftRuleCreateOrConnectWithoutCategoryInput {
 
     @Field(() => MinecraftRuleWhereUniqueInput, {nullable:false})
     @Type(() => MinecraftRuleWhereUniqueInput)
-    where!: MinecraftRuleWhereUniqueInput;
+    where!: Prisma.AtLeast<MinecraftRuleWhereUniqueInput, 'id'>;
 
     @Field(() => MinecraftRuleCreateWithoutCategoryInput, {nullable:false})
     @Type(() => MinecraftRuleCreateWithoutCategoryInput)

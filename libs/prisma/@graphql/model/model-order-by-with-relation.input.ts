@@ -1,6 +1,7 @@
 import { Field } from '@nestjs/graphql';
 import { InputType } from '@nestjs/graphql';
 import { SortOrder } from '../prisma/sort-order.enum';
+import { SortOrderInput } from '../prisma/sort-order.input';
 import { ModelTagsOrderByRelationAggregateInput } from '../model-tags/model-tags-order-by-relation-aggregate.input';
 import { ImageOrderByRelationAggregateInput } from '../image/image-order-by-relation-aggregate.input';
 import { ManufacturerOrderByWithRelationInput } from '../manufacturer/manufacturer-order-by-with-relation.input';
@@ -39,20 +40,8 @@ export class ModelOrderByWithRelationInput {
     @Field(() => SortOrder, {nullable:true})
     updatedAt?: keyof typeof SortOrder;
 
-    @Field(() => ModelTagsOrderByRelationAggregateInput, {nullable:true})
-    tags?: ModelTagsOrderByRelationAggregateInput;
-
-    @Field(() => ImageOrderByRelationAggregateInput, {nullable:true})
-    images?: ImageOrderByRelationAggregateInput;
-
-    @Field(() => ManufacturerOrderByWithRelationInput, {nullable:true})
-    manufacturer?: ManufacturerOrderByWithRelationInput;
-
-    @Field(() => ScaleOrderByWithRelationInput, {nullable:true})
-    scale?: ScaleOrderByWithRelationInput;
-
-    @Field(() => SortOrder, {nullable:true})
-    clockifyProjectId?: keyof typeof SortOrder;
+    @Field(() => SortOrderInput, {nullable:true})
+    clockifyProjectId?: SortOrderInput;
 
     @Field(() => SortOrder, {nullable:true})
     contents?: keyof typeof SortOrder;
@@ -71,4 +60,16 @@ export class ModelOrderByWithRelationInput {
 
     @Field(() => SortOrder, {nullable:true})
     scaleId?: keyof typeof SortOrder;
+
+    @Field(() => ModelTagsOrderByRelationAggregateInput, {nullable:true})
+    tags?: ModelTagsOrderByRelationAggregateInput;
+
+    @Field(() => ImageOrderByRelationAggregateInput, {nullable:true})
+    images?: ImageOrderByRelationAggregateInput;
+
+    @Field(() => ManufacturerOrderByWithRelationInput, {nullable:true})
+    manufacturer?: ManufacturerOrderByWithRelationInput;
+
+    @Field(() => ScaleOrderByWithRelationInput, {nullable:true})
+    scale?: ScaleOrderByWithRelationInput;
 }

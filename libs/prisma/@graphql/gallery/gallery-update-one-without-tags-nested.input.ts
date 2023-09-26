@@ -4,8 +4,10 @@ import { GalleryCreateWithoutTagsInput } from './gallery-create-without-tags.inp
 import { Type } from 'class-transformer';
 import { GalleryCreateOrConnectWithoutTagsInput } from './gallery-create-or-connect-without-tags.input';
 import { GalleryUpsertWithoutTagsInput } from './gallery-upsert-without-tags.input';
+import { GalleryWhereInput } from './gallery-where.input';
+import { Prisma } from '@prisma/client';
 import { GalleryWhereUniqueInput } from './gallery-where-unique.input';
-import { GalleryUpdateWithoutTagsInput } from './gallery-update-without-tags.input';
+import { GalleryUpdateToOneWithWhereWithoutTagsInput } from './gallery-update-to-one-with-where-without-tags.input';
 
 @InputType()
 export class GalleryUpdateOneWithoutTagsNestedInput {
@@ -22,17 +24,19 @@ export class GalleryUpdateOneWithoutTagsNestedInput {
     @Type(() => GalleryUpsertWithoutTagsInput)
     upsert?: GalleryUpsertWithoutTagsInput;
 
-    @Field(() => Boolean, {nullable:true})
-    disconnect?: boolean;
+    @Field(() => GalleryWhereInput, {nullable:true})
+    @Type(() => GalleryWhereInput)
+    disconnect?: GalleryWhereInput;
 
-    @Field(() => Boolean, {nullable:true})
-    delete?: boolean;
+    @Field(() => GalleryWhereInput, {nullable:true})
+    @Type(() => GalleryWhereInput)
+    delete?: GalleryWhereInput;
 
     @Field(() => GalleryWhereUniqueInput, {nullable:true})
     @Type(() => GalleryWhereUniqueInput)
-    connect?: GalleryWhereUniqueInput;
+    connect?: Prisma.AtLeast<GalleryWhereUniqueInput, 'id' | 'slug'>;
 
-    @Field(() => GalleryUpdateWithoutTagsInput, {nullable:true})
-    @Type(() => GalleryUpdateWithoutTagsInput)
-    update?: GalleryUpdateWithoutTagsInput;
+    @Field(() => GalleryUpdateToOneWithWhereWithoutTagsInput, {nullable:true})
+    @Type(() => GalleryUpdateToOneWithWhereWithoutTagsInput)
+    update?: GalleryUpdateToOneWithWhereWithoutTagsInput;
 }

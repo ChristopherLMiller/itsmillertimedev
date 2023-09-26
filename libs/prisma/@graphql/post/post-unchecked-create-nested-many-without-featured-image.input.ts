@@ -4,6 +4,7 @@ import { PostCreateWithoutFeaturedImageInput } from './post-create-without-featu
 import { Type } from 'class-transformer';
 import { PostCreateOrConnectWithoutFeaturedImageInput } from './post-create-or-connect-without-featured-image.input';
 import { PostCreateManyFeaturedImageInputEnvelope } from './post-create-many-featured-image-input-envelope.input';
+import { Prisma } from '@prisma/client';
 import { PostWhereUniqueInput } from './post-where-unique.input';
 
 @InputType()
@@ -23,5 +24,5 @@ export class PostUncheckedCreateNestedManyWithoutFeaturedImageInput {
 
     @Field(() => [PostWhereUniqueInput], {nullable:true})
     @Type(() => PostWhereUniqueInput)
-    connect?: Array<PostWhereUniqueInput>;
+    connect?: Array<Prisma.AtLeast<PostWhereUniqueInput, 'id' | 'slug'>>;
 }

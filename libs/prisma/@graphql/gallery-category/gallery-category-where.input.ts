@@ -3,7 +3,7 @@ import { InputType } from '@nestjs/graphql';
 import { IntFilter } from '../prisma/int-filter.input';
 import { StringFilter } from '../prisma/string-filter.input';
 import { IntNullableFilter } from '../prisma/int-nullable-filter.input';
-import { GalleryRelationFilter } from '../gallery/gallery-relation-filter.input';
+import { GalleryNullableRelationFilter } from '../gallery/gallery-nullable-relation-filter.input';
 
 @InputType()
 export class GalleryCategoryWhereInput {
@@ -29,6 +29,6 @@ export class GalleryCategoryWhereInput {
     @Field(() => IntNullableFilter, {nullable:true})
     galleryId?: IntNullableFilter;
 
-    @Field(() => GalleryRelationFilter, {nullable:true})
-    Gallery?: GalleryRelationFilter;
+    @Field(() => GalleryNullableRelationFilter, {nullable:true})
+    Gallery?: GalleryNullableRelationFilter;
 }

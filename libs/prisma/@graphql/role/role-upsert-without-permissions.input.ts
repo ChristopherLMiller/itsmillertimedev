@@ -3,6 +3,7 @@ import { InputType } from '@nestjs/graphql';
 import { RoleUpdateWithoutPermissionsInput } from './role-update-without-permissions.input';
 import { Type } from 'class-transformer';
 import { RoleCreateWithoutPermissionsInput } from './role-create-without-permissions.input';
+import { RoleWhereInput } from './role-where.input';
 
 @InputType()
 export class RoleUpsertWithoutPermissionsInput {
@@ -14,4 +15,8 @@ export class RoleUpsertWithoutPermissionsInput {
     @Field(() => RoleCreateWithoutPermissionsInput, {nullable:false})
     @Type(() => RoleCreateWithoutPermissionsInput)
     create!: RoleCreateWithoutPermissionsInput;
+
+    @Field(() => RoleWhereInput, {nullable:true})
+    @Type(() => RoleWhereInput)
+    where?: RoleWhereInput;
 }

@@ -1,5 +1,6 @@
 import { Field } from '@nestjs/graphql';
 import { ArgsType } from '@nestjs/graphql';
+import { Prisma } from '@prisma/client';
 import { ImageWhereUniqueInput } from './image-where-unique.input';
 import { Type } from 'class-transformer';
 import { ImageCreateInput } from './image-create.input';
@@ -10,7 +11,7 @@ export class UpsertOneImageArgs {
 
     @Field(() => ImageWhereUniqueInput, {nullable:false})
     @Type(() => ImageWhereUniqueInput)
-    where!: ImageWhereUniqueInput;
+    where!: Prisma.AtLeast<ImageWhereUniqueInput, 'public_id'>;
 
     @Field(() => ImageCreateInput, {nullable:false})
     @Type(() => ImageCreateInput)

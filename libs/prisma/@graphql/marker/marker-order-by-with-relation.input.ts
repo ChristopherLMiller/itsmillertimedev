@@ -1,6 +1,7 @@
 import { Field } from '@nestjs/graphql';
 import { InputType } from '@nestjs/graphql';
 import { SortOrder } from '../prisma/sort-order.enum';
+import { SortOrderInput } from '../prisma/sort-order.input';
 
 @InputType()
 export class MarkerOrderByWithRelationInput {
@@ -14,11 +15,11 @@ export class MarkerOrderByWithRelationInput {
     @Field(() => SortOrder, {nullable:true})
     lon?: keyof typeof SortOrder;
 
-    @Field(() => SortOrder, {nullable:true})
-    siteURL?: keyof typeof SortOrder;
+    @Field(() => SortOrderInput, {nullable:true})
+    siteURL?: SortOrderInput;
 
-    @Field(() => SortOrder, {nullable:true})
-    galleryURL?: keyof typeof SortOrder;
+    @Field(() => SortOrderInput, {nullable:true})
+    galleryURL?: SortOrderInput;
 
     @Field(() => SortOrder, {nullable:true})
     title?: keyof typeof SortOrder;

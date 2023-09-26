@@ -3,6 +3,7 @@ import { InputType } from '@nestjs/graphql';
 import { ManufacturerCreateWithoutModelInput } from './manufacturer-create-without-model.input';
 import { Type } from 'class-transformer';
 import { ManufacturerCreateOrConnectWithoutModelInput } from './manufacturer-create-or-connect-without-model.input';
+import { Prisma } from '@prisma/client';
 import { ManufacturerWhereUniqueInput } from './manufacturer-where-unique.input';
 
 @InputType()
@@ -18,5 +19,5 @@ export class ManufacturerCreateNestedOneWithoutModelInput {
 
     @Field(() => ManufacturerWhereUniqueInput, {nullable:true})
     @Type(() => ManufacturerWhereUniqueInput)
-    connect?: ManufacturerWhereUniqueInput;
+    connect?: Prisma.AtLeast<ManufacturerWhereUniqueInput, 'id' | 'slug'>;
 }

@@ -3,6 +3,7 @@ import { ArgsType } from '@nestjs/graphql';
 import { ModelWhereInput } from './model-where.input';
 import { Type } from 'class-transformer';
 import { ModelOrderByWithRelationInput } from './model-order-by-with-relation.input';
+import { Prisma } from '@prisma/client';
 import { ModelWhereUniqueInput } from './model-where-unique.input';
 import { Int } from '@nestjs/graphql';
 import { ModelScalarFieldEnum } from './model-scalar-field.enum';
@@ -18,7 +19,7 @@ export class FindManyModelArgs {
     orderBy?: Array<ModelOrderByWithRelationInput>;
 
     @Field(() => ModelWhereUniqueInput, {nullable:true})
-    cursor?: ModelWhereUniqueInput;
+    cursor?: Prisma.AtLeast<ModelWhereUniqueInput, 'id' | 'slug'>;
 
     @Field(() => Int, {nullable:true})
     take?: number;

@@ -4,6 +4,7 @@ import { ModelCreateWithoutManufacturerInput } from './model-create-without-manu
 import { Type } from 'class-transformer';
 import { ModelCreateOrConnectWithoutManufacturerInput } from './model-create-or-connect-without-manufacturer.input';
 import { ModelCreateManyManufacturerInputEnvelope } from './model-create-many-manufacturer-input-envelope.input';
+import { Prisma } from '@prisma/client';
 import { ModelWhereUniqueInput } from './model-where-unique.input';
 
 @InputType()
@@ -23,5 +24,5 @@ export class ModelUncheckedCreateNestedManyWithoutManufacturerInput {
 
     @Field(() => [ModelWhereUniqueInput], {nullable:true})
     @Type(() => ModelWhereUniqueInput)
-    connect?: Array<ModelWhereUniqueInput>;
+    connect?: Array<Prisma.AtLeast<ModelWhereUniqueInput, 'id' | 'slug'>>;
 }

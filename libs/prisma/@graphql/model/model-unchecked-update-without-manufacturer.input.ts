@@ -5,9 +5,9 @@ import { StringFieldUpdateOperationsInput } from '../prisma/string-field-update-
 import { BoolFieldUpdateOperationsInput } from '../prisma/bool-field-update-operations.input';
 import { EnumVisibilityFieldUpdateOperationsInput } from '../prisma/enum-visibility-field-update-operations.input';
 import { DateTimeFieldUpdateOperationsInput } from '../prisma/date-time-field-update-operations.input';
+import { NullableStringFieldUpdateOperationsInput } from '../prisma/nullable-string-field-update-operations.input';
 import { ModelTagsUncheckedUpdateManyWithoutModelNestedInput } from '../model-tags/model-tags-unchecked-update-many-without-model-nested.input';
 import { ImageUncheckedUpdateManyWithoutModelNestedInput } from '../image/image-unchecked-update-many-without-model-nested.input';
-import { NullableStringFieldUpdateOperationsInput } from '../prisma/nullable-string-field-update-operations.input';
 
 @InputType()
 export class ModelUncheckedUpdateWithoutManufacturerInput {
@@ -42,12 +42,6 @@ export class ModelUncheckedUpdateWithoutManufacturerInput {
     @Field(() => DateTimeFieldUpdateOperationsInput, {nullable:true})
     updatedAt?: DateTimeFieldUpdateOperationsInput;
 
-    @Field(() => ModelTagsUncheckedUpdateManyWithoutModelNestedInput, {nullable:true})
-    tags?: ModelTagsUncheckedUpdateManyWithoutModelNestedInput;
-
-    @Field(() => ImageUncheckedUpdateManyWithoutModelNestedInput, {nullable:true})
-    images?: ImageUncheckedUpdateManyWithoutModelNestedInput;
-
     @Field(() => NullableStringFieldUpdateOperationsInput, {nullable:true})
     clockifyProjectId?: NullableStringFieldUpdateOperationsInput;
 
@@ -65,4 +59,10 @@ export class ModelUncheckedUpdateWithoutManufacturerInput {
 
     @Field(() => IntFieldUpdateOperationsInput, {nullable:true})
     scaleId?: IntFieldUpdateOperationsInput;
+
+    @Field(() => ModelTagsUncheckedUpdateManyWithoutModelNestedInput, {nullable:true})
+    tags?: ModelTagsUncheckedUpdateManyWithoutModelNestedInput;
+
+    @Field(() => ImageUncheckedUpdateManyWithoutModelNestedInput, {nullable:true})
+    images?: ImageUncheckedUpdateManyWithoutModelNestedInput;
 }

@@ -5,6 +5,7 @@ import { Type } from 'class-transformer';
 import { UserCreateOrConnectWithoutRoleInput } from './user-create-or-connect-without-role.input';
 import { UserUpsertWithWhereUniqueWithoutRoleInput } from './user-upsert-with-where-unique-without-role.input';
 import { UserCreateManyRoleInputEnvelope } from './user-create-many-role-input-envelope.input';
+import { Prisma } from '@prisma/client';
 import { UserWhereUniqueInput } from './user-where-unique.input';
 import { UserUpdateWithWhereUniqueWithoutRoleInput } from './user-update-with-where-unique-without-role.input';
 import { UserUpdateManyWithWhereWithoutRoleInput } from './user-update-many-with-where-without-role.input';
@@ -31,19 +32,19 @@ export class UserUncheckedUpdateManyWithoutRoleNestedInput {
 
     @Field(() => [UserWhereUniqueInput], {nullable:true})
     @Type(() => UserWhereUniqueInput)
-    set?: Array<UserWhereUniqueInput>;
+    set?: Array<Prisma.AtLeast<UserWhereUniqueInput, 'id' | 'supabaseId'>>;
 
     @Field(() => [UserWhereUniqueInput], {nullable:true})
     @Type(() => UserWhereUniqueInput)
-    disconnect?: Array<UserWhereUniqueInput>;
+    disconnect?: Array<Prisma.AtLeast<UserWhereUniqueInput, 'id' | 'supabaseId'>>;
 
     @Field(() => [UserWhereUniqueInput], {nullable:true})
     @Type(() => UserWhereUniqueInput)
-    delete?: Array<UserWhereUniqueInput>;
+    delete?: Array<Prisma.AtLeast<UserWhereUniqueInput, 'id' | 'supabaseId'>>;
 
     @Field(() => [UserWhereUniqueInput], {nullable:true})
     @Type(() => UserWhereUniqueInput)
-    connect?: Array<UserWhereUniqueInput>;
+    connect?: Array<Prisma.AtLeast<UserWhereUniqueInput, 'id' | 'supabaseId'>>;
 
     @Field(() => [UserUpdateWithWhereUniqueWithoutRoleInput], {nullable:true})
     @Type(() => UserUpdateWithWhereUniqueWithoutRoleInput)

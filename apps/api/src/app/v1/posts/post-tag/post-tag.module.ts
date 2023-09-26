@@ -1,4 +1,5 @@
-import { CacheModule, Module } from '@nestjs/common';
+import { CacheModule } from '@nestjs/cache-manager';
+import { Module } from '@nestjs/common';
 import { PostTagController } from './post-tag.controller';
 import { PostTagService } from './post-tag.service';
 

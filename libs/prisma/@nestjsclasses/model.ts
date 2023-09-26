@@ -2,7 +2,7 @@ import { ModelTags } from './model_tags';
 import { Image } from './image';
 import { Manufacturer } from './manufacturer';
 import { Scale } from './scale';
-import { Visibility } from '../.pnpm/@prisma+client@4.10.1_prisma@4.10.1/node_modules/@prisma/client';
+import { Visibility } from '@prisma/client';
 import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
 
 export class Model {

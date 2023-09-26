@@ -1,6 +1,7 @@
 import { Field } from '@nestjs/graphql';
 import { InputType } from '@nestjs/graphql';
 import { SortOrder } from '../prisma/sort-order.enum';
+import { SortOrderInput } from '../prisma/sort-order.input';
 import { MarkerCountOrderByAggregateInput } from './marker-count-order-by-aggregate.input';
 import { Type } from 'class-transformer';
 import { MarkerAvgOrderByAggregateInput } from './marker-avg-order-by-aggregate.input';
@@ -20,11 +21,11 @@ export class MarkerOrderByWithAggregationInput {
     @Field(() => SortOrder, {nullable:true})
     lon?: keyof typeof SortOrder;
 
-    @Field(() => SortOrder, {nullable:true})
-    siteURL?: keyof typeof SortOrder;
+    @Field(() => SortOrderInput, {nullable:true})
+    siteURL?: SortOrderInput;
 
-    @Field(() => SortOrder, {nullable:true})
-    galleryURL?: keyof typeof SortOrder;
+    @Field(() => SortOrderInput, {nullable:true})
+    galleryURL?: SortOrderInput;
 
     @Field(() => SortOrder, {nullable:true})
     title?: keyof typeof SortOrder;

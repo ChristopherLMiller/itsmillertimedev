@@ -3,6 +3,7 @@ import { ArgsType } from '@nestjs/graphql';
 import { MinecraftRuleCategoryWhereInput } from './minecraft-rule-category-where.input';
 import { Type } from 'class-transformer';
 import { MinecraftRuleCategoryOrderByWithRelationInput } from './minecraft-rule-category-order-by-with-relation.input';
+import { Prisma } from '@prisma/client';
 import { MinecraftRuleCategoryWhereUniqueInput } from './minecraft-rule-category-where-unique.input';
 import { Int } from '@nestjs/graphql';
 import { MinecraftRuleCategoryScalarFieldEnum } from './minecraft-rule-category-scalar-field.enum';
@@ -18,7 +19,7 @@ export class FindManyMinecraftRuleCategoryArgs {
     orderBy?: Array<MinecraftRuleCategoryOrderByWithRelationInput>;
 
     @Field(() => MinecraftRuleCategoryWhereUniqueInput, {nullable:true})
-    cursor?: MinecraftRuleCategoryWhereUniqueInput;
+    cursor?: Prisma.AtLeast<MinecraftRuleCategoryWhereUniqueInput, 'id' | 'name'>;
 
     @Field(() => Int, {nullable:true})
     take?: number;

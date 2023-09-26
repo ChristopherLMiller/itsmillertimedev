@@ -4,6 +4,7 @@ import { GalleryCategoryCreateWithoutGalleryInput } from './gallery-category-cre
 import { Type } from 'class-transformer';
 import { GalleryCategoryCreateOrConnectWithoutGalleryInput } from './gallery-category-create-or-connect-without-gallery.input';
 import { GalleryCategoryCreateManyGalleryInputEnvelope } from './gallery-category-create-many-gallery-input-envelope.input';
+import { Prisma } from '@prisma/client';
 import { GalleryCategoryWhereUniqueInput } from './gallery-category-where-unique.input';
 
 @InputType()
@@ -23,5 +24,5 @@ export class GalleryCategoryUncheckedCreateNestedManyWithoutGalleryInput {
 
     @Field(() => [GalleryCategoryWhereUniqueInput], {nullable:true})
     @Type(() => GalleryCategoryWhereUniqueInput)
-    connect?: Array<GalleryCategoryWhereUniqueInput>;
+    connect?: Array<Prisma.AtLeast<GalleryCategoryWhereUniqueInput, 'id' | 'slug'>>;
 }

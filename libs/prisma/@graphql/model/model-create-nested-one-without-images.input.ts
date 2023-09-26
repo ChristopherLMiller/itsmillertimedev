@@ -3,6 +3,7 @@ import { InputType } from '@nestjs/graphql';
 import { ModelCreateWithoutImagesInput } from './model-create-without-images.input';
 import { Type } from 'class-transformer';
 import { ModelCreateOrConnectWithoutImagesInput } from './model-create-or-connect-without-images.input';
+import { Prisma } from '@prisma/client';
 import { ModelWhereUniqueInput } from './model-where-unique.input';
 
 @InputType()
@@ -18,5 +19,5 @@ export class ModelCreateNestedOneWithoutImagesInput {
 
     @Field(() => ModelWhereUniqueInput, {nullable:true})
     @Type(() => ModelWhereUniqueInput)
-    connect?: ModelWhereUniqueInput;
+    connect?: Prisma.AtLeast<ModelWhereUniqueInput, 'id' | 'slug'>;
 }

@@ -3,6 +3,7 @@ import { InputType } from '@nestjs/graphql';
 import { PostCategoryCreateWithoutPostsInput } from './post-category-create-without-posts.input';
 import { Type } from 'class-transformer';
 import { PostCategoryCreateOrConnectWithoutPostsInput } from './post-category-create-or-connect-without-posts.input';
+import { Prisma } from '@prisma/client';
 import { PostCategoryWhereUniqueInput } from './post-category-where-unique.input';
 
 @InputType()
@@ -18,5 +19,5 @@ export class PostCategoryCreateNestedOneWithoutPostsInput {
 
     @Field(() => PostCategoryWhereUniqueInput, {nullable:true})
     @Type(() => PostCategoryWhereUniqueInput)
-    connect?: PostCategoryWhereUniqueInput;
+    connect?: Prisma.AtLeast<PostCategoryWhereUniqueInput, 'id' | 'slug'>;
 }

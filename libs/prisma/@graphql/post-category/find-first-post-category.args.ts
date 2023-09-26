@@ -3,6 +3,7 @@ import { ArgsType } from '@nestjs/graphql';
 import { PostCategoryWhereInput } from './post-category-where.input';
 import { Type } from 'class-transformer';
 import { PostCategoryOrderByWithRelationInput } from './post-category-order-by-with-relation.input';
+import { Prisma } from '@prisma/client';
 import { PostCategoryWhereUniqueInput } from './post-category-where-unique.input';
 import { Int } from '@nestjs/graphql';
 import { PostCategoryScalarFieldEnum } from './post-category-scalar-field.enum';
@@ -18,7 +19,7 @@ export class FindFirstPostCategoryArgs {
     orderBy?: Array<PostCategoryOrderByWithRelationInput>;
 
     @Field(() => PostCategoryWhereUniqueInput, {nullable:true})
-    cursor?: PostCategoryWhereUniqueInput;
+    cursor?: Prisma.AtLeast<PostCategoryWhereUniqueInput, 'id' | 'slug'>;
 
     @Field(() => Int, {nullable:true})
     take?: number;

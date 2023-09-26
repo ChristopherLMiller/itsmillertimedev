@@ -5,6 +5,7 @@ import { Type } from 'class-transformer';
 import { PermissionsToRolesCreateOrConnectWithoutPermissionInput } from './permissions-to-roles-create-or-connect-without-permission.input';
 import { PermissionsToRolesUpsertWithWhereUniqueWithoutPermissionInput } from './permissions-to-roles-upsert-with-where-unique-without-permission.input';
 import { PermissionsToRolesCreateManyPermissionInputEnvelope } from './permissions-to-roles-create-many-permission-input-envelope.input';
+import { Prisma } from '@prisma/client';
 import { PermissionsToRolesWhereUniqueInput } from './permissions-to-roles-where-unique.input';
 import { PermissionsToRolesUpdateWithWhereUniqueWithoutPermissionInput } from './permissions-to-roles-update-with-where-unique-without-permission.input';
 import { PermissionsToRolesUpdateManyWithWhereWithoutPermissionInput } from './permissions-to-roles-update-many-with-where-without-permission.input';
@@ -31,19 +32,19 @@ export class PermissionsToRolesUncheckedUpdateManyWithoutPermissionNestedInput {
 
     @Field(() => [PermissionsToRolesWhereUniqueInput], {nullable:true})
     @Type(() => PermissionsToRolesWhereUniqueInput)
-    set?: Array<PermissionsToRolesWhereUniqueInput>;
+    set?: Array<Prisma.AtLeast<PermissionsToRolesWhereUniqueInput, 'roleId_permissionId'>>;
 
     @Field(() => [PermissionsToRolesWhereUniqueInput], {nullable:true})
     @Type(() => PermissionsToRolesWhereUniqueInput)
-    disconnect?: Array<PermissionsToRolesWhereUniqueInput>;
+    disconnect?: Array<Prisma.AtLeast<PermissionsToRolesWhereUniqueInput, 'roleId_permissionId'>>;
 
     @Field(() => [PermissionsToRolesWhereUniqueInput], {nullable:true})
     @Type(() => PermissionsToRolesWhereUniqueInput)
-    delete?: Array<PermissionsToRolesWhereUniqueInput>;
+    delete?: Array<Prisma.AtLeast<PermissionsToRolesWhereUniqueInput, 'roleId_permissionId'>>;
 
     @Field(() => [PermissionsToRolesWhereUniqueInput], {nullable:true})
     @Type(() => PermissionsToRolesWhereUniqueInput)
-    connect?: Array<PermissionsToRolesWhereUniqueInput>;
+    connect?: Array<Prisma.AtLeast<PermissionsToRolesWhereUniqueInput, 'roleId_permissionId'>>;
 
     @Field(() => [PermissionsToRolesUpdateWithWhereUniqueWithoutPermissionInput], {nullable:true})
     @Type(() => PermissionsToRolesUpdateWithWhereUniqueWithoutPermissionInput)

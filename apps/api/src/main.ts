@@ -88,6 +88,8 @@ async function bootstrap() {
   winstonInstance.info(
     `🚀 Application is running on: http://localhost:${config.general.port}`
   );
+
+  app.enableShutdownHooks();
 }
 
 bootstrap();

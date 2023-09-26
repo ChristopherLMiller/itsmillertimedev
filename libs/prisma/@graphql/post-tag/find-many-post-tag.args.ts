@@ -3,6 +3,7 @@ import { ArgsType } from '@nestjs/graphql';
 import { PostTagWhereInput } from './post-tag-where.input';
 import { Type } from 'class-transformer';
 import { PostTagOrderByWithRelationInput } from './post-tag-order-by-with-relation.input';
+import { Prisma } from '@prisma/client';
 import { PostTagWhereUniqueInput } from './post-tag-where-unique.input';
 import { Int } from '@nestjs/graphql';
 import { PostTagScalarFieldEnum } from './post-tag-scalar-field.enum';
@@ -18,7 +19,7 @@ export class FindManyPostTagArgs {
     orderBy?: Array<PostTagOrderByWithRelationInput>;
 
     @Field(() => PostTagWhereUniqueInput, {nullable:true})
-    cursor?: PostTagWhereUniqueInput;
+    cursor?: Prisma.AtLeast<PostTagWhereUniqueInput, 'id' | 'slug'>;
 
     @Field(() => Int, {nullable:true})
     take?: number;

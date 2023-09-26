@@ -6,7 +6,7 @@ import { BoolFilter } from '../prisma/bool-filter.input';
 import { DateTimeFilter } from '../prisma/date-time-filter.input';
 import { DateTimeNullableFilter } from '../prisma/date-time-nullable-filter.input';
 import { StringNullableFilter } from '../prisma/string-nullable-filter.input';
-import { ImageRelationFilter } from '../image/image-relation-filter.input';
+import { ImageNullableRelationFilter } from '../image/image-nullable-relation-filter.input';
 import { PostCategoryRelationFilter } from '../post-category/post-category-relation-filter.input';
 import { PostTagListRelationFilter } from '../post-tag/post-tag-list-relation-filter.input';
 
@@ -61,8 +61,8 @@ export class PostWhereInput {
     @Field(() => IntFilter, {nullable:true})
     postCategoryId?: IntFilter;
 
-    @Field(() => ImageRelationFilter, {nullable:true})
-    featuredImage?: ImageRelationFilter;
+    @Field(() => ImageNullableRelationFilter, {nullable:true})
+    featuredImage?: ImageNullableRelationFilter;
 
     @Field(() => PostCategoryRelationFilter, {nullable:true})
     category?: PostCategoryRelationFilter;

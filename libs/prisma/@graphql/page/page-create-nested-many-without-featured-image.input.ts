@@ -4,6 +4,7 @@ import { PageCreateWithoutFeaturedImageInput } from './page-create-without-featu
 import { Type } from 'class-transformer';
 import { PageCreateOrConnectWithoutFeaturedImageInput } from './page-create-or-connect-without-featured-image.input';
 import { PageCreateManyFeaturedImageInputEnvelope } from './page-create-many-featured-image-input-envelope.input';
+import { Prisma } from '@prisma/client';
 import { PageWhereUniqueInput } from './page-where-unique.input';
 
 @InputType()
@@ -23,5 +24,5 @@ export class PageCreateNestedManyWithoutFeaturedImageInput {
 
     @Field(() => [PageWhereUniqueInput], {nullable:true})
     @Type(() => PageWhereUniqueInput)
-    connect?: Array<PageWhereUniqueInput>;
+    connect?: Array<Prisma.AtLeast<PageWhereUniqueInput, 'id' | 'slug'>>;
 }

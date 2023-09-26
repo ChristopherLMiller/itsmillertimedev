@@ -4,6 +4,7 @@ import { GalleryImageCreateWithoutGalleriesInput } from './gallery-image-create-
 import { Type } from 'class-transformer';
 import { GalleryImageCreateOrConnectWithoutGalleriesInput } from './gallery-image-create-or-connect-without-galleries.input';
 import { GalleryImageUpsertWithWhereUniqueWithoutGalleriesInput } from './gallery-image-upsert-with-where-unique-without-galleries.input';
+import { Prisma } from '@prisma/client';
 import { GalleryImageWhereUniqueInput } from './gallery-image-where-unique.input';
 import { GalleryImageUpdateWithWhereUniqueWithoutGalleriesInput } from './gallery-image-update-with-where-unique-without-galleries.input';
 import { GalleryImageUpdateManyWithWhereWithoutGalleriesInput } from './gallery-image-update-many-with-where-without-galleries.input';
@@ -26,19 +27,19 @@ export class GalleryImageUpdateManyWithoutGalleriesNestedInput {
 
     @Field(() => [GalleryImageWhereUniqueInput], {nullable:true})
     @Type(() => GalleryImageWhereUniqueInput)
-    set?: Array<GalleryImageWhereUniqueInput>;
+    set?: Array<Prisma.AtLeast<GalleryImageWhereUniqueInput, 'id' | 'slug'>>;
 
     @Field(() => [GalleryImageWhereUniqueInput], {nullable:true})
     @Type(() => GalleryImageWhereUniqueInput)
-    disconnect?: Array<GalleryImageWhereUniqueInput>;
+    disconnect?: Array<Prisma.AtLeast<GalleryImageWhereUniqueInput, 'id' | 'slug'>>;
 
     @Field(() => [GalleryImageWhereUniqueInput], {nullable:true})
     @Type(() => GalleryImageWhereUniqueInput)
-    delete?: Array<GalleryImageWhereUniqueInput>;
+    delete?: Array<Prisma.AtLeast<GalleryImageWhereUniqueInput, 'id' | 'slug'>>;
 
     @Field(() => [GalleryImageWhereUniqueInput], {nullable:true})
     @Type(() => GalleryImageWhereUniqueInput)
-    connect?: Array<GalleryImageWhereUniqueInput>;
+    connect?: Array<Prisma.AtLeast<GalleryImageWhereUniqueInput, 'id' | 'slug'>>;
 
     @Field(() => [GalleryImageUpdateWithWhereUniqueWithoutGalleriesInput], {nullable:true})
     @Type(() => GalleryImageUpdateWithWhereUniqueWithoutGalleriesInput)

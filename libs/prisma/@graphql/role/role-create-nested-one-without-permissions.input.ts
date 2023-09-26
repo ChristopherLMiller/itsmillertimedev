@@ -3,6 +3,7 @@ import { InputType } from '@nestjs/graphql';
 import { RoleCreateWithoutPermissionsInput } from './role-create-without-permissions.input';
 import { Type } from 'class-transformer';
 import { RoleCreateOrConnectWithoutPermissionsInput } from './role-create-or-connect-without-permissions.input';
+import { Prisma } from '@prisma/client';
 import { RoleWhereUniqueInput } from './role-where-unique.input';
 
 @InputType()
@@ -18,5 +19,5 @@ export class RoleCreateNestedOneWithoutPermissionsInput {
 
     @Field(() => RoleWhereUniqueInput, {nullable:true})
     @Type(() => RoleWhereUniqueInput)
-    connect?: RoleWhereUniqueInput;
+    connect?: Prisma.AtLeast<RoleWhereUniqueInput, 'id'>;
 }

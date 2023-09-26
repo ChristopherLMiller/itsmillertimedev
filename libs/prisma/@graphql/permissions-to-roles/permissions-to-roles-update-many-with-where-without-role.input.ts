@@ -2,7 +2,7 @@ import { Field } from '@nestjs/graphql';
 import { InputType } from '@nestjs/graphql';
 import { PermissionsToRolesScalarWhereInput } from './permissions-to-roles-scalar-where.input';
 import { Type } from 'class-transformer';
-import { PermissionsToRolesUncheckedUpdateManyWithoutPermissionsInput } from './permissions-to-roles-unchecked-update-many-without-permissions.input';
+import { PermissionsToRolesUncheckedUpdateManyWithoutRoleInput } from './permissions-to-roles-unchecked-update-many-without-role.input';
 
 @InputType()
 export class PermissionsToRolesUpdateManyWithWhereWithoutRoleInput {
@@ -11,7 +11,7 @@ export class PermissionsToRolesUpdateManyWithWhereWithoutRoleInput {
     @Type(() => PermissionsToRolesScalarWhereInput)
     where!: PermissionsToRolesScalarWhereInput;
 
-    @Field(() => PermissionsToRolesUncheckedUpdateManyWithoutPermissionsInput, {nullable:false})
-    @Type(() => PermissionsToRolesUncheckedUpdateManyWithoutPermissionsInput)
-    data!: PermissionsToRolesUncheckedUpdateManyWithoutPermissionsInput;
+    @Field(() => PermissionsToRolesUncheckedUpdateManyWithoutRoleInput, {nullable:false})
+    @Type(() => PermissionsToRolesUncheckedUpdateManyWithoutRoleInput)
+    data!: PermissionsToRolesUncheckedUpdateManyWithoutRoleInput;
 }

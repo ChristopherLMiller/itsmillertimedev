@@ -5,6 +5,7 @@ import { Type } from 'class-transformer';
 import { ImageCreateOrConnectWithoutModelInput } from './image-create-or-connect-without-model.input';
 import { ImageUpsertWithWhereUniqueWithoutModelInput } from './image-upsert-with-where-unique-without-model.input';
 import { ImageCreateManyModelInputEnvelope } from './image-create-many-model-input-envelope.input';
+import { Prisma } from '@prisma/client';
 import { ImageWhereUniqueInput } from './image-where-unique.input';
 import { ImageUpdateWithWhereUniqueWithoutModelInput } from './image-update-with-where-unique-without-model.input';
 import { ImageUpdateManyWithWhereWithoutModelInput } from './image-update-many-with-where-without-model.input';
@@ -31,19 +32,19 @@ export class ImageUncheckedUpdateManyWithoutModelNestedInput {
 
     @Field(() => [ImageWhereUniqueInput], {nullable:true})
     @Type(() => ImageWhereUniqueInput)
-    set?: Array<ImageWhereUniqueInput>;
+    set?: Array<Prisma.AtLeast<ImageWhereUniqueInput, 'public_id'>>;
 
     @Field(() => [ImageWhereUniqueInput], {nullable:true})
     @Type(() => ImageWhereUniqueInput)
-    disconnect?: Array<ImageWhereUniqueInput>;
+    disconnect?: Array<Prisma.AtLeast<ImageWhereUniqueInput, 'public_id'>>;
 
     @Field(() => [ImageWhereUniqueInput], {nullable:true})
     @Type(() => ImageWhereUniqueInput)
-    delete?: Array<ImageWhereUniqueInput>;
+    delete?: Array<Prisma.AtLeast<ImageWhereUniqueInput, 'public_id'>>;
 
     @Field(() => [ImageWhereUniqueInput], {nullable:true})
     @Type(() => ImageWhereUniqueInput)
-    connect?: Array<ImageWhereUniqueInput>;
+    connect?: Array<Prisma.AtLeast<ImageWhereUniqueInput, 'public_id'>>;
 
     @Field(() => [ImageUpdateWithWhereUniqueWithoutModelInput], {nullable:true})
     @Type(() => ImageUpdateWithWhereUniqueWithoutModelInput)

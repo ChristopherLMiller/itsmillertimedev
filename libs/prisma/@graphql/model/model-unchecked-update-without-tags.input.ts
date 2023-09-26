@@ -5,8 +5,8 @@ import { StringFieldUpdateOperationsInput } from '../prisma/string-field-update-
 import { BoolFieldUpdateOperationsInput } from '../prisma/bool-field-update-operations.input';
 import { EnumVisibilityFieldUpdateOperationsInput } from '../prisma/enum-visibility-field-update-operations.input';
 import { DateTimeFieldUpdateOperationsInput } from '../prisma/date-time-field-update-operations.input';
-import { ImageUncheckedUpdateManyWithoutModelNestedInput } from '../image/image-unchecked-update-many-without-model-nested.input';
 import { NullableStringFieldUpdateOperationsInput } from '../prisma/nullable-string-field-update-operations.input';
+import { ImageUncheckedUpdateManyWithoutModelNestedInput } from '../image/image-unchecked-update-many-without-model-nested.input';
 
 @InputType()
 export class ModelUncheckedUpdateWithoutTagsInput {
@@ -41,9 +41,6 @@ export class ModelUncheckedUpdateWithoutTagsInput {
     @Field(() => DateTimeFieldUpdateOperationsInput, {nullable:true})
     updatedAt?: DateTimeFieldUpdateOperationsInput;
 
-    @Field(() => ImageUncheckedUpdateManyWithoutModelNestedInput, {nullable:true})
-    images?: ImageUncheckedUpdateManyWithoutModelNestedInput;
-
     @Field(() => NullableStringFieldUpdateOperationsInput, {nullable:true})
     clockifyProjectId?: NullableStringFieldUpdateOperationsInput;
 
@@ -64,4 +61,7 @@ export class ModelUncheckedUpdateWithoutTagsInput {
 
     @Field(() => IntFieldUpdateOperationsInput, {nullable:true})
     scaleId?: IntFieldUpdateOperationsInput;
+
+    @Field(() => ImageUncheckedUpdateManyWithoutModelNestedInput, {nullable:true})
+    images?: ImageUncheckedUpdateManyWithoutModelNestedInput;
 }

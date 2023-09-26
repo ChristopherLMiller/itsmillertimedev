@@ -4,6 +4,7 @@ import { ImageCreateWithoutModelInput } from './image-create-without-model.input
 import { Type } from 'class-transformer';
 import { ImageCreateOrConnectWithoutModelInput } from './image-create-or-connect-without-model.input';
 import { ImageCreateManyModelInputEnvelope } from './image-create-many-model-input-envelope.input';
+import { Prisma } from '@prisma/client';
 import { ImageWhereUniqueInput } from './image-where-unique.input';
 
 @InputType()
@@ -23,5 +24,5 @@ export class ImageUncheckedCreateNestedManyWithoutModelInput {
 
     @Field(() => [ImageWhereUniqueInput], {nullable:true})
     @Type(() => ImageWhereUniqueInput)
-    connect?: Array<ImageWhereUniqueInput>;
+    connect?: Array<Prisma.AtLeast<ImageWhereUniqueInput, 'public_id'>>;
 }

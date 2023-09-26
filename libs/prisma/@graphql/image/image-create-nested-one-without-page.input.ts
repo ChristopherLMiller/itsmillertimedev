@@ -3,6 +3,7 @@ import { InputType } from '@nestjs/graphql';
 import { ImageCreateWithoutPageInput } from './image-create-without-page.input';
 import { Type } from 'class-transformer';
 import { ImageCreateOrConnectWithoutPageInput } from './image-create-or-connect-without-page.input';
+import { Prisma } from '@prisma/client';
 import { ImageWhereUniqueInput } from './image-where-unique.input';
 
 @InputType()
@@ -18,5 +19,5 @@ export class ImageCreateNestedOneWithoutPageInput {
 
     @Field(() => ImageWhereUniqueInput, {nullable:true})
     @Type(() => ImageWhereUniqueInput)
-    connect?: ImageWhereUniqueInput;
+    connect?: Prisma.AtLeast<ImageWhereUniqueInput, 'public_id'>;
 }

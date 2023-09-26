@@ -3,6 +3,7 @@ import { ArgsType } from '@nestjs/graphql';
 import { GalleryTagWhereInput } from './gallery-tag-where.input';
 import { Type } from 'class-transformer';
 import { GalleryTagOrderByWithRelationInput } from './gallery-tag-order-by-with-relation.input';
+import { Prisma } from '@prisma/client';
 import { GalleryTagWhereUniqueInput } from './gallery-tag-where-unique.input';
 import { Int } from '@nestjs/graphql';
 import { GalleryTagScalarFieldEnum } from './gallery-tag-scalar-field.enum';
@@ -18,7 +19,7 @@ export class FindFirstGalleryTagArgs {
     orderBy?: Array<GalleryTagOrderByWithRelationInput>;
 
     @Field(() => GalleryTagWhereUniqueInput, {nullable:true})
-    cursor?: GalleryTagWhereUniqueInput;
+    cursor?: Prisma.AtLeast<GalleryTagWhereUniqueInput, 'id' | 'slug'>;
 
     @Field(() => Int, {nullable:true})
     take?: number;

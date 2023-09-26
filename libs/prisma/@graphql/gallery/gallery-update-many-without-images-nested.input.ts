@@ -4,6 +4,7 @@ import { GalleryCreateWithoutImagesInput } from './gallery-create-without-images
 import { Type } from 'class-transformer';
 import { GalleryCreateOrConnectWithoutImagesInput } from './gallery-create-or-connect-without-images.input';
 import { GalleryUpsertWithWhereUniqueWithoutImagesInput } from './gallery-upsert-with-where-unique-without-images.input';
+import { Prisma } from '@prisma/client';
 import { GalleryWhereUniqueInput } from './gallery-where-unique.input';
 import { GalleryUpdateWithWhereUniqueWithoutImagesInput } from './gallery-update-with-where-unique-without-images.input';
 import { GalleryUpdateManyWithWhereWithoutImagesInput } from './gallery-update-many-with-where-without-images.input';
@@ -26,19 +27,19 @@ export class GalleryUpdateManyWithoutImagesNestedInput {
 
     @Field(() => [GalleryWhereUniqueInput], {nullable:true})
     @Type(() => GalleryWhereUniqueInput)
-    set?: Array<GalleryWhereUniqueInput>;
+    set?: Array<Prisma.AtLeast<GalleryWhereUniqueInput, 'id' | 'slug'>>;
 
     @Field(() => [GalleryWhereUniqueInput], {nullable:true})
     @Type(() => GalleryWhereUniqueInput)
-    disconnect?: Array<GalleryWhereUniqueInput>;
+    disconnect?: Array<Prisma.AtLeast<GalleryWhereUniqueInput, 'id' | 'slug'>>;
 
     @Field(() => [GalleryWhereUniqueInput], {nullable:true})
     @Type(() => GalleryWhereUniqueInput)
-    delete?: Array<GalleryWhereUniqueInput>;
+    delete?: Array<Prisma.AtLeast<GalleryWhereUniqueInput, 'id' | 'slug'>>;
 
     @Field(() => [GalleryWhereUniqueInput], {nullable:true})
     @Type(() => GalleryWhereUniqueInput)
-    connect?: Array<GalleryWhereUniqueInput>;
+    connect?: Array<Prisma.AtLeast<GalleryWhereUniqueInput, 'id' | 'slug'>>;
 
     @Field(() => [GalleryUpdateWithWhereUniqueWithoutImagesInput], {nullable:true})
     @Type(() => GalleryUpdateWithWhereUniqueWithoutImagesInput)

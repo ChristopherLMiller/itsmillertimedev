@@ -5,11 +5,11 @@ import { StringFilter } from '../prisma/string-filter.input';
 import { BoolFilter } from '../prisma/bool-filter.input';
 import { EnumVisibilityFilter } from '../prisma/enum-visibility-filter.input';
 import { DateTimeFilter } from '../prisma/date-time-filter.input';
+import { StringNullableFilter } from '../prisma/string-nullable-filter.input';
 import { ModelTagsListRelationFilter } from '../model-tags/model-tags-list-relation-filter.input';
 import { ImageListRelationFilter } from '../image/image-list-relation-filter.input';
 import { ManufacturerRelationFilter } from '../manufacturer/manufacturer-relation-filter.input';
 import { ScaleRelationFilter } from '../scale/scale-relation-filter.input';
-import { StringNullableFilter } from '../prisma/string-nullable-filter.input';
 
 @InputType()
 export class ModelWhereInput {
@@ -53,18 +53,6 @@ export class ModelWhereInput {
     @Field(() => DateTimeFilter, {nullable:true})
     updatedAt?: DateTimeFilter;
 
-    @Field(() => ModelTagsListRelationFilter, {nullable:true})
-    tags?: ModelTagsListRelationFilter;
-
-    @Field(() => ImageListRelationFilter, {nullable:true})
-    images?: ImageListRelationFilter;
-
-    @Field(() => ManufacturerRelationFilter, {nullable:true})
-    manufacturer?: ManufacturerRelationFilter;
-
-    @Field(() => ScaleRelationFilter, {nullable:true})
-    scale?: ScaleRelationFilter;
-
     @Field(() => StringNullableFilter, {nullable:true})
     clockifyProjectId?: StringNullableFilter;
 
@@ -85,4 +73,16 @@ export class ModelWhereInput {
 
     @Field(() => IntFilter, {nullable:true})
     scaleId?: IntFilter;
+
+    @Field(() => ModelTagsListRelationFilter, {nullable:true})
+    tags?: ModelTagsListRelationFilter;
+
+    @Field(() => ImageListRelationFilter, {nullable:true})
+    images?: ImageListRelationFilter;
+
+    @Field(() => ManufacturerRelationFilter, {nullable:true})
+    manufacturer?: ManufacturerRelationFilter;
+
+    @Field(() => ScaleRelationFilter, {nullable:true})
+    scale?: ScaleRelationFilter;
 }

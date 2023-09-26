@@ -3,6 +3,7 @@ import { ArgsType } from '@nestjs/graphql';
 import { MarkerWhereInput } from './marker-where.input';
 import { Type } from 'class-transformer';
 import { MarkerOrderByWithRelationInput } from './marker-order-by-with-relation.input';
+import { Prisma } from '@prisma/client';
 import { MarkerWhereUniqueInput } from './marker-where-unique.input';
 import { Int } from '@nestjs/graphql';
 import { MarkerCountAggregateInput } from './marker-count-aggregate.input';
@@ -24,7 +25,7 @@ export class MarkerAggregateArgs {
 
     @Field(() => MarkerWhereUniqueInput, {nullable:true})
     @Type(() => MarkerWhereUniqueInput)
-    cursor?: MarkerWhereUniqueInput;
+    cursor?: Prisma.AtLeast<MarkerWhereUniqueInput, 'id'>;
 
     @Field(() => Int, {nullable:true})
     take?: number;

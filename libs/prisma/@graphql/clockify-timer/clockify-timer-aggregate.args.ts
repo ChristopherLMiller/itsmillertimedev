@@ -3,6 +3,7 @@ import { ArgsType } from '@nestjs/graphql';
 import { ClockifyTimerWhereInput } from './clockify-timer-where.input';
 import { Type } from 'class-transformer';
 import { ClockifyTimerOrderByWithRelationInput } from './clockify-timer-order-by-with-relation.input';
+import { Prisma } from '@prisma/client';
 import { ClockifyTimerWhereUniqueInput } from './clockify-timer-where-unique.input';
 import { Int } from '@nestjs/graphql';
 import { ClockifyTimerCountAggregateInput } from './clockify-timer-count-aggregate.input';
@@ -22,7 +23,7 @@ export class ClockifyTimerAggregateArgs {
     orderBy?: Array<ClockifyTimerOrderByWithRelationInput>;
 
     @Field(() => ClockifyTimerWhereUniqueInput, {nullable:true})
-    cursor?: ClockifyTimerWhereUniqueInput;
+    cursor?: Prisma.AtLeast<ClockifyTimerWhereUniqueInput, 'projectId' | 'id'>;
 
     @Field(() => Int, {nullable:true})
     take?: number;

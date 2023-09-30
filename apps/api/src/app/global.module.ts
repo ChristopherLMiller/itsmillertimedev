@@ -40,6 +40,7 @@ import { V1Module } from './v1/v1.module';
             }),
           };
         } else {
+          console.log('Memory cache in use, development mode is enabled');
           return {
             store: MemoryStore,
           };
@@ -48,7 +49,6 @@ import { V1Module } from './v1/v1.module';
     }),
     V1Module,
     AuthModule,
-    //AdminJSModule,
   ],
   providers: [
     {

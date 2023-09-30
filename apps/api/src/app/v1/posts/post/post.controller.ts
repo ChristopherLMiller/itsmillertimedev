@@ -39,7 +39,7 @@ export class PostController {
   })
   @PermissionsRequired('POST.CREATE')
   async create(
-    @Body() createPostData: Prisma.PostCreateInput
+    @Body() createPostData: Prisma.PostCreateInput,
   ): Response<PrismaPost | Prisma.BatchPayload> {
     return { data: await this.postService.create(createPostData) };
   }
@@ -53,7 +53,7 @@ export class PostController {
   })
   @PermissionsPublic()
   async findAll(
-    @Query() query: Prisma.PostFindManyArgs
+    @Query() query: Prisma.PostFindManyArgs,
   ): Response<Partial<PrismaPost[]>> {
     return { ...(await this.postService.findAll(query)) };
   }
@@ -81,11 +81,8 @@ export class PostController {
     description: 'Successfully created new post',
   })
   @ApiResponse({ status: 403, description: 'Forbidden, check auth key' })
-  async update(
-    @Param('id') id: string,
-    @Body() updatePostDto: PrismaPost
-  ): Response<string> {
-    return { data: await this.postService.update(+id, updatePostDto) };
+  async update(): Response<string> {
+    return { data: null };
   }
 
   @Delete(':id')
@@ -97,7 +94,7 @@ export class PostController {
     description: 'Post successfully deleted',
   })
   @ApiResponse({ status: 403, description: 'Forbidden, check auth key' })
-  async remove(@Param('id') id: string): Response<string> {
-    return { data: await this.postService.remove(+id) };
+  async remove(): Response<string> {
+    return { data: null };
   }
 }

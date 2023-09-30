@@ -7,7 +7,7 @@ import {
 } from '@itsmillertimedev/data';
 import { Controller, Get, Query, UseGuards } from '@nestjs/common';
 import { ApiResponse, ApiSecurity, ApiTags } from '@nestjs/swagger';
-import { PermissionsPublic } from 'apps/api/src/common/decorators/auth.decorator';
+import { PermissionsPublic } from '../../../common/decorators/auth.decorator';
 import { supabaseAuthGuard } from '../../../common/guards/supabaseAuth.guard';
 import { WeatherService } from './weather.service';
 

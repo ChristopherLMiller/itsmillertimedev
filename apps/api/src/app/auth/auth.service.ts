@@ -9,7 +9,7 @@ import { SettingsService } from '../settings/settings.service';
 export class AuthService {
   constructor(
     private prisma: PrismaService,
-    private readonly settings: SettingsService
+    private readonly settings: SettingsService,
   ) {}
 
   logger = new Logger(AuthService.name);
@@ -17,7 +17,7 @@ export class AuthService {
 
   signInEmail = async (
     email: string,
-    password: string
+    password: string,
   ): Promise<Session | null> => {
     const { error, data } = await this.supabase.auth.signInWithPassword({
       email,
@@ -37,7 +37,7 @@ export class AuthService {
             email: data.user.email,
             roleId: await this.settings.getField<number>(
               'auth',
-              'default_group'
+              'default_group',
             ),
           },
         });
@@ -57,6 +57,7 @@ export class AuthService {
   };
 
   isLoggedIn = async (token: string): Promise<boolean> => {
+    //console.log(this.request);
     if (!token) {
       return false;
     }
@@ -85,7 +86,7 @@ export class AuthService {
   };
 
   getRolePermissions = async (
-    roleId: number
+    roleId: number,
   ): Promise<PermissionsToRoles[]> => {
     return this.prisma.permissionsToRoles.findMany({
       where: { roleId },
@@ -96,7 +97,7 @@ export class AuthService {
   };
 
   getUserPermissions = async (
-    userId: string
+    userId: string,
   ): Promise<PermissionsToRoles[]> => {
     const userRole = await this.getUserRole(userId);
     return this.getRolePermissions(userRole.id);

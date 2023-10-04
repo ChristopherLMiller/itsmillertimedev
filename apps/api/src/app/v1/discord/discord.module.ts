@@ -2,7 +2,7 @@ import { DiscordModule as DiscordBot } from '@discord-nestjs/core';
 import { HttpModule } from '@nestjs/axios';
 import { Module } from '@nestjs/common';
 import { GatewayIntentBits } from 'discord.js';
-import { SettingsService } from '../../settings/settings.service';
+import { SettingsService } from '../../common/settings/settings.service';
 import { BotModule } from './bot/bot.module';
 import { DiscordController } from './discord.controller';
 import { DiscordService } from './discord.service';

@@ -1,8 +1,8 @@
 import { HttpService } from '@nestjs/axios';
 import { BadRequestException, Injectable, Logger } from '@nestjs/common';
 import { dataFetcher } from '../../../common/handlers/dataFetcher';
-import { PrismaService } from '../../prisma/prisma.service';
-import { SettingsService } from '../../settings/settings.service';
+import { PrismaService } from '../../common/prisma/prisma.service';
+import { SettingsService } from '../../common/settings/settings.service';
 
 @Injectable()
 export class ClockifyService {

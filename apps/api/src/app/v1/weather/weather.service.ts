@@ -1,43 +1,46 @@
 import { HttpService } from '@nestjs/axios';
 import { Injectable } from '@nestjs/common';
 import { dataFetcher } from '../../../common/handlers/dataFetcher';
-import { SettingsService } from '../../settings/settings.service';
+import { SettingsService } from '../../common/settings/settings.service';
 
 @Injectable()
 export class WeatherService {
-  constructor(private http: HttpService, private settings: SettingsService) {}
+  constructor(
+    private http: HttpService,
+    private settings: SettingsService,
+  ) {}
 
   async getCurrentWeather({ lat, lon }) {
     const data = await this.getData(
-      `onecall?lat=${lat}&lon=${lon}&exclude=minutely,hourly,daily`
+      `onecall?lat=${lat}&lon=${lon}&exclude=minutely,hourly,daily`,
     );
     return { data, meta: { lat, lon } };
   }
 
   async getMinutelyForecast({ lat, lon }) {
     const data = await this.getData(
-      `onecall?lat=${lat}&lon=${lon}&exclude=current,hourly,daily,alerts`
+      `onecall?lat=${lat}&lon=${lon}&exclude=current,hourly,daily,alerts`,
     );
     return { data, meta: { lat, lon } };
   }
 
   async getHourlyForecast({ lat, lon }) {
     const data = await this.getData(
-      `onecall?lat=${lat}&lon=${lon}&exclude=current,minutely,daily,alerts`
+      `onecall?lat=${lat}&lon=${lon}&exclude=current,minutely,daily,alerts`,
     );
     return { data, meta: { lat, lon } };
   }
 
   async getDailyForecast({ lat, lon }) {
     const data = await this.getData(
-      `onecall?lat=${lat}&lon=${lon}&exclude=current,minutely,hourly,alerts`
+      `onecall?lat=${lat}&lon=${lon}&exclude=current,minutely,hourly,alerts`,
     );
     return { data, meta: { lat, lon } };
   }
 
   async getAlerts({ lat, lon }) {
     const data = await this.getData(
-      `onecall?lat=${lat}&lon=${lon}&exclude=current,minutely,hourly,daily`
+      `onecall?lat=${lat}&lon=${lon}&exclude=current,minutely,hourly,daily`,
     );
     return { data, meta: { lat, lon } };
   }
@@ -46,7 +49,7 @@ export class WeatherService {
   async getData(url: string): Promise<any> {
     const key = await this.settings.getField('openweatermap', 'api_key');
     const data = await dataFetcher(
-      this.http.get(`${url}&appid=${key}&units=imperial`)
+      this.http.get(`${url}&appid=${key}&units=imperial`),
     );
     return data;
   }

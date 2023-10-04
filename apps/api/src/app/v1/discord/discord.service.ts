@@ -4,7 +4,7 @@ import { DiscordUserSetting } from '@prisma/client';
 
 import { AxiosResponse } from 'axios';
 import { dataFetcher } from '../../../common/handlers/dataFetcher';
-import { PrismaService } from '../../prisma/prisma.service';
+import { PrismaService } from '../../common/prisma/prisma.service';
 import { DiscordChannels } from './discord.types';
 
 @Injectable()

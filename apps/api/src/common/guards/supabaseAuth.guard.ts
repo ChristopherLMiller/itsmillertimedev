@@ -7,11 +7,14 @@ import {
   UnauthorizedException,
 } from '@nestjs/common';
 import { Reflector } from '@nestjs/core';
-import { AuthService } from '../../app/auth/auth.service';
+import { AuthService } from '../../app/common/auth/auth.service';
 
 @Injectable()
 export class supabaseAuthGuard implements CanActivate {
-  constructor(private authService: AuthService, private reflector: Reflector) {}
+  constructor(
+    private authService: AuthService,
+    private reflector: Reflector,
+  ) {}
 
   logger = new Logger(supabaseAuthGuard.name);
 
@@ -21,7 +24,7 @@ export class supabaseAuthGuard implements CanActivate {
 
     const permissionNodes = this.reflector.get<string[]>(
       'auth_permission_node',
-      handler
+      handler,
     );
 
     // We flow through the following to determine if the user is able to access the resource or not
@@ -38,7 +41,7 @@ export class supabaseAuthGuard implements CanActivate {
 
       if (jwt) {
         const { data, error } = await this.authService.getUser(
-          jwt.split(' ')[1]
+          jwt.split(' ')[1],
         );
 
         // Verify we got a user
@@ -48,14 +51,14 @@ export class supabaseAuthGuard implements CanActivate {
             // this is whats used to compare and verify if they have permission or not
 
             const user = await this.authService.getUserPermissions(
-              data.user.id
+              data.user.id,
             );
             return true;
           }
         } else {
           if (error.status === 401) {
             throw new UnauthorizedException(
-              `${error.status}: ${error.message}`
+              `${error.status}: ${error.message}`,
             );
           } else {
             throw new BadRequestException(`${error.status}: ${error.message}`);
@@ -63,7 +66,7 @@ export class supabaseAuthGuard implements CanActivate {
         }
       } else {
         throw new UnauthorizedException(
-          'Must be authenticated to access this endpoint'
+          'Must be authenticated to access this endpoint',
         );
       }
     }

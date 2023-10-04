@@ -1,8 +1,8 @@
 import { Client, LatLngLiteral } from '@googlemaps/google-maps-services-js';
 import { Injectable } from '@nestjs/common';
 import { Marker } from '@prisma/client';
-import { PrismaService } from '../../prisma/prisma.service';
-import { SettingsService } from '../../settings/settings.service';
+import { PrismaService } from '../../common/prisma/prisma.service';
+import { SettingsService } from '../../common/settings/settings.service';
 
 @Injectable()
 export class MapsService {

@@ -11,7 +11,7 @@ import {
 import { ApiSecurity, ApiTags } from '@nestjs/swagger';
 import { ClockifyTimer } from '@prisma/client';
 import { formatDistanceStrict, parseISO } from 'date-fns';
-import { SettingsService } from '../../settings/settings.service';
+import { SettingsService } from '../../common/settings/settings.service';
 import { ClockifyService } from '../clockify/clockify.service';
 import { DiscordService } from '../discord/discord.service';
 import { DiscordChannels } from '../discord/discord.types';
@@ -24,7 +24,7 @@ export class WebhooksController {
     private clockify: ClockifyService,
     private discord: DiscordService,
     private image: ImageService,
-    private readonly settings: SettingsService
+    private readonly settings: SettingsService,
   ) {}
 
   logger = new Logger(WebhooksController.name);
@@ -34,17 +34,17 @@ export class WebhooksController {
   @ApiSecurity('clockify-signature')
   async webhookClockifyStart(
     @Headers('clockify-signature') clockifySignature: string,
-    @Body() body: any
+    @Body() body: any,
   ): Promise<ClockifyTimer> {
     const startSignature = await this.settings.getField(
       'clockify',
-      'start_signature'
+      'start_signature',
     );
     // if the signatures don't match we need to eject with a 403 error
     if (clockifySignature != startSignature) {
       this.logger.error('Invalid Clockify Webhook Signature provided');
       throw new ForbiddenException(
-        'Invalid Clockify Webhook Signature provided'
+        'Invalid Clockify Webhook Signature provided',
       );
     }
 
@@ -58,7 +58,7 @@ export class WebhooksController {
     // send a message to discord
     this.discord.sendMessage(
       `Clockify timer started - ${project.name}`,
-      DiscordChannels.DISCORD_BOT_SPAM_CHANNEL
+      DiscordChannels.DISCORD_BOT_SPAM_CHANNEL,
     );
 
     // return the started timer
@@ -68,17 +68,17 @@ export class WebhooksController {
   @Post('clockify/stop')
   async webhookClockifyStop(
     @Headers('clockify-signature') clockifySignature: string,
-    @Body() body: any
+    @Body() body: any,
   ): Promise<ClockifyTimer> {
     const stopSignature = await this.settings.getField(
       'clockify',
-      'stop_signature'
+      'stop_signature',
     );
     // if the signatures don't match we need to eject with a 403 error
     if (clockifySignature != stopSignature) {
       this.logger.error('Invalid Clockify Webhook Signature provided');
       throw new ForbiddenException(
-        'Invalid Clockify Webhook Signature provided'
+        'Invalid Clockify Webhook Signature provided',
       );
     }
     const { project, timeInterval } = body;
@@ -92,13 +92,13 @@ export class WebhooksController {
     // convert the timeInterval to a number
     const timeElapsed = formatDistanceStrict(
       parseISO(timeInterval.end),
-      parseISO(timeInterval.start)
+      parseISO(timeInterval.start),
     );
 
     // Send a message to discord
     this.discord.sendMessage(
       `Clockify timer stopped - ${project.name}; Elapsed Time: ${timeElapsed}`,
-      DiscordChannels.DISCORD_BOT_SPAM_CHANNEL
+      DiscordChannels.DISCORD_BOT_SPAM_CHANNEL,
     );
     return this.clockify.removeClockifyTimer(project.id);
   }
@@ -106,17 +106,17 @@ export class WebhooksController {
   @Post('clockify/delete')
   async webhookClockifyDelete(
     @Headers('clockify-signature') clockifySignature: string,
-    @Body() body: any
+    @Body() body: any,
   ): Promise<ClockifyTimer> {
     const stopSignature = await this.settings.getField(
       'clockify',
-      'stop_signature'
+      'stop_signature',
     );
     // if the signatures don't match we need to eject with a 403 error
     if (clockifySignature != stopSignature) {
       this.logger.error('Invalid Clockify Webhook Signature provided');
       throw new ForbiddenException(
-        'Invalid Clockify Webhook Signature provided'
+        'Invalid Clockify Webhook Signature provided',
       );
     }
     const { project } = body;
@@ -130,7 +130,7 @@ export class WebhooksController {
     // Send a message to discord
     this.discord.sendMessage(
       `Clockify timer deleted - ${project.name}`,
-      DiscordChannels.DISCORD_BOT_SPAM_CHANNEL
+      DiscordChannels.DISCORD_BOT_SPAM_CHANNEL,
     );
     return this.clockify.removeClockifyTimer(project.id);
   }
@@ -146,7 +146,7 @@ export class WebhooksController {
         if (await this.image.createImage(body)) {
           this.discord.sendMessage(
             `Created new Cloudinary resource, public_id: ${body.public_id}`,
-            DiscordChannels.DISCORD_BOT_SPAM_CHANNEL
+            DiscordChannels.DISCORD_BOT_SPAM_CHANNEL,
           );
           return {
             data: {
@@ -164,7 +164,7 @@ export class WebhooksController {
         if (await this.image.deleteImage(body.resources.public_id)) {
           this.discord.sendMessage(
             `Deleted Cloudinary resource, public_id: ${body.resources.public_id}`,
-            DiscordChannels.DISCORD_BOT_SPAM_CHANNEL
+            DiscordChannels.DISCORD_BOT_SPAM_CHANNEL,
           );
           return {
             data: {
@@ -183,7 +183,7 @@ export class WebhooksController {
         if (await this.image.updateMetadata('public_id')) {
           this.discord.sendMessage(
             `Updated Cloudinary resource, public_id: ${body.resources.public_id}`,
-            DiscordChannels.DISCORD_BOT_SPAM_CHANNEL
+            DiscordChannels.DISCORD_BOT_SPAM_CHANNEL,
           );
           return {
             data: {

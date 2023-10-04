@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { PostCategory, Prisma } from '@prisma/client';
 import { PrismaLib } from 'libs/prisma/lib';
-import { PrismaService } from '../../../prisma/prisma.service';
+import { PrismaService } from '../../../common/prisma/prisma.service';
 
 @Injectable()
 export class PostCategoryService {

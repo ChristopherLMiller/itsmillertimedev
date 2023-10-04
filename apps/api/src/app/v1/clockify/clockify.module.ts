@@ -1,6 +1,6 @@
 import { HttpModule } from '@nestjs/axios';
 import { Module } from '@nestjs/common';
-import { SettingsService } from '../../settings/settings.service';
+import { SettingsService } from '../../common/settings/settings.service';
 import { ClockifyController } from './clockify.controller';
 import { ClockifyService } from './clockify.service';
 

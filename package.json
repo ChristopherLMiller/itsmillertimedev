@@ -51,7 +51,7 @@
     "react-dom": "18.2.0",
     "react-is": "18.2.0",
     "react-router-dom": "^6.16.0",
-    "redis": "^4.6.10",
+    "redis": "^3.1.2",
     "reflect-metadata": "^0.1.13",
     "regenerator-runtime": "0.14.0",
     "rimraf": "^5.0.1",

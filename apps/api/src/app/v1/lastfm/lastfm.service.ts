@@ -1,7 +1,7 @@
 import { HttpService } from '@nestjs/axios';
 import { Injectable, Logger } from '@nestjs/common';
 import { dataFetcher } from '../../../common/handlers/dataFetcher';
-import { SettingsService } from '../../settings/settings.service';
+import { SettingsService } from '../../common/settings/settings.service';
 
 @Injectable()
 export class LastFMService {
@@ -9,7 +9,7 @@ export class LastFMService {
 
   constructor(
     private http: HttpService,
-    private readonly settings: SettingsService
+    private readonly settings: SettingsService,
   ) {}
 
   async getTopArtists() {
@@ -21,7 +21,7 @@ export class LastFMService {
           method: 'chart.gettopartists',
           format: 'json',
         },
-      })
+      }),
     );
     return data;
   }
@@ -36,7 +36,7 @@ export class LastFMService {
           user: username,
           format: 'json',
         },
-      })
+      }),
     );
     return data;
   }
@@ -51,7 +51,7 @@ export class LastFMService {
           user: username,
           format: 'json',
         },
-      })
+      }),
     );
     return data;
   }

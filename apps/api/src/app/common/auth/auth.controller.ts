@@ -1,7 +1,7 @@
 import { Response } from '@itsmillertimedev/data';
 import { Body, Controller, Post } from '@nestjs/common';
 import { Session } from '@supabase/supabase-js';
-import { PermissionsPublic } from '../../common/decorators/auth.decorator';
+import { PermissionsPublic } from '../../../common/decorators/auth.decorator';
 import { AuthService } from './auth.service';
 
 @Controller({ path: 'auth' })

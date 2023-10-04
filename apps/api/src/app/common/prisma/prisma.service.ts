@@ -1,7 +1,7 @@
 import { Injectable, Logger, OnModuleInit } from '@nestjs/common';
 import { Prisma, PrismaClient } from '@prisma/client';
-import { config } from '../../../config';
-import { GenerateSlugMiddleware } from '../../common/middleware/generateSlug.middleware';
+import { config } from '../../../../config';
+import { GenerateSlugMiddleware } from '../../../common/middleware/generateSlug.middleware';
 
 @Injectable()
 export class PrismaService

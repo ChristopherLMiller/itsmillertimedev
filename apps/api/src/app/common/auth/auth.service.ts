@@ -1,7 +1,7 @@
 import { Injectable, Logger } from '@nestjs/common';
 import { PermissionsToRoles, Role } from '@prisma/client';
 import { Session, UserResponse, createClient } from '@supabase/supabase-js';
-import { config } from '../../../config';
+import { config } from '../../../../config';
 import { PrismaService } from '../prisma/prisma.service';
 import { SettingsService } from '../settings/settings.service';
 

@@ -10,8 +10,8 @@ import {
 import { REQUEST } from '@nestjs/core';
 import { Post, Prisma } from '@prisma/client';
 import { Request as ExpressRequest } from 'express';
-import { AuthService } from '../../../auth/auth.service';
-import { PrismaService } from '../../../prisma/prisma.service';
+import { AuthService } from '../../../common/auth/auth.service';
+import { PrismaService } from '../../../common/prisma/prisma.service';
 
 @Injectable({ scope: Scope.REQUEST })
 export class PostService {

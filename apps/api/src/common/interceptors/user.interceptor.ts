@@ -5,7 +5,7 @@ import {
   NestInterceptor,
 } from '@nestjs/common';
 import { Observable } from 'rxjs';
-import { AuthService } from '../../app/auth/auth.service';
+import { AuthService } from '../../app/common/auth/auth.service';
 
 @Injectable()
 export class UserInterceptor<T> implements NestInterceptor {
@@ -13,7 +13,7 @@ export class UserInterceptor<T> implements NestInterceptor {
 
   async intercept(
     context: ExecutionContext,
-    next: CallHandler<T>
+    next: CallHandler<T>,
   ): Promise<Observable<T>> {
     const req = context.switchToHttp().getRequest();
     const jwt = req.headers?.authorization;

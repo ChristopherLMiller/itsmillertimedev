@@ -4,8 +4,8 @@ import { Image, Prisma } from '@prisma/client';
 import { v2 as cloudinary } from 'cloudinary';
 
 import { dataFetcher } from '../../../common/handlers/dataFetcher';
-import { PrismaService } from '../../prisma/prisma.service';
-import { SettingsService } from '../../settings/settings.service';
+import { PrismaService } from '../../common/prisma/prisma.service';
+import { SettingsService } from '../../common/settings/settings.service';
 import streamifier = require('streamifier');
 
 // eslint-disable-next-line @typescript-eslint/no-var-requires

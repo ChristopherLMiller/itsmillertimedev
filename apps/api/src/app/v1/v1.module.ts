@@ -12,7 +12,6 @@ import { PageModule } from './page/page.module';
 import { PostCategoryModule } from './posts/post-category/post-category.module';
 import { PostTagModule } from './posts/post-tag/post-tag.module';
 import { PostModule } from './posts/post/post.module';
-import { RssModule } from './rss/rss.module';
 import { WeatherModule } from './weather/weather.module';
 import { WebhooksModule } from './webhooks/webhooks.module';
 
@@ -31,7 +30,6 @@ import { WebhooksModule } from './webhooks/webhooks.module';
     PostTagModule,
     PostModule,
     PageModule,
-    RssModule,
   ],
   controllers: [HealthController],
 })

@@ -4,7 +4,7 @@ import { DiscordUserSetting } from '@prisma/client';
 
 import { AxiosResponse } from 'axios';
 import { dataFetcher } from '../../../common/handlers/dataFetcher';
-import { PrismaService } from '../../../common/prisma/prisma.service';
+import { PrismaService } from '../../prisma/prisma.service';
 import { DiscordChannels } from './discord.types';
 
 @Injectable()
@@ -13,12 +13,12 @@ export class DiscordService {
 
   constructor(
     private httpService: HttpService,
-    private prisma: PrismaService
+    private prisma: PrismaService,
   ) {}
 
   async sendMessage(
     message: string,
-    channel: DiscordChannels
+    channel: DiscordChannels,
   ): Promise<AxiosResponse> {
     const data = dataFetcher(
       this.httpService.post(
@@ -35,8 +35,8 @@ export class DiscordService {
           headers: {
             'Content-Type': 'application/json',
           },
-        }
-      )
+        },
+      ),
     );
     return data;
   }
@@ -52,7 +52,7 @@ export class DiscordService {
   async updateUserMeta(
     userId: string,
     key: string,
-    value: string
+    value: string,
   ): Promise<DiscordUserSetting> {
     // first get the user meta
     const userData = await this.getUserMeta(userId);

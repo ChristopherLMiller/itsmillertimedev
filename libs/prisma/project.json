@@ -19,6 +19,12 @@
         "parallel": false,
         "commands": ["prisma migrate dev --name {args.name}"]
       }
+    },
+    "studio": {
+      "executor": "nx:run-commands",
+      "options": {
+        "commands": ["npx prisma studio --schema libs/prisma/schema.prisma"]
+      }
     }
   },
   "tags": []

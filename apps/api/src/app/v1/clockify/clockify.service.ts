@@ -1,7 +1,7 @@
 import { HttpService } from '@nestjs/axios';
 import { BadRequestException, Injectable, Logger } from '@nestjs/common';
 import { dataFetcher } from '../../../common/handlers/dataFetcher';
-import { PrismaService } from '../../../common/prisma/prisma.service';
+import { PrismaService } from '../../prisma/prisma.service';
 import { SettingsService } from '../../settings/settings.service';
 
 @Injectable()
@@ -11,7 +11,7 @@ export class ClockifyService {
   constructor(
     private prisma: PrismaService,
     private http: HttpService,
-    private readonly settings: SettingsService
+    private readonly settings: SettingsService,
   ) {}
 
   // Start new timer for projectID
@@ -40,7 +40,7 @@ export class ClockifyService {
   }): Promise<any> {
     const workspaceId = await this.settings.getField(
       'clockify',
-      'workspace_id'
+      'workspace_id',
     );
 
     const data = await dataFetcher(
@@ -51,7 +51,7 @@ export class ClockifyService {
           page,
           name,
         },
-      })
+      }),
     );
     return data;
   }
@@ -59,11 +59,11 @@ export class ClockifyService {
   async getProject({ id }): Promise<any> {
     const workspaceId = await this.settings.getField(
       'clockify',
-      'workspace_id'
+      'workspace_id',
     );
 
     const data = await dataFetcher(
-      this.http.get(`/workspaces/${workspaceId}/projects/${id}`)
+      this.http.get(`/workspaces/${workspaceId}/projects/${id}`),
     );
 
     return data;
@@ -77,13 +77,13 @@ export class ClockifyService {
 
     const workspaceId = await this.settings.getField(
       'clockify',
-      'workspace_id'
+      'workspace_id',
     );
 
     const data = await dataFetcher(
       this.http.post(`/workspaces/${workspaceId}/time-entries`, {
         projectId,
-      })
+      }),
     );
     return data;
   }
@@ -98,8 +98,8 @@ export class ClockifyService {
       )}/user/${clockifySettings['user_id']}/time-entries`,
         {
           end: new Date().toISOString(),
-        }
-      )
+        },
+      ),
     );
     return data;
   }
@@ -112,11 +112,11 @@ export class ClockifyService {
 
     const workspaceId = await this.settings.getField(
       'clockify',
-      'workspace_id'
+      'workspace_id',
     );
 
     const data = await dataFetcher(
-      this.http.get(`workspaces/${workspaceId}/projects/${projectId}`)
+      this.http.get(`workspaces/${workspaceId}/projects/${projectId}`),
     );
 
     return data;

@@ -1,14 +1,14 @@
 import { Client, LatLngLiteral } from '@googlemaps/google-maps-services-js';
 import { Injectable } from '@nestjs/common';
 import { Marker } from '@prisma/client';
-import { PrismaService } from '../../../common/prisma/prisma.service';
+import { PrismaService } from '../../prisma/prisma.service';
 import { SettingsService } from '../../settings/settings.service';
 
 @Injectable()
 export class MapsService {
   constructor(
     private prisma: PrismaService,
-    private readonly settings: SettingsService
+    private readonly settings: SettingsService,
   ) {}
 
   gmapsClient = new Client({});
@@ -22,7 +22,7 @@ export class MapsService {
   }
 
   async getGPSCoordinateFromLocation(
-    place: string
+    place: string,
   ): Promise<{ gps: LatLngLiteral; address: string } | null> {
     const apiKey = await this.settings.getField('google', 'maps_api_key');
     const response = await this.gmapsClient.geocode({

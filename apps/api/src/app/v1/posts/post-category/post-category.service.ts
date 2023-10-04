@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { PostCategory, Prisma } from '@prisma/client';
 import { PrismaLib } from 'libs/prisma/lib';
-import { PrismaService } from '../../../../common/prisma/prisma.service';
+import { PrismaService } from '../../../prisma/prisma.service';
 
 @Injectable()
 export class PostCategoryService {
@@ -10,7 +10,7 @@ export class PostCategoryService {
   prismaLib = new PrismaLib();
 
   async create(
-    newData: PostCategory | PostCategory[]
+    newData: PostCategory | PostCategory[],
   ): Promise<PostCategory | Prisma.BatchPayload> {
     // check if a singular item or an array
     if (Array.isArray(newData)) {
@@ -19,11 +19,11 @@ export class PostCategoryService {
         newData.flatMap(async (item) => {
           const slug = await this.prismaLib.generateSlug(
             item.slug ? item.slug : item.title,
-            'postCategory'
+            'postCategory',
           );
 
           return { ...item, slug };
-        })
+        }),
       );
 
       return this.prisma.postCategory.createMany({
@@ -39,7 +39,7 @@ export class PostCategoryService {
           const title = newData.title;
           const slug = await this.prismaLib.generateSlug(
             newData.slug ? newData.slug : newData.title,
-            'postCategory'
+            'postCategory',
           );
 
           result = await this.prisma.postCategory.create({
@@ -73,7 +73,7 @@ export class PostCategoryService {
 
   update(
     slug: string,
-    updatePostCategory: PostCategory
+    updatePostCategory: PostCategory,
   ): Promise<PostCategory> {
     return this.prisma.postCategory.update({
       where: { slug: slug },

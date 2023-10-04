@@ -4,7 +4,7 @@ import { Image, Prisma } from '@prisma/client';
 import { v2 as cloudinary } from 'cloudinary';
 
 import { dataFetcher } from '../../../common/handlers/dataFetcher';
-import { PrismaService } from '../../../common/prisma/prisma.service';
+import { PrismaService } from '../../prisma/prisma.service';
 import { SettingsService } from '../../settings/settings.service';
 import streamifier = require('streamifier');
 
@@ -16,7 +16,7 @@ export class ImageService {
   constructor(
     private httpService: HttpService,
     private prisma: PrismaService,
-    private readonly settings: SettingsService
+    private readonly settings: SettingsService,
   ) {}
 
   logger = new Logger();
@@ -86,19 +86,19 @@ export class ImageService {
 
   async createBase64(
     public_id: string,
-    width: number | 'auto'
+    width: number | 'auto',
   ): Promise<string> {
     const settings = await this.settings.getSetting('cloudinary');
     // Retrieve the image from cloudinary
     this.logger.log(
-      `${settings['image_domain']}/w_${width},q_auto,f_auto/${public_id}`
+      `${settings['image_domain']}/w_${width},q_auto,f_auto/${public_id}`,
     );
 
     const imageData = await dataFetcher(
       this.httpService.get(
         `${settings['image_domain']}/w_${width},q_auto,f_auto/${public_id}`,
-        { responseType: 'arraybuffer' }
-      )
+        { responseType: 'arraybuffer' },
+      ),
     );
 
     // Convert the buffer data into a base64 string
@@ -115,7 +115,7 @@ export class ImageService {
       const imageData = await dataFetcher(
         this.httpService.get(`${settings['image_domain']}/${public_id}`, {
           responseType: 'arraybuffer',
-        })
+        }),
       );
 
       // Extract the EXIF data from the image
@@ -221,7 +221,7 @@ export class ImageService {
           }
 
           return result;
-        }
+        },
       );
 
       // create the stream, upload to cloudinary

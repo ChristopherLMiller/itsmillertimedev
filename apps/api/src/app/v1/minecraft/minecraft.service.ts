@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { MinecraftRule, MinecraftRuleCategory } from '@prisma/client';
-import { PrismaService } from '../../../common/prisma/prisma.service';
+import { PrismaService } from '../../prisma/prisma.service';
 
 @Injectable()
 export class MinecraftService {

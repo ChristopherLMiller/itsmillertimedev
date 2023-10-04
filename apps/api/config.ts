@@ -9,10 +9,13 @@ export const config = {
     dsn: process.env.SENTRY_DSN,
   },
   caching: {
+    enabled: process.env.CACHING_ENABLED,
+    cacheTTL: +process.env.CACHE_TTL,
+    maxCacheItems: process.env.MAX_ITEMS_IN_CACHE,
     redis: {
       host: process.env.REDIS_HOST,
-      port: process.env.REDIS_PORT,
-      ttl: process.env.CACHE_TTL,
+      port: +process.env.REDIS_PORT,
+      ttl: +process.env.CACHE_TTL,
       username: process.env.REDIS_USERNAME,
       password: process.env.REDIS_PASSWORD,
     },

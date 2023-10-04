@@ -10,8 +10,8 @@ import {
 import { REQUEST } from '@nestjs/core';
 import { Post, Prisma } from '@prisma/client';
 import { Request as ExpressRequest } from 'express';
-import { PrismaService } from '../../../../common/prisma/prisma.service';
 import { AuthService } from '../../../auth/auth.service';
+import { PrismaService } from '../../../prisma/prisma.service';
 
 @Injectable({ scope: Scope.REQUEST })
 export class PostService {
@@ -55,8 +55,8 @@ export class PostService {
     const orderBy = JSON.parse(
       (query.orderBy as string) || '{"createdAt":"asc"}',
     );
-    const skip = query.skip || 0;
-    const take = query.take || undefined;
+    const skip = +query.skip || 0;
+    const take = +query.take || undefined;
     const whereQuery = query.where || undefined;
     const selectQuery = query.select || undefined;
     const includeQuery = query.include || undefined;

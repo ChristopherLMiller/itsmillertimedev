@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { PostTag, Prisma } from '@prisma/client';
 import { PrismaLib } from 'libs/prisma/lib';
-import { PrismaService } from '../../../../common/prisma/prisma.service';
+import { PrismaService } from '../../../prisma/prisma.service';
 
 @Injectable()
 export class PostTagService {
@@ -10,7 +10,7 @@ export class PostTagService {
   prismaLib = new PrismaLib();
 
   async create(
-    newData: PostTag | PostTag[]
+    newData: PostTag | PostTag[],
   ): Promise<PostTag | Prisma.BatchPayload> {
     // check if a singular item or an array
     if (Array.isArray(newData)) {
@@ -19,14 +19,14 @@ export class PostTagService {
         newData.flatMap(async (item) => {
           const slug = await this.prismaLib.generateSlug(
             item.slug ? item.slug : item.title,
-            'postTag'
+            'postTag',
           );
 
           return {
             title: item.title,
             slug,
           };
-        })
+        }),
       );
 
       return this.prisma.postTag.createMany({
@@ -42,7 +42,7 @@ export class PostTagService {
           const title = newData.title;
           const slug = await this.prismaLib.generateSlug(
             newData.slug ? newData.slug : newData.title,
-            'postTag'
+            'postTag',
           );
 
           result = await this.prisma.postTag.create({

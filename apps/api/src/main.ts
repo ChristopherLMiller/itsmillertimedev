@@ -28,7 +28,7 @@ async function bootstrap() {
           nestWinstonModuleUtilities.format.nestLike('API', {
             colors: true,
             prettyPrint: true,
-          })
+          }),
         ),
       }),
       new winston.transports.Http({
@@ -78,7 +78,7 @@ async function bootstrap() {
   //Register global pieces
   app.useGlobalInterceptors(
     new SentryInterceptor(),
-    new ResponseTransformInterceptor()
+    new ResponseTransformInterceptor(),
   );
   app.useGlobalPipes(new ValidationPipe());
   app.setGlobalPrefix('api');
@@ -86,7 +86,7 @@ async function bootstrap() {
   // Start the application
   await app.listen(config.general.port, '0.0.0.0');
   winstonInstance.info(
-    `🚀 Application is running on: http://localhost:${config.general.port}`
+    `🚀 Application is running on: http://localhost:${config.general.port}`,
   );
 
   app.enableShutdownHooks();

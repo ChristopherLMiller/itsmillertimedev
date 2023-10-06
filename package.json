@@ -67,14 +67,12 @@
     "@nestjs/cli": "^10.1.18",
     "@nestjs/schematics": "^10.0.2",
     "@nestjs/testing": "^10.2.6",
-    "@nrwl/cli": "15.9.3",
     "@nrwl/cypress": "16.9.0",
     "@nrwl/eslint-plugin-nx": "16.9.0",
     "@nrwl/jest": "16.9.0",
     "@nrwl/linter": "16.9.0",
     "@nrwl/nest": "^16.9.0",
     "@nrwl/node": "16.9.0",
-    "@nrwl/nx-cloud": "^16.4.0",
     "@nrwl/react": "16.9.0",
     "@nrwl/web": "16.9.0",
     "@nrwl/workspace": "16.9.0",
@@ -125,7 +123,8 @@
     "ts-loader": "^9.4.4",
     "ts-node": "10.9.1",
     "tsconfig-paths": "^4.2.0",
-    "typescript": "~5.2.2"
+    "typescript": "~5.2.2",
+    "nx-cloud": "^16.4.0"
   },
   "engines": {
     "node": ">=16.0.0"

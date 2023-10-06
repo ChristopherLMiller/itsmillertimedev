@@ -5,7 +5,7 @@
   },
   "tasksRunnerOptions": {
     "default": {
-      "runner": "@nrwl/nx-cloud",
+      "runner": "nx-cloud",
       "options": {
         "cacheableOperations": [
           "build",
@@ -21,6 +21,10 @@
     "build": {
       "dependsOn": [
         "^build"
+      ],
+      "inputs": [
+        "production",
+        "^production"
       ]
     }
   },
@@ -37,5 +41,15 @@
       }
     }
   },
-  "defaultProject": "app"
+  "defaultProject": "app",
+  "namedInputs": {
+    "default": [
+      "{projectRoot}/**/*",
+      "sharedGlobals"
+    ],
+    "sharedGlobals": [],
+    "production": [
+      "default"
+    ]
+  }
 }

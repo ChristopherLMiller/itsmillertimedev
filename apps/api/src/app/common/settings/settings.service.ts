@@ -4,7 +4,7 @@ import { PrismaService } from '../prisma/prisma.service';
 
 @Injectable()
 export class SettingsService {
-  private _logger = new Logger(SettingsService.name);
+  private readonly _logger = new Logger(SettingsService.name);
 
   constructor(private prisma: PrismaService) {}
 
@@ -25,6 +25,10 @@ export class SettingsService {
   }
 
   async getFieldValue<T>(key: string, field: string): Promise<T> {
-    return (await this.getSetting(key))['fields'][field].value;
+    try {
+      return (await this.getSetting(key))['fields'][field].value;
+    } catch (error) {
+      this._logger.error(`Unable to load setting value of ${field} for ${key}`);
+    }
   }
 }

@@ -1,4 +1,0 @@
-export enum DiscordChannels {
-  DISCORD_BOT_SPAM_CHANNEL,
-  DISCORD_BOT_GENERAL_CHANNEL,
-}

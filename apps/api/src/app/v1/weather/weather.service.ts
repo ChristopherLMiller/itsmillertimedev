@@ -1,5 +1,5 @@
 import { HttpService } from '@nestjs/axios';
-import { Injectable } from '@nestjs/common';
+import { Injectable, Logger } from '@nestjs/common';
 import { dataFetcher } from '../../../common/handlers/dataFetcher';
 import { SettingsService } from '../../common/settings/settings.service';
 
@@ -8,7 +8,25 @@ export class WeatherService {
   constructor(
     private http: HttpService,
     private settings: SettingsService,
-  ) {}
+  ) {
+    this.loadSettings().then((settings) => {
+      this.apiKey = settings.apiKey;
+      this._logger.log('Settings loaded successfully');
+    });
+  }
+
+  // Local variables
+  private apiKey;
+  private readonly _logger = new Logger(WeatherService.name);
+
+  async loadSettings() {
+    const apiKey = await this.settings.getFieldValue(
+      'openweathermap',
+      'api-key',
+    );
+
+    return { apiKey };
+  }
 
   async getCurrentWeather({ lat, lon }) {
     const data = await this.getData(
@@ -47,7 +65,7 @@ export class WeatherService {
 
   // METHOD TO RETRIEVE THE DATA
   async getData(url: string): Promise<any> {
-    const key = await this.settings.getField('openweatermap', 'api_key');
+    const key = await this.settings.getFieldOld('openweatermap', 'api_key');
     const data = await dataFetcher(
       this.http.get(`${url}&appid=${key}&units=imperial`),
     );

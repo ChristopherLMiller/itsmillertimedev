@@ -1,8 +1,14 @@
 import { Body, Controller, Get, Post, UseGuards } from '@nestjs/common';
 import { ApiTags } from '@nestjs/swagger';
-import { PermissionsPublic } from '../../../common/decorators/auth.decorator';
+import { Marker } from '@prisma/client';
+import {
+  PermissionsNodes,
+  PermissionsPublic,
+} from '../../../common/decorators/auth.decorator';
 import { supabaseAuthGuard } from '../../../common/guards/supabaseAuth.guard';
+import { DataResponse } from '../../../lib/response';
 import { MapsService } from './maps.service';
+import { MapsPermissionNodes } from './permissions.nodes';
 
 @Controller({ version: '1', path: 'maps' })
 @ApiTags('Maps')
@@ -12,14 +18,14 @@ export class MapsController {
 
   @Get('markers')
   @PermissionsPublic()
-  async getMarkers(): Promise<any> {
+  async getMarkers(): DataResponse<Array<Marker>> {
     const data = await this.maps.findMapMarkers();
-    return { data: { markers: data }, meta: { totalRecords: data.length } };
+    return { data, meta: { totalRecords: data.length } };
   }
 
   @Post('markers')
-  async createMarker(@Body() body: any): Promise<any> {
-    const data = await this.maps.createMapMarker(body);
-    return { data: { marker: data } };
+  @PermissionsNodes(MapsPermissionNodes.CREATE_MARKER)
+  async createMarker(@Body() body: Marker): DataResponse<Marker> {
+    return { data: await this.maps.createMapMarker(body) };
   }
 }

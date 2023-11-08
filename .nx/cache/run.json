@@ -1,0 +1,21 @@
+{
+  "run": {
+    "command": "nx run prisma:generate",
+    "startTime": "2023-11-08T07:16:16.966Z",
+    "endTime": "2023-11-08T07:16:19.349Z",
+    "inner": false
+  },
+  "tasks": [
+    {
+      "taskId": "prisma:generate",
+      "target": "generate",
+      "projectName": "prisma",
+      "hash": "6992701860945283448",
+      "startTime": "2023-11-08T07:16:16.976Z",
+      "endTime": "2023-11-08T07:16:19.347Z",
+      "params": "",
+      "cacheStatus": "cache-miss",
+      "status": 0
+    }
+  ]
+}

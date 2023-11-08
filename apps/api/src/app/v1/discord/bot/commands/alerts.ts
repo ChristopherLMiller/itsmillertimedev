@@ -12,15 +12,15 @@ import { DiscordService } from '../../discord.service';
 export class WeatherAlertsCommand {
   constructor(
     private discord: DiscordService,
-    private weatherService: WeatherService
+    private weatherService: WeatherService,
   ) {}
 
-  logger = new Logger(WeatherAlertsCommand.name);
+  private readonly _logger = new Logger(WeatherAlertsCommand.name);
 
   @Handler()
   async onAlertsCommand(
-    @EventParams() interaction: ClientEvents['interactionCreate']
-  ): Promise<any> {
+    @EventParams() interaction: ClientEvents['interactionCreate'],
+  ): Promise<unknown> {
     // extract out the event
     const event = interaction[0];
     // we need to see if the user is setup in the DB first
@@ -43,7 +43,7 @@ export class WeatherAlertsCommand {
 
     // extract out the alerts
     const alerts = data.data.alerts;
-    this.logger.log(alerts);
+    this._logger.log(alerts);
 
     if (!alerts || alerts.length < 1) {
       return {

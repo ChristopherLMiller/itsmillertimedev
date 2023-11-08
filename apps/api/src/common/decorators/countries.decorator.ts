@@ -1,6 +1,8 @@
-import { SetMetadata } from '@nestjs/common';
+import { CustomDecorator, SetMetadata } from '@nestjs/common';
 
-export const CountriesWhitelist = (...countries: string[]) =>
-  SetMetadata('whitelistedCountries', countries);
-export const CountriesBlacklist = (...countries: string[]) =>
-  SetMetadata('blacklistedCountries', countries);
+export const CountriesWhitelist = (
+  ...countries: string[]
+): CustomDecorator<string> => SetMetadata('whitelistedCountries', countries);
+export const CountriesBlacklist = (
+  ...countries: string[]
+): CustomDecorator<string> => SetMetadata('blacklistedCountries', countries);

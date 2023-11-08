@@ -1,4 +1,3 @@
-import { Response } from '@itsmillertimedev/data';
 import { countWords } from '@itsmillertimedev/utility-functions';
 import {
   BadRequestException,
@@ -10,6 +9,7 @@ import {
 import { REQUEST } from '@nestjs/core';
 import { Post, Prisma } from '@prisma/client';
 import { Request as ExpressRequest } from 'express';
+import { DataResponse } from '../../../../lib/response';
 import { AuthService } from '../../../common/auth/auth.service';
 import { PrismaService } from '../../../common/prisma/prisma.service';
 
@@ -20,7 +20,7 @@ export class PostService {
     private prisma: PrismaService,
     private authService: AuthService,
   ) {}
-  private logger = new Logger(PostService.name);
+  private readonly _logger = new Logger(PostService.name);
 
   async create(newData: Prisma.PostCreateInput): Promise<Post> {
     try {
@@ -32,7 +32,7 @@ export class PostService {
       return data;
     } catch (error) {
       if (error instanceof Prisma.PrismaClientValidationError) {
-        this.logger.log(error.message);
+        this._logger.log(error.message);
         throw new BadRequestException(
           'Unable to validate the post',
           error.message,
@@ -43,7 +43,9 @@ export class PostService {
     }
   }
 
-  async findAll(query?: Prisma.PostFindManyArgs): Response<Partial<Post[]>> {
+  async findAll(
+    query?: Prisma.PostFindManyArgs,
+  ): DataResponse<Partial<Post[]>> {
     // Immediately verify that both select and include aren't included, if they
     // are then error and exit immediately
     if (query.select && query.include) {
@@ -148,7 +150,7 @@ export class PostService {
         });
       }
     } catch (error) {
-      console.log(error);
+      this._logger.error(error);
       throw new BadRequestException(error.message, error);
     }
 

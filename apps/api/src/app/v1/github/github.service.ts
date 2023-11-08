@@ -1,3 +1,4 @@
+import { GithubUser } from '@itsmillertimedev/data';
 import { HttpService } from '@nestjs/axios';
 import { Injectable } from '@nestjs/common';
 import { dataFetcher } from '../../../common/handlers/dataFetcher';
@@ -6,11 +7,9 @@ import { dataFetcher } from '../../../common/handlers/dataFetcher';
 export class GithubService {
   constructor(private httpService: HttpService) {}
 
-  async findUser(login: string): Promise<any> {
-    const data = await dataFetcher(
-      this.httpService.get(`https://api.github.com/users/${login}`)
+  async findUser(login: string): Promise<GithubUser> {
+    return await dataFetcher(
+      this.httpService.get(`https://api.github.com/users/${login}`),
     );
-
-    return data;
   }
 }

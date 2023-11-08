@@ -10,32 +10,32 @@ export class ClockifyService {
   constructor(
     private prisma: PrismaService,
     private http: HttpService,
-    private readonly settings: SettingsService,
+    private settings: SettingsService,
   ) {
-    this.loadSettings().then((data) => {
-      this.workspaceId = data.workspaceId;
-      this.userId = data.userId;
-      this.logger.log('Clockify settings loaded successfully');
+    this.loadSettings().then((settings) => {
+      this.workspaceId = settings.workspaceId;
+      this.userId = settings.userId;
+      this._logger.log('Settings loaded successfully');
     });
   }
 
   // Variables local to the class
-  logger = new Logger(ClockifyService.name);
-  workspaceId = null;
-  userId = null;
+  private readonly _logger = new Logger(ClockifyService.name);
+  private workspaceId = null;
+  private userId = null;
 
   // Function to load the settings from the settings service
   async loadSettings() {
     try {
       const workspaceId = await this.settings.getFieldValue(
         'clockify',
-        'workspace_id',
+        'workspace-id',
       );
-      const userId = await this.settings.getFieldValue('clockify', 'user_id');
+      const userId = await this.settings.getFieldValue('clockify', 'user-id');
 
       return { workspaceId, userId };
     } catch (error) {
-      this.logger.error(error);
+      this._logger.error(error);
       throw error;
     }
   }
@@ -46,7 +46,7 @@ export class ClockifyService {
     startTime = Date.now().toLocaleString(),
   ) {
     if (projectId === null) {
-      this.logger.error('ProjectID was required, but one was not provided');
+      this._logger.error('ProjectID was required, but one was not provided');
       throw new BadRequestException('must provide project ID');
     }
 
@@ -58,14 +58,14 @@ export class ClockifyService {
       });
 
       if (result !== null) {
-        this.logger.log(
+        this._logger.log(
           `Inserted clockify timer successfully for project ${projectId}`,
         );
       }
 
       return result;
     } catch (error) {
-      this.logger.error(error);
+      this._logger.error(error);
       throw error;
     }
   }
@@ -79,18 +79,18 @@ export class ClockifyService {
       });
 
       if (data !== null) {
-        this.logger.log(`Project ${projectID} is being removed`);
+        this._logger.log(`Project ${projectID} is being removed`);
         return this.prisma.clockifyTimer.delete({
           where: { projectId: projectID },
         });
       } else {
-        this.logger.log(
+        this._logger.log(
           `Project ${projectID} has already been deleted, skipping deletion`,
         );
         return null;
       }
     } catch (error) {
-      this.logger.log(error);
+      this._logger.log(error);
       return null;
     }
   }
@@ -191,7 +191,7 @@ export class ClockifyService {
     const currentProjectState = await this.getProject(id);
 
     if (currentProjectState.archived !== true) {
-      this.logger.log(
+      this._logger.log(
         `Projet ${currentProjectState.name} is not archived, doing so now`,
       );
       const updatedProject = await this.updateProject(id, {
@@ -200,7 +200,7 @@ export class ClockifyService {
       });
 
       if (updatedProject.archived) {
-        this.logger.log(
+        this._logger.log(
           `${updatedProject.name} is now archived, ready for deletion`,
         );
       }

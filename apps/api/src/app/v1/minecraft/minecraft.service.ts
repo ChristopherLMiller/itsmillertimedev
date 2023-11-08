@@ -6,7 +6,7 @@ import { PrismaService } from '../../common/prisma/prisma.service';
 export class MinecraftService {
   constructor(private prisma: PrismaService) {}
 
-  findRules(): Promise<MinecraftRule[]> {
+  findRules(): Promise<Array<MinecraftRule>> {
     return this.prisma.minecraftRule.findMany();
   }
 
@@ -14,7 +14,7 @@ export class MinecraftService {
     return this.prisma.minecraftRule.findFirst({ where: { id: ruleId } });
   }
 
-  findRulesCategories(): Promise<MinecraftRuleCategory[]> {
+  findRulesCategories(): Promise<Array<MinecraftRuleCategory>> {
     return this.prisma.minecraftRuleCategory.findMany();
   }
 }

@@ -39,28 +39,28 @@ import { ClockifyPermissionNodes } from './permissions.nodes';
 @Controller({ version: '1', path: 'clockify' })
 @ApiTags('Clockify')
 @UseGuards(supabaseAuthGuard)
-@ResponseTimeLimit(100)
+@ResponseTimeLimit(700)
 export class ClockifyController {
   constructor(
     private clockify: ClockifyService,
     private discord: DiscordService,
     private settings: SettingsService,
   ) {
-    this.loadSettings().then((data) => {
-      this.discordNotificationSettings = data.discordNotificationSettings;
-      this._logger.log('Clockify settings loaded successfully');
+    this.loadSettings().then((settings) => {
+      this.discordNotificationSettings = settings.discordNotificationSettings;
+      this._logger.log('Settings loaded successfully');
     });
   }
 
   // Variable local to the class
   private discordNotificationSettings = null;
-  private _logger = new Logger(ClockifyController.name);
+  private readonly _logger = new Logger(ClockifyController.name);
 
   async loadSettings() {
     try {
       const discordNotificationSettings = await this.settings.getField(
         'clockify',
-        'discord_notifications',
+        'discord-notifications',
       );
       return { discordNotificationSettings };
     } catch (error) {
@@ -366,9 +366,9 @@ export class ClockifyController {
     // send a discord notification if its enabled in the settings
     if (this.discordNotificationSettings['webhook_start']['value']) {
       // send a message to discord
-      this.discord.sendMessage(
+      this.discord.sendDiscordMessage(
         `Clockify timer started for '${project.name}'`,
-        'spam_channel',
+        'spam-channel',
       );
     }
 
@@ -400,9 +400,9 @@ export class ClockifyController {
     // send a discord notification if its enabled in the settings
     if (this.discordNotificationSettings['webhook_stop']['value']) {
       // send a message to discord
-      this.discord.sendMessage(
+      this.discord.sendDiscordMessage(
         `Clockify timer stopped for '${project.name}'; Elapsed time ${timeElapsed}`,
-        'spam_channel',
+        'spam-channel',
       );
     }
 
@@ -427,9 +427,9 @@ export class ClockifyController {
 
     // send a discord notification if its enabled in the settings
     if (this.discordNotificationSettings['webhook_delete']['value']) {
-      this.discord.sendMessage(
+      this.discord.sendDiscordMessage(
         `Clockify timer deleted for '${project.name}'`,
-        'spam_channel',
+        'spam-channel',
       );
     }
     return { data: await this.clockify.removeClockifyTimer(project.id) };

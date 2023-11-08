@@ -5,19 +5,31 @@ import { SettingsService } from '../../common/settings/settings.service';
 
 @Injectable()
 export class LastFMService {
-  logger = new Logger(LastFMService.name);
-
   constructor(
     private http: HttpService,
     private readonly settings: SettingsService,
-  ) {}
+  ) {
+    this.loadSettings().then((settings) => {
+      this.apiKey = settings.apiKey;
+      this._logger.log('Settings loaded successfully');
+    });
+  }
+
+  async loadSettings() {
+    const apiKey = await this.settings.getFieldValue('lastfm', 'api-key');
+
+    return { apiKey };
+  }
+
+  // local variables
+  private readonly _logger = new Logger(LastFMService.name);
+  private apiKey;
 
   async getTopArtists() {
-    const lastFmKey = this.settings.getField('lastfm', 'api_key');
     const data = await dataFetcher(
       this.http.get('', {
         params: {
-          api_key: lastFmKey,
+          api_key: this.apiKey,
           method: 'chart.gettopartists',
           format: 'json',
         },
@@ -27,11 +39,10 @@ export class LastFMService {
   }
 
   async getUser(username: string) {
-    const lastFmKey = this.settings.getField('lastfm', 'api_key');
     const data = await dataFetcher(
       this.http.get('', {
         params: {
-          api_key: lastFmKey,
+          api_key: this.apiKey,
           method: 'user.getinfo',
           user: username,
           format: 'json',
@@ -42,11 +53,10 @@ export class LastFMService {
   }
 
   async getRecentTracks(username: string) {
-    const lastFmKey = this.settings.getField('lastfm', 'api_key');
     const data = await dataFetcher(
       this.http.get('', {
         params: {
-          api_key: lastFmKey,
+          api_key: this.apiKey,
           method: 'user.getRecentTracks',
           user: username,
           format: 'json',
@@ -57,8 +67,8 @@ export class LastFMService {
   }
 
   async getCurrentlyPlaying(username: string) {
-    const { data } = await this.getRecentTracks(username);
-    const newestTrack = data.recenttracks.track[0];
+    const data = await this.getRecentTracks(username);
+    const newestTrack = data['recenttracks']['track'][0];
 
     // see if the track contains an element called @attr and if its got now playing as true,
     // this signifies that the track is playing right now, return it

@@ -3,14 +3,14 @@ import { Prisma } from '@prisma/client';
 import { PrismaLib } from 'libs/prisma/lib';
 
 export function GenerateSlugMiddleware<
-  T extends Prisma.BatchPayload = Prisma.BatchPayload
+  T extends Prisma.BatchPayload = Prisma.BatchPayload,
 >(): Prisma.Middleware {
   const prismaLib = new PrismaLib();
   const logger = new Logger(GenerateSlugMiddleware.name);
 
   return async (
     params: Prisma.MiddlewareParams,
-    next: (params: Prisma.MiddlewareParams) => Promise<T>
+    next: (params: Prisma.MiddlewareParams) => Promise<T>,
   ): Promise<T> => {
     // if a new piece of content is created lets generate the slug for it
     if (params.action === 'create') {
@@ -26,7 +26,7 @@ export function GenerateSlugMiddleware<
         case Prisma.ModelName.ModelTags: {
           const slug = await prismaLib.generateSlug(
             params.args.data.title,
-            params.model.toLowerCase()
+            params.model.toLowerCase(),
           );
 
           params.args.data.slug = slug;

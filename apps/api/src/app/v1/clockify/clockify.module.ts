@@ -16,7 +16,7 @@ import { ClockifyService } from './clockify.service';
       useFactory: async (settings: SettingsService) => ({
         baseURL: 'https://api.clockify.me/api/v1',
         headers: {
-          'X-Api-Key': await settings.getFieldValue('clockify', 'api_key'),
+          'X-Api-Key': await settings.getFieldValue('clockify', 'api-key'),
         },
       }),
     }),

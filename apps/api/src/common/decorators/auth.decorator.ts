@@ -8,7 +8,7 @@ export enum AuthLevels {
 export const AuthAllowed = (level: AuthLevels) =>
   SetMetadata('authLevelAllowed', level);
 
-export const PermissionsRequired = (...nodes: string[]) =>
+export const PermissionsNodes = (...nodes: string[]) =>
   SetMetadata('auth_permission_node', nodes);
 
 export const PermissionsPublic = () =>

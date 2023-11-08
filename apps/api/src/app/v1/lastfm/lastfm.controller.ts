@@ -1,24 +1,30 @@
-import { Response } from '@itsmillertimedev/data';
-import { Controller, Get, Param } from '@nestjs/common';
+import { Controller, Get, Param, UseGuards } from '@nestjs/common';
+import { DataResponse } from '../../../lib/response';
 
+import { PermissionsPublic } from '../../../common/decorators/auth.decorator';
+import { supabaseAuthGuard } from '../../../common/guards/supabaseAuth.guard';
 import { LastFMService } from './lastfm.service';
 
 @Controller({ version: '1', path: 'lastfm' })
+@UseGuards(supabaseAuthGuard)
 export class LastFMController {
   constructor(private lastfm: LastFMService) {}
 
   @Get('artists')
-  async getTopArtists(): Response<any> {
-    return await this.lastfm.getTopArtists();
+  @PermissionsPublic()
+  async getTopArtists(): DataResponse<any> {
+    return { data: await this.lastfm.getTopArtists() };
   }
 
   @Get('user/:username')
-  async getUser(@Param() params): Response<any> {
-    return await this.lastfm.getUser(params.username);
+  @PermissionsPublic()
+  async getUser(@Param() params): DataResponse<any> {
+    return { data: await this.lastfm.getUser(params.username) };
   }
 
   @Get('playing/:username')
-  async getCurrentlyPlaying(@Param() params): Response<any> {
-    return await this.lastfm.getCurrentlyPlaying(params.username);
+  @PermissionsPublic()
+  async getCurrentlyPlaying(@Param() params): DataResponse<any> {
+    return { data: await this.lastfm.getCurrentlyPlaying(params.username) };
   }
 }

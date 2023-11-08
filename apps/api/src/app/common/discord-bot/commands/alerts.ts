@@ -1,8 +1,8 @@
 import { Command, EventParams, Handler } from '@discord-nestjs/core';
 import { Injectable, Logger } from '@nestjs/common';
 import { ClientEvents, EmbedBuilder } from 'discord.js';
-import { WeatherService } from '../../../weather/weather.service';
-import { DiscordService } from '../../discord.service';
+import { DiscordService } from '../../../v1/discord/discord.service';
+import { WeatherService } from '../../../v1/weather/weather.service';
 
 @Injectable()
 @Command({

@@ -7,8 +7,8 @@ import {
   SubCommand,
 } from '@discord-nestjs/core';
 import { ClientEvents, InteractionReplyOptions } from 'discord.js';
-import { MapsService } from '../../../../maps/maps.service';
-import { DiscordService } from '../../../discord.service';
+import { DiscordService } from '../../../../v1/discord/discord.service';
+import { MapsService } from '../../../../v1/maps/maps.service';
 
 export class ZoneDto {
   @Param({
@@ -20,12 +20,15 @@ export class ZoneDto {
 
 @SubCommand({ name: 'location', description: 'City to watch' })
 export class LocationSubCommand {
-  constructor(private discord: DiscordService, private maps: MapsService) {}
+  constructor(
+    private discord: DiscordService,
+    private maps: MapsService,
+  ) {}
 
   @Handler()
   async onLocationSubCommand(
     @IA(SlashCommandPipe) dto: ZoneDto,
-    @EventParams() interaction: ClientEvents['interactionCreate']
+    @EventParams() interaction: ClientEvents['interactionCreate'],
   ): Promise<InteractionReplyOptions> {
     const event = interaction[0];
 
@@ -35,7 +38,7 @@ export class LocationSubCommand {
     const data = await this.discord.updateUserMeta(
       event.user.id,
       'location',
-      JSON.stringify(gpsData)
+      JSON.stringify(gpsData),
     );
 
     if (data) {

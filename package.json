@@ -46,6 +46,7 @@
     "helmet": "^7.1.0",
     "js2xmlparser": "^5.0.0",
     "nest-winston": "^1.9.4",
+    "nestjs-dynamic-providers": "^0.3.0",
     "next": "14.0.1",
     "node-fetch": "^3.3.2",
     "react": "18.2.0",

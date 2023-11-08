@@ -1,7 +1,7 @@
+import { Record } from '@itsmillertimedev/data';
 import { Injectable, Logger } from '@nestjs/common';
-import { PermissionsToRoles, Role } from '@prisma/client';
+import { PermissionsToRoles, Role, User } from '@prisma/client';
 import { Session, UserResponse, createClient } from '@supabase/supabase-js';
-import { config } from '../../../../config';
 import { PrismaService } from '../prisma/prisma.service';
 import { SettingsService } from '../settings/settings.service';
 
@@ -9,17 +9,38 @@ import { SettingsService } from '../settings/settings.service';
 export class AuthService {
   constructor(
     private prisma: PrismaService,
-    private readonly settings: SettingsService,
-  ) {}
+    private settings: SettingsService,
+  ) {
+    this.loadSettings().then((settings) => {
+      this.defaultGroup = settings.defaultGroup;
+      this._logger.log(`Settings loaded successfully`);
+    });
+  }
 
-  logger = new Logger(AuthService.name);
-  supabase = createClient(config.supabase.url, config.supabase.key);
+  // Local Variables
+  private readonly _logger = new Logger(AuthService.name);
+  private _supabase = createClient(
+    process.env.SUPABASE_URL,
+    process.env.SUPABASE_KEY,
+  );
+  private defaultGroup = null;
 
-  signInEmail = async (
-    email: string,
-    password: string,
-  ): Promise<Session | null> => {
-    const { error, data } = await this.supabase.auth.signInWithPassword({
+  // Settings loader
+  async loadSettings() {
+    try {
+      const defaultGroup = await this.settings.getFieldValue<number>(
+        'auth',
+        'default-group',
+      );
+      return { defaultGroup };
+    } catch (error) {
+      this._logger.error(error);
+      throw error;
+    }
+  }
+
+  async signInEmail(email: string, password: string): Promise<User | Session> {
+    const { error, data } = await this._supabase.auth.signInWithPassword({
       email,
       password,
     });
@@ -35,29 +56,26 @@ export class AuthService {
           data: {
             supabaseId: data.user.id,
             email: data.user.email,
-            roleId: await this.settings.getField<number>(
-              'auth',
-              'default_group',
-            ),
+            roleId: this.defaultGroup,
           },
         });
-        console.log(result);
+
+        return result;
       }
 
       // lastly return the session
       return data.session;
     } else {
-      this.logger.error(error.message);
+      this._logger.error(error.message);
       throw new Error(error.message);
     }
-  };
+  }
 
-  getUser = async (token: string): Promise<UserResponse> => {
-    return this.supabase.auth.getUser(token);
-  };
+  async getUser(token: string): Promise<UserResponse> {
+    return this._supabase.auth.getUser(token);
+  }
 
-  isLoggedIn = async (token: string): Promise<boolean> => {
-    //console.log(this.request);
+  async isLoggedIn(token: string): Promise<boolean> {
     if (!token) {
       return false;
     }
@@ -68,13 +86,13 @@ export class AuthService {
     } else {
       return data.user.role === 'authenticated';
     }
-  };
+  }
 
-  getJWT = (token: string): string | null => {
+  getJWT(token: string): string | null {
     return token.split(' ')[1] || null;
-  };
+  }
 
-  getUserRole = async (userId: string): Promise<Partial<Role>> => {
+  async getUserRole(userId: string): Promise<Partial<Role>> {
     const user = await this.prisma.user.findUnique({
       where: { supabaseId: userId },
       select: {
@@ -83,23 +101,38 @@ export class AuthService {
     });
 
     return user.role;
-  };
+  }
 
-  getRolePermissions = async (
-    roleId: number,
-  ): Promise<PermissionsToRoles[]> => {
+  async getRolePermissions(roleId: number): Promise<PermissionsToRoles[]> {
     return this.prisma.permissionsToRoles.findMany({
       where: { roleId },
       include: {
         Permission: true,
       },
     });
-  };
+  }
 
-  getUserPermissions = async (
-    userId: string,
-  ): Promise<PermissionsToRoles[]> => {
+  async getUserPermissions(userId: string): Promise<PermissionsToRoles[]> {
     const userRole = await this.getUserRole(userId);
     return this.getRolePermissions(userRole.id);
-  };
+  }
+
+  async createUser(record: Record): Promise<User> {
+    const { id, email } = record;
+    const meta = record.email;
+
+    const result = await this.prisma.user.create({
+      data: {
+        supabaseId: id,
+        email,
+        roleId: 2,
+        meta,
+      },
+    });
+    return result;
+  }
+
+  async deleteUser(id: string): Promise<User> {
+    return await this.prisma.user.delete({ where: { supabaseId: id } });
+  }
 }

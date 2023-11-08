@@ -1,6 +1,8 @@
 import { HttpModule } from '@nestjs/axios';
 import { Module } from '@nestjs/common';
+import { SettingsModule } from '../../common/settings/settings.module';
 import { SettingsService } from '../../common/settings/settings.service';
+import { DiscordModule } from '../discord/discord.module';
 import { ClockifyController } from './clockify.controller';
 import { ClockifyService } from './clockify.service';
 
@@ -14,10 +16,12 @@ import { ClockifyService } from './clockify.service';
       useFactory: async (settings: SettingsService) => ({
         baseURL: 'https://api.clockify.me/api/v1',
         headers: {
-          'X-Api-Key': await settings.getField('clockify', 'api_key'),
+          'X-Api-Key': await settings.getFieldValue('clockify', 'api-key'),
         },
       }),
     }),
+    SettingsModule,
+    DiscordModule,
   ],
   providers: [ClockifyService],
   exports: [ClockifyService],

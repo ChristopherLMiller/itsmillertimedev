@@ -1,17 +1,19 @@
-import { Response } from '@itsmillertimedev/data';
 import { Controller, Get, Query, UseGuards } from '@nestjs/common';
 import { ApiTags } from '@nestjs/swagger';
-import { BasicAuthGuard } from '../../../../common/guards/basicAuth.guard';
+import { PermissionsPublic } from '../../../../common/decorators/auth.decorator';
+import { supabaseAuthGuard } from '../../../../common/guards/supabaseAuth.guard';
+import { DataResponse } from '../../../../lib/response';
 import { MinecraftService } from '../minecraft.service';
 
 @Controller({ version: '1', path: 'minecraft/stats' })
 @ApiTags('Minecraft Stats')
-@UseGuards(BasicAuthGuard)
+@UseGuards(supabaseAuthGuard)
 export class MinecraftStatsController {
   constructor(private minecraft: MinecraftService) {}
 
   @Get('player/:id')
-  async getStats(@Query('id') id): Response<any> {
+  @PermissionsPublic()
+  async getStats(@Query('id') id): DataResponse<any> {
     return { data: { stats: [] }, meta: { playerId: id } };
   }
 }

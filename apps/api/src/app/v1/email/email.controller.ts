@@ -1,10 +1,10 @@
 import { Controller, Post, UseGuards } from '@nestjs/common';
 import { ApiTags } from '@nestjs/swagger';
-import { BasicAuthGuard } from '../../../common/guards/basicAuth.guard';
+import { supabaseAuthGuard } from '../../../common/guards/supabaseAuth.guard';
 
 @Controller({ version: '1', path: 'email' })
 @ApiTags('Email')
-@UseGuards(BasicAuthGuard)
+@UseGuards(supabaseAuthGuard)
 export class EmailController {
   cosntructor() {
     // Nothing to see here

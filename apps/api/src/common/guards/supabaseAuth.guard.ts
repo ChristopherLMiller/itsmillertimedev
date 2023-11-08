@@ -16,11 +16,18 @@ export class supabaseAuthGuard implements CanActivate {
     private reflector: Reflector,
   ) {}
 
-  logger = new Logger(supabaseAuthGuard.name);
+  private readonly _logger = new Logger(supabaseAuthGuard.name);
 
   async canActivate(context: ExecutionContext): Promise<boolean> {
     const handler = context.getHandler();
     const request = context.switchToHttp().getRequest();
+
+    // Check if the requesting user is localhost, and also only in dev mode, if so just return true now
+    if (
+      request.hostname === 'localhost' &&
+      process.env.NODE_ENV === 'development'
+    )
+      return true;
 
     const permissionNodes = this.reflector.get<string[]>(
       'auth_permission_node',

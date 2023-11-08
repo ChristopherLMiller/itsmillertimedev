@@ -1,34 +1,13 @@
-import { DiscordModule as DiscordBot } from '@discord-nestjs/core';
+import { DiscordModule as NestDiscordModule } from '@discord-nestjs/core';
 import { HttpModule } from '@nestjs/axios';
 import { Module } from '@nestjs/common';
-import { GatewayIntentBits } from 'discord.js';
-import { SettingsService } from '../../common/settings/settings.service';
-import { BotModule } from './bot/bot.module';
+import { SettingsModule } from '../../common/settings/settings.module';
 import { DiscordController } from './discord.controller';
 import { DiscordService } from './discord.service';
 
 @Module({
   controllers: [DiscordController],
-  imports: [
-    DiscordBot.forRootAsync({
-      imports: [],
-      inject: [SettingsService],
-      useFactory: async (settings: SettingsService) => ({
-        token: await settings.getField('discord', 'bot_token'),
-        discordClientOptions: {
-          intents: [
-            GatewayIntentBits.DirectMessages,
-            GatewayIntentBits.Guilds,
-            GatewayIntentBits.GuildMessages,
-            GatewayIntentBits.GuildWebhooks,
-            GatewayIntentBits.MessageContent,
-          ],
-        },
-      }),
-    }),
-    BotModule,
-    HttpModule,
-  ],
+  imports: [SettingsModule, HttpModule, NestDiscordModule.forFeature()],
   providers: [DiscordService],
   exports: [DiscordService],
 })

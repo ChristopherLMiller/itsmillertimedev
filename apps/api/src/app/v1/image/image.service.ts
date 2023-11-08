@@ -17,9 +17,47 @@ export class ImageService {
     private httpService: HttpService,
     private prisma: PrismaService,
     private readonly settings: SettingsService,
-  ) {}
+  ) {
+    this.loadSettings().then((settings) => {
+      this.imageDomain = settings.imageDomain;
+      this.apiKey = settings.apiKey;
+      this.apiSecret = settings.apiSecret;
+      this.cloudName = settings.cloudName;
+      this._logger.log('Settings loaded successfully');
+    });
+  }
 
-  logger = new Logger();
+  async loadSettings() {
+    const imageDomain = await this.settings.getFieldValue(
+      'cloudinary',
+      'image-domain',
+    );
+    const apiKey = await this.settings.getFieldValue('cloudinary', 'api-key');
+    const apiSecret = await this.settings.getFieldValue(
+      'cloudinary',
+      'api-secret',
+    );
+    const cloudName = await this.settings.getFieldValue(
+      'cloudinary',
+      'cloud-name',
+    );
+    const uploadPreset = await this.settings.getFieldValue(
+      'cloudinary',
+      'upload-preset',
+    );
+    const folder = await this.settings.getFieldValue('cloudinary', 'folder');
+
+    return { imageDomain, apiKey, apiSecret, cloudName, folder, uploadPreset };
+  }
+
+  // Local variables
+  private readonly _logger = new Logger(ImageService.name);
+  private imageDomain;
+  private apiKey;
+  private apiSecret;
+  private cloudName;
+  private uploadPreset;
+  private folder;
 
   async createImage(params): Promise<Image> {
     // check that the image doesn't exist first
@@ -75,7 +113,7 @@ export class ImageService {
       return 'Record deleted Successfully';
     } catch (error) {
       if (error instanceof Prisma.PrismaClientKnownRequestError) {
-        this.logger.log(error);
+        this._logger.log(error);
         // Prisma error code for record doesn't exist
         if (error.code === 'P2025') {
           return error.meta['cause'] as string;
@@ -88,15 +126,14 @@ export class ImageService {
     public_id: string,
     width: number | 'auto',
   ): Promise<string> {
-    const settings = await this.settings.getSetting('cloudinary');
     // Retrieve the image from cloudinary
-    this.logger.log(
-      `${settings['image_domain']}/w_${width},q_auto,f_auto/${public_id}`,
+    this._logger.log(
+      `${this.imageDomain}/w_${width},q_auto,f_auto/${public_id}`,
     );
 
     const imageData = await dataFetcher(
       this.httpService.get(
-        `${settings['image_domain']}/w_${width},q_auto,f_auto/${public_id}`,
+        `${this.imageDomain}/w_${width},q_auto,f_auto/${public_id}`,
         { responseType: 'arraybuffer' },
       ),
     );
@@ -109,11 +146,10 @@ export class ImageService {
   }
 
   async createExif(public_id: string): Promise<Image['exif']> {
-    const settings = this.settings.getSetting('cloudinary');
     try {
       // Fetch the image
       const imageData = await dataFetcher(
-        this.httpService.get(`${settings['image_domain']}/${public_id}`, {
+        this.httpService.get(`${this.imageDomain}/${public_id}`, {
           responseType: 'arraybuffer',
         }),
       );
@@ -134,7 +170,7 @@ export class ImageService {
       return exif;
     } catch (exception) {
       //TODO: handle bad requests and such here
-      this.logger.log(exception);
+      this._logger.log(exception);
       return undefined;
     }
   }
@@ -177,8 +213,8 @@ export class ImageService {
 
     // If we have exif data from the DB, exit now with it
     if (fromDB?.exif) {
-      this.logger.log('returning DB exif');
-      this.logger.log(fromDB.exif);
+      this._logger.log('returning DB exif');
+      this._logger.log(fromDB.exif);
       return fromDB;
     }
 
@@ -194,12 +230,11 @@ export class ImageService {
     return result;
   }
 
-  async uploadImage(file: Express.Multer.File): Promise<any> {
-    const settings = this.settings.getSetting('cloudinary');
+  async uploadImage(file: Express.Multer.File): Promise<string> {
     cloudinary.config({
-      api_key: settings['api_key'],
-      api_secret: settings['api_secret'],
-      cloud_name: settings['cloud'],
+      api_key: this.apiKey,
+      api_secret: this.apiSecret,
+      cloud_name: this.cloudName,
     });
 
     try {
@@ -207,16 +242,16 @@ export class ImageService {
 
       const uploadStream = cloudinary.uploader.upload_stream(
         {
-          upload_preset: settings['upload_preset'],
+          upload_preset: this.uploadPreset,
           use_filename: true,
           filename_override: file.originalname,
-          folder: `${settings['folder']}/${date.getFullYear().toString()}/${(
+          folder: `${this.folder}/${date.getFullYear().toString()}/${(
             date.getMonth() + 1
           ).toString()}`,
         },
         (error, result) => {
           if (error) {
-            this.logger.log(error);
+            this._logger.log(error);
             throw new Error(error.message);
           }
 
@@ -227,13 +262,14 @@ export class ImageService {
       // create the stream, upload to cloudinary
       streamifier.createReadStream(file.buffer).pipe(uploadStream);
 
-      return 'File uploaded successfully';
+      return 'Upload successful';
     } catch (error) {
-      this.logger.log(error);
+      this._logger.log(error);
+      throw error;
     }
   }
 
   async updateMetadata(public_id: string) {
-    return null;
+    return public_id;
   }
 }

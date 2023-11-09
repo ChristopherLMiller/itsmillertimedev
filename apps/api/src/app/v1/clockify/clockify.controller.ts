@@ -364,7 +364,7 @@ export class ClockifyController {
     }
 
     // send a discord notification if its enabled in the settings
-    if (this.discordNotificationSettings['webhook_start']['value']) {
+    if (this.discordNotificationSettings['webhook-start']['value']) {
       // send a message to discord
       this.discord.sendDiscordMessage(
         `Clockify timer started for '${project.name}'`,
@@ -398,7 +398,7 @@ export class ClockifyController {
     );
 
     // send a discord notification if its enabled in the settings
-    if (this.discordNotificationSettings['webhook_stop']['value']) {
+    if (this.discordNotificationSettings['webhook-stop']['value']) {
       // send a message to discord
       this.discord.sendDiscordMessage(
         `Clockify timer stopped for '${project.name}'; Elapsed time ${timeElapsed}`,
@@ -426,7 +426,7 @@ export class ClockifyController {
     }
 
     // send a discord notification if its enabled in the settings
-    if (this.discordNotificationSettings['webhook_delete']['value']) {
+    if (this.discordNotificationSettings['webhook-delete']['value']) {
       this.discord.sendDiscordMessage(
         `Clockify timer deleted for '${project.name}'`,
         'spam-channel',

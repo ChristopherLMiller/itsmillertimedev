@@ -1,4 +1,3 @@
-import { CacheModule } from '@nestjs/cache-manager';
 import { Module } from '@nestjs/common';
 import { PostController } from './post.controller';
 import { PostService } from './post.service';
@@ -6,7 +5,7 @@ import { PostService } from './post.service';
 @Module({
   controllers: [PostController],
   providers: [PostService],
-  imports: [CacheModule.register()],
+  imports: [],
   exports: [PostService],
 })
 export class PostModule {}

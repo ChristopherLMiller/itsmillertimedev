@@ -9,7 +9,7 @@ import {
 import { REQUEST } from '@nestjs/core';
 import { Post, Prisma } from '@prisma/client';
 import { Request as ExpressRequest } from 'express';
-import { DataResponse } from '../../../../lib/response';
+import { DataResponse } from '../../../../../src/lib/response';
 import { AuthService } from '../../../common/auth/auth.service';
 import { PrismaService } from '../../../common/prisma/prisma.service';
 
@@ -29,6 +29,7 @@ export class PostService {
       const data = await this.prisma.post.create({
         data: { ...newData, metaTitle, wordCount },
       });
+
       return data;
     } catch (error) {
       if (error instanceof Prisma.PrismaClientValidationError) {

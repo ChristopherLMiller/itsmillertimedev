@@ -1,8 +1,6 @@
 import { CacheInterceptor, CacheModule } from '@nestjs/cache-manager';
 import { Logger, Module } from '@nestjs/common';
-import { ConfigModule } from '@nestjs/config';
 import { APP_GUARD, APP_INTERCEPTOR } from '@nestjs/core';
-import { DevtoolsModule } from '@nestjs/devtools-integration';
 import MemoryStore from 'cache-manager-memory-store';
 import { redisStore } from 'cache-manager-redis-yet';
 import { supabaseAuthGuard } from '../common/guards/supabaseAuth.guard';
@@ -17,15 +15,8 @@ import { V1Module } from './v1/v1.module';
 @Module({
   controllers: [],
   imports: [
-    DevtoolsModule.register({
-      http: process.env.ENVIRONMENT !== 'production',
-    }),
     SettingsModule,
     PrismaModule,
-    ConfigModule.forRoot({
-      isGlobal: true,
-      envFilePath: '.env',
-    }),
     CacheModule.registerAsync({
       isGlobal: true,
       useFactory: async () => {
@@ -48,13 +39,18 @@ import { V1Module } from './v1/v1.module';
           logger.log(
             `Caching Service - ${process.env.REDIS_HOST}:${process.env.REDIS_PORT} TTL: ${process.env.CACHE_TTL}`,
           );
-          const store = await redisStore({
+          /*const store = await redisStore({
             socket: {
               host: process.env.REDIS_HOST,
-              passphrase: process.env.REDIS_PASSWORD,
+              //passphrase: process.env.REDIS_PASSWORD,
               port: +process.env.REDIS_PORT,
             },
+            username: process.env.REDIS_USERNAME,
+            password: process.env.REDIS_PASSWORD,
             ttl: +process.env.CACHE_TTL,
+          });*/
+          const store = await redisStore({
+            url: `redis://${process.env.REDIS_USERNAME}:${process.env.REDIS_PASSWORD}@${process.env.REDIS_HOST}:${process.env.REDIS_PORT}`,
           });
           return { store };
         } catch (error) {

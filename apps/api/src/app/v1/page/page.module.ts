@@ -1,4 +1,3 @@
-import { CacheModule } from '@nestjs/cache-manager';
 import { Module } from '@nestjs/common';
 import { PageController } from './page.controller';
 import { PageService } from './page.service';
@@ -6,6 +5,6 @@ import { PageService } from './page.service';
 @Module({
   controllers: [PageController],
   providers: [PageService],
-  imports: [CacheModule.register()],
+  imports: [],
 })
 export class PageModule {}

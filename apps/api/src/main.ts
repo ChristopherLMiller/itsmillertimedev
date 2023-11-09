@@ -46,7 +46,6 @@ async function bootstrap() {
   // Create the Nest App
   const app = await NestFactory.create(GlobalModule, {
     bufferLogs: true,
-    snapshot: true,
     logger: WinstonModule.createLogger({ instance: winstonInstance }),
   });
 
@@ -80,7 +79,11 @@ async function bootstrap() {
 
   // Start the application
   await app.listen(process.env.PORT, '0.0.0.0');
-  winstonInstance.info(`🚀 Application is running on: ${await app.getUrl()}`);
+  winstonInstance.info(
+    `🚀 Application v${
+      packageData.version
+    } is running on: ${await app.getUrl()}`,
+  );
 
   app.enableShutdownHooks();
 }

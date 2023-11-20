@@ -1,9 +1,4 @@
-import { Multer as MulterNamed } from 'multer';
-
 declare global {
-  namespace Express {
-    type Multer = MulterNamed;
-  }
   namespace NodeJS {
     interface ProcessEnv {
       PORT: number;

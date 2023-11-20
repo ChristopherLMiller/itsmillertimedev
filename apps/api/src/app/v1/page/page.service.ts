@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { PrismaService } from '../../common/prisma/prisma.service';
 
 @Injectable()
@@ -22,6 +22,10 @@ export class PageService {
         slug: slug,
       },
     });
+
+    if (data === null) {
+      throw new NotFoundException(`${slug} was not found in pages`);
+    }
 
     return {
       data,

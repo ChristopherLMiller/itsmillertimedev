@@ -12,7 +12,7 @@ import { GithubService } from './github.service';
 export class GithubController {
   constructor(private github: GithubService) {}
 
-  @Get('user/:login')
+  @Get('users/:login')
   @ApiOperation({ description: 'Gets a Github users profile' })
   @ApiResponse({
     status: HttpStatusCode.Ok,

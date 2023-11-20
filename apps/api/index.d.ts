@@ -18,6 +18,7 @@ declare global {
       CACHING_ENABLED: boolean;
       REDIS_HOST: string;
       REDIS_PASSWORD: string;
+      REDIS_USERNAME: string;
     }
   }
 }

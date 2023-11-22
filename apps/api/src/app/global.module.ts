@@ -5,9 +5,9 @@ import MemoryStore from 'cache-manager-memory-store';
 import { redisStore } from 'cache-manager-redis-yet';
 import { supabaseAuthGuard } from '../common/guards/supabaseAuth.guard';
 import { LoggingInterceptor } from '../common/interceptors/logging.interceptor';
+import { ResponseInterceptor } from '../common/interceptors/response.interceptor';
 import { UserInterceptor } from '../common/interceptors/user.interceptor';
 import { AuthModule } from './common/auth/auth.module';
-import { DiscordBotModule } from './common/discord-bot/discord-bot.module';
 import { PrismaModule } from './common/prisma/prisma.module';
 import { SettingsModule } from './common/settings/settings.module';
 import { V1Module } from './v1/v1.module';
@@ -39,16 +39,7 @@ import { V1Module } from './v1/v1.module';
           logger.log(
             `Caching Service - ${process.env.REDIS_HOST}:${process.env.REDIS_PORT} TTL: ${process.env.CACHE_TTL}`,
           );
-          /*const store = await redisStore({
-            socket: {
-              host: process.env.REDIS_HOST,
-              //passphrase: process.env.REDIS_PASSWORD,
-              port: +process.env.REDIS_PORT,
-            },
-            username: process.env.REDIS_USERNAME,
-            password: process.env.REDIS_PASSWORD,
-            ttl: +process.env.CACHE_TTL,
-          });*/
+
           const store = await redisStore({
             url: `redis://${process.env.REDIS_USERNAME}:${process.env.REDIS_PASSWORD}@${process.env.REDIS_HOST}:${process.env.REDIS_PORT}`,
           });
@@ -64,7 +55,6 @@ import { V1Module } from './v1/v1.module';
     }),
     V1Module,
     AuthModule,
-    DiscordBotModule,
   ],
   providers: [
     {
@@ -82,6 +72,10 @@ import { V1Module } from './v1/v1.module';
     {
       provide: APP_GUARD,
       useClass: supabaseAuthGuard,
+    },
+    {
+      provide: APP_INTERCEPTOR,
+      useClass: ResponseInterceptor,
     },
     Logger,
   ],

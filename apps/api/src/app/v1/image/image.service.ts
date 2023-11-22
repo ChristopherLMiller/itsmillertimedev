@@ -1,7 +1,6 @@
 import { HttpService } from '@nestjs/axios';
 import { Injectable, Logger } from '@nestjs/common';
 import { Image, Prisma } from '@prisma/client';
-import { v2 as cloudinary } from 'cloudinary';
 
 import { dataFetcher } from '../../../common/handlers/dataFetcher';
 import { PrismaService } from '../../common/prisma/prisma.service';
@@ -228,45 +227,6 @@ export class ImageService {
       update: { public_id, exif },
     });
     return result;
-  }
-
-  async uploadImage(file: Express.Multer.File): Promise<string> {
-    cloudinary.config({
-      api_key: this.apiKey,
-      api_secret: this.apiSecret,
-      cloud_name: this.cloudName,
-    });
-
-    try {
-      const date = new Date();
-
-      const uploadStream = cloudinary.uploader.upload_stream(
-        {
-          upload_preset: this.uploadPreset,
-          use_filename: true,
-          filename_override: file.originalname,
-          folder: `${this.folder}/${date.getFullYear().toString()}/${(
-            date.getMonth() + 1
-          ).toString()}`,
-        },
-        (error, result) => {
-          if (error) {
-            this._logger.log(error);
-            throw new Error(error.message);
-          }
-
-          return result;
-        },
-      );
-
-      // create the stream, upload to cloudinary
-      streamifier.createReadStream(file.buffer).pipe(uploadStream);
-
-      return 'Upload successful';
-    } catch (error) {
-      this._logger.log(error);
-      throw error;
-    }
   }
 
   async updateMetadata(public_id: string) {

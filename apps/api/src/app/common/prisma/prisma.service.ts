@@ -34,6 +34,8 @@ export class PrismaService
       if (error.errorCode === 'P10001') {
         this._logger.log(error);
         process.exit(1);
+      } else {
+        this._logger.log(error);
       }
     }
   }

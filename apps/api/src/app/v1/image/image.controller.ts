@@ -2,18 +2,14 @@ import {
   Controller,
   Delete,
   Get,
-  Post,
   Query,
   UnsupportedMediaTypeException,
-  UploadedFile,
   UseGuards,
   UseInterceptors,
 } from '@nestjs/common';
-import { FileInterceptor } from '@nestjs/platform-express';
 import { ApiOperation, ApiQuery, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { Image } from '@prisma/client';
 import { HttpStatusCode } from 'axios';
-import { IgnoreCloudinary } from '../../../common/decorators/IgnoreCloudinary.decorator';
 import {
   PermissionsNodes,
   PermissionsPublic,
@@ -48,27 +44,6 @@ export class ImageController {
     return {
       data: await this.imageService.getImage(public_id),
       meta: { public_id },
-    };
-  }
-
-  @Post('/')
-  @ApiOperation({ summary: 'Uploads an image to cloudinary' })
-  @ApiResponse({ status: HttpStatusCode.Ok, description: 'Success' })
-  @ApiResponse({
-    status: HttpStatusCode.Unauthorized,
-    description: 'Forbidden',
-  })
-  @IgnoreCloudinary()
-  @UseInterceptors(FileInterceptor('file'))
-  @PermissionsNodes(CloudinaryPermissionNodes.UPLOAD_FILE)
-  async uploadImage(
-    @UploadedFile('file') file: Express.Multer.File,
-  ): DataResponse<Partial<string>> {
-    return {
-      data: await this.imageService.uploadImage(file),
-      meta: {
-        file: file.originalname,
-      },
     };
   }
 

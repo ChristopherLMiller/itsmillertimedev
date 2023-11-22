@@ -1,5 +1,6 @@
 import { ValidationPipe, VersioningType } from '@nestjs/common';
 import { NestFactory } from '@nestjs/core';
+import { NestExpressApplication } from '@nestjs/platform-express';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 import * as Sentry from '@sentry/node';
 import helmet from 'helmet';
@@ -44,9 +45,10 @@ async function bootstrap() {
   });
 
   // Create the Nest App
-  const app = await NestFactory.create(GlobalModule, {
+  const app = await NestFactory.create<NestExpressApplication>(GlobalModule, {
     bufferLogs: true,
     logger: WinstonModule.createLogger({ instance: winstonInstance }),
+    abortOnError: true,
   });
 
   //Register global pieces
@@ -62,7 +64,7 @@ async function bootstrap() {
     .addBearerAuth()
     .build();
   const swaggerDocument = SwaggerModule.createDocument(app, swaggerOptions);
-  SwaggerModule.setup('docs', app, swaggerDocument);
+  SwaggerModule.setup('/', app, swaggerDocument);
 
   // Enable versioning
   app.enableVersioning({

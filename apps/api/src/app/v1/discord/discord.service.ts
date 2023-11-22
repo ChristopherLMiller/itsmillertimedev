@@ -56,15 +56,18 @@ export class DiscordService {
     }
   }
 
-  async getUsers(): Promise<Array<DiscordUserSetting>> {
-    return this.prisma.discordUserSetting.findMany();
+  async getUsersMeta(
+    userId?: DiscordUserSetting['userId'],
+  ): Promise<Array<DiscordUserSetting>> {
+    return this.prisma.discordUserSetting.findMany({ where: { userId } });
   }
 
-  async getUserMeta(userId: string): Promise<DiscordUserSetting> {
-    return this.prisma.discordUserSetting.findUnique({
-      where: {
-        userId,
-      },
+  async createUserMeta(
+    userId: string,
+    meta?: DiscordUserSetting['meta'],
+  ): Promise<DiscordUserSetting> {
+    return this.prisma.discordUserSetting.create({
+      data: { userId, meta: meta || {} },
     });
   }
 
@@ -74,7 +77,7 @@ export class DiscordService {
     value: string,
   ): Promise<DiscordUserSetting> {
     // first get the user meta
-    const userData = await this.getUserMeta(userId);
+    const userData = await this.getUsersMeta(userId)[0];
     const meta = userData ? userData.meta : {};
 
     // update the field

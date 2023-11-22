@@ -1,9 +1,4 @@
-import { Multer as MulterNamed } from 'multer';
-
 declare global {
-  namespace Express {
-    type Multer = MulterNamed;
-  }
   namespace NodeJS {
     interface ProcessEnv {
       PORT: number;
@@ -18,6 +13,7 @@ declare global {
       CACHING_ENABLED: boolean;
       REDIS_HOST: string;
       REDIS_PASSWORD: string;
+      REDIS_USERNAME: string;
     }
   }
 }

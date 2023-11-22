@@ -4,14 +4,15 @@ import { DiscordUserSetting } from '@prisma/client';
 import { HttpStatusCode } from 'axios';
 import { Collection, User } from 'discord.js';
 import { PermissionsNodes } from '../../../common/decorators/auth.decorator';
+import { ApiKeyAuthGuard } from '../../../common/guards/apiKeyAuth.guard';
 import { supabaseAuthGuard } from '../../../common/guards/supabaseAuth.guard';
 import { DataResponse } from '../../../lib/response';
 import { DiscordService } from './discord.service';
 import { DiscordPermissionNodes } from './permissions.nodes';
 
 @Controller({ version: '1', path: 'discord' })
-@ApiTags('Discord', 'Bot')
-@UseGuards(supabaseAuthGuard)
+@ApiTags('Discord')
+@UseGuards(supabaseAuthGuard, ApiKeyAuthGuard)
 export class DiscordController {
   constructor(private discord: DiscordService) {}
 
@@ -36,8 +37,43 @@ export class DiscordController {
     status: HttpStatusCode.Unauthorized,
     description: 'Forbidden',
   })
-  async getUsers(): DataResponse<Array<DiscordUserSetting>> {
-    return { data: await this.discord.getUsers() };
+  @PermissionsNodes(DiscordPermissionNodes.GET_USER_META)
+  async getUsersMeta(): DataResponse<Array<DiscordUserSetting>> {
+    return { data: await this.discord.getUsersMeta() };
+  }
+
+  @Get('meta/users/:id')
+  @ApiOperation({
+    description: 'Get the Discord users with associated accounts',
+  })
+  @ApiResponse({ status: HttpStatusCode.Ok, description: 'Success' })
+  @ApiResponse({
+    status: HttpStatusCode.Unauthorized,
+    description: 'Forbidden',
+  })
+  @PermissionsNodes(DiscordPermissionNodes.GET_USER_META)
+  async getUserMeta(
+    @Param('id') userId: DiscordUserSetting['userId'],
+  ): DataResponse<Array<DiscordUserSetting>> {
+    return { data: await this.discord.getUsersMeta(userId) };
+  }
+
+  @Post('meta/users')
+  @ApiOperation({ description: 'Create a new Discord user meta entry' })
+  @ApiResponse({
+    status: HttpStatusCode.Ok,
+    description: 'Successfully created',
+  })
+  @ApiResponse({
+    status: HttpStatusCode.Unauthorized,
+    description: 'Unauthorized',
+  })
+  @PermissionsNodes(DiscordPermissionNodes.CREATE_USER_META)
+  async createUser(
+    @Body('userId') userId: string,
+    @Body('meta') meta?: DiscordUserSetting['meta'],
+  ): DataResponse<DiscordUserSetting> {
+    return { data: await this.discord.createUserMeta(userId, meta) };
   }
   //#endregion
 

@@ -1,4 +1,3 @@
-import { DiscordModule } from '@discord-nestjs/core';
 import { HttpModule } from '@nestjs/axios';
 import { Module } from '@nestjs/common';
 import { LastFMController } from './lastfm.controller';
@@ -13,7 +12,6 @@ import { LastFMService } from './lastfm.service';
         'User-Agent': 'ItsMillerTime',
       },
     }),
-    DiscordModule,
   ],
   providers: [LastFMService],
 })

@@ -41,10 +41,8 @@ export class LoggingInterceptor<T> implements NestInterceptor<T> {
         /// log this information out now
         this._logger.log(
           `[${method}] Req: ${originalUrl}: Client IP: ${
-            connection.remoteAddress
-          }[Forwarded for: ${
             request.headers['x-forwarded-for']
-          }] Res: ${statusCode} - Total Time: ${totalTime}ms ${
+          } Res: ${statusCode} - Total Time: ${totalTime}ms ${
             totalTime < allowableTimings ? '✅' : '❌'
           }`,
         );

@@ -22,9 +22,7 @@ export class LoggingInterceptor<T> implements NestInterceptor<T> {
     const response = context.switchToHttp().getResponse();
     const request = context.switchToHttp().getRequest();
     const { statusCode } = response;
-    const { originalUrl, method, params, query, body, connection } = request;
-
-    console.log(request.headers['x-api-key']);
+    const { originalUrl, method, params, query, body } = request;
 
     // Grab out the allowable timing information from the reflector
     const allowableTimings =

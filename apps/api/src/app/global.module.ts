@@ -3,6 +3,7 @@ import { Logger, Module } from '@nestjs/common';
 import { APP_GUARD, APP_INTERCEPTOR } from '@nestjs/core';
 import MemoryStore from 'cache-manager-memory-store';
 import { redisStore } from 'cache-manager-redis-yet';
+import { RedisClientOptions } from 'redis';
 import { supabaseAuthGuard } from '../common/guards/supabaseAuth.guard';
 import { LoggingInterceptor } from '../common/interceptors/logging.interceptor';
 import { ResponseInterceptor } from '../common/interceptors/response.interceptor';
@@ -17,7 +18,7 @@ import { V1Module } from './v1/v1.module';
   imports: [
     SettingsModule,
     PrismaModule,
-    CacheModule.registerAsync({
+    CacheModule.registerAsync<RedisClientOptions>({
       isGlobal: true,
       useFactory: async () => {
         const logger = new Logger(GlobalModule.name);
@@ -42,6 +43,7 @@ import { V1Module } from './v1/v1.module';
 
           const store = await redisStore({
             url: `redis://${process.env.REDIS_USERNAME}:${process.env.REDIS_PASSWORD}@${process.env.REDIS_HOST}:${process.env.REDIS_PORT}`,
+            ttl: +process.env.CACHE_TTL,
           });
           return { store };
         } catch (error) {

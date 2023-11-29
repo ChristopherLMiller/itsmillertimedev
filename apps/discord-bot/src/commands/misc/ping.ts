@@ -1,10 +1,10 @@
-import { SlashCommandBuilder } from 'discord.js';
+import { CommandInteraction } from 'discord.js';
+import { Discord, Slash } from 'discordx';
 
-module.exports = {
-  data: new SlashCommandBuilder()
-    .setName('ping')
-    .setDescription('Replies wih a pong!'),
-  async execute(interaction) {
-    await interaction.reply('Pong!');
-  },
-};
+@Discord()
+export class PingCommand {
+  @Slash({ description: 'Replies with a pong!', name: 'ping' })
+  ping(interaction: CommandInteraction): void {
+    interaction.reply('pong');
+  }
+}

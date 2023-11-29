@@ -1,12 +1,12 @@
 import { Controller, Get, Param } from '@nestjs/common';
 import { ApiTags } from '@nestjs/swagger';
 import { PermissionsPublic } from '../../../common/decorators/auth.decorator';
-import { PageService } from './page.service';
+import { PagesService } from './pages.service';
 
-@Controller({ version: '1', path: 'page' })
-@ApiTags('Page')
-export class PageController {
-  constructor(private readonly pageService: PageService) {}
+@Controller({ version: '1', path: 'pages' })
+@ApiTags('Pages')
+export class PagesController {
+  constructor(private readonly pageService: PagesService) {}
 
   @Get('/')
   @PermissionsPublic()

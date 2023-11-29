@@ -1,9 +1,8 @@
-import { GithubUser } from '@itsmillertimedev/data';
+import { DataResponse, GithubUser } from '@itsmillertimedev/data';
 import { Controller, Get, Param } from '@nestjs/common';
 import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { HttpStatusCode } from 'axios';
 import { PermissionsPublic } from '../../../common/decorators/auth.decorator';
-import { DataResponse } from '../../../lib/response';
 import { GithubService } from './github.service';
 @Controller({ version: '1', path: 'github' })
 @ApiTags('Github')

@@ -1,10 +1,10 @@
+import { DataResponse } from '@itsmillertimedev/data';
 import { Body, Controller, Get, Param, Post } from '@nestjs/common';
 import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { DiscordUserSetting } from '@prisma/client';
 import { HttpStatusCode } from 'axios';
 import { Collection, User } from 'discord.js';
 import { PermissionsNodes } from '../../../common/decorators/auth.decorator';
-import { DataResponse } from '../../../lib/response';
 import { DiscordService } from './discord.service';
 import { DiscordPermissionNodes } from './permissions.nodes';
 

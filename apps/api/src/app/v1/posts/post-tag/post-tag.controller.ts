@@ -1,3 +1,4 @@
+import { DataResponse } from '@itsmillertimedev/data';
 import {
   Body,
   Controller,
@@ -14,7 +15,6 @@ import {
   PermissionsNodes,
   PermissionsPublic,
 } from '../../../../common/decorators/auth.decorator';
-import { DataResponse } from '../../../../lib/response';
 import { PostsTagsPermissionNodes } from './permissions.nodes';
 import { PostTagService } from './post-tag.service';
 

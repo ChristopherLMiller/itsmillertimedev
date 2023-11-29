@@ -1,6 +1,7 @@
 import {
   CurrentWeather,
   DailyForecast,
+  DataResponse,
   HourlyForecast,
   MinutelyForecast,
 } from '@itsmillertimedev/data';
@@ -8,7 +9,6 @@ import { Controller, Get, Query } from '@nestjs/common';
 import { ApiResponse, ApiTags } from '@nestjs/swagger';
 import { HttpStatusCode } from 'axios';
 import { PermissionsPublic } from '../../../common/decorators/auth.decorator';
-import { DataResponse } from '../../../lib/response';
 import { WeatherService } from './weather.service';
 
 @Controller({ version: '1', path: 'weather' })

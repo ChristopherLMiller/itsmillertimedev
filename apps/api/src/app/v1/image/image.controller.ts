@@ -1,3 +1,4 @@
+import { DataResponse } from '@itsmillertimedev/data';
 import {
   Controller,
   Delete,
@@ -14,7 +15,6 @@ import {
   PermissionsPublic,
 } from '../../../common/decorators/auth.decorator';
 import { CloudinaryTransformInterceptor } from '../../../common/interceptors/cloudinaryTransform.interceptor';
-import { DataResponse } from '../../../lib/response';
 import { ImageService } from './image.service';
 import { CloudinaryPermissionNodes } from './permissions.nodes';
 

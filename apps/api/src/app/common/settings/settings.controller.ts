@@ -1,10 +1,10 @@
+import { DataResponse } from '@itsmillertimedev/data';
 import { Controller, Get, Query, UseGuards } from '@nestjs/common';
 import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { Settings } from '@prisma/client';
 import { HttpStatusCode } from 'axios';
 import { PermissionsPublic } from '../../../common/decorators/auth.decorator';
 import { ApiKeyAuthGuard } from '../../../common/guards/apiKeyAuth.guard';
-import { DataResponse } from '../../../lib/response';
 import { SettingsService } from './settings.service';
 
 @Controller({ path: 'settings' })

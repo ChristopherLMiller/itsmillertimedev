@@ -1,5 +1,6 @@
 import {
   Client,
+  DataResponse,
   Project,
   TimeInterval,
   User,
@@ -29,7 +30,6 @@ import {
 } from '../../../common/decorators/auth.decorator';
 import { ResponseTimeLimit } from '../../../common/decorators/responseTime.decorator';
 import { HookdeckGuard } from '../../../common/guards/hookdeck.guard';
-import { DataResponse } from '../../../lib/response';
 import { SettingsService } from '../../common/settings/settings.service';
 import { DiscordService } from '../discord/discord.service';
 import { ClockifyService } from './clockify.service';

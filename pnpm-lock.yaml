@@ -134,6 +134,9 @@ dependencies:
   helmet:
     specifier: ^7.1.0
     version: 7.1.0
+  itty-fetcher:
+    specifier: ^0.9.4
+    version: 0.9.4
   js2xmlparser:
     specifier: ^5.0.0
     version: 5.0.0
@@ -9942,6 +9945,10 @@ packages:
       reflect.getprototypeof: 1.0.4
       set-function-name: 2.0.1
     dev: true
+
+  /itty-fetcher@0.9.4:
+    resolution: {integrity: sha512-o5YpTmov46EbzTrrVpeR9sRK3itWa32VsV9Fv04CzzDm1ZvAXG0RoOGjT9ECOwyipheNf4eLTkstfbRtG8Epgg==}
+    dev: false
 
   /jackspeak@2.3.6:
     resolution: {integrity: sha512-N3yCS/NegsOBokc8GAdM8UcmfsKiSS8cipheD/nivzr700H+nsMOxJjQnvwOcRYVuFkdH0wGUvW2WbXGmrZGbQ==}

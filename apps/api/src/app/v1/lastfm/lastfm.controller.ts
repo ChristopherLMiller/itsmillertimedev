@@ -1,5 +1,5 @@
+import { DataResponse } from '@itsmillertimedev/data';
 import { Controller, Get, Param } from '@nestjs/common';
-import { DataResponse } from '../../../lib/response';
 
 import { PermissionsPublic } from '../../../common/decorators/auth.decorator';
 import { LastFMService } from './lastfm.service';

@@ -1,3 +1,4 @@
+import { DataResponse } from '@itsmillertimedev/data';
 import { Body, Controller, Get, Post } from '@nestjs/common';
 import { ApiTags } from '@nestjs/swagger';
 import { Marker } from '@prisma/client';
@@ -5,7 +6,6 @@ import {
   PermissionsNodes,
   PermissionsPublic,
 } from '../../../common/decorators/auth.decorator';
-import { DataResponse } from '../../../lib/response';
 import { MapsService } from './maps.service';
 import { MapsPermissionNodes } from './permissions.nodes';
 

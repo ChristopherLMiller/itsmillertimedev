@@ -1,6 +1,6 @@
 import { HttpService } from '@nestjs/axios';
 import { BadRequestException, Injectable, Logger } from '@nestjs/common';
-import { DiscordUserSetting } from '@prisma/client';
+import { DiscordUserSetting, Prisma } from '@prisma/client';
 
 import { InjectDiscordClient } from '@discord-nestjs/core';
 import { Client, Collection, User } from 'discord.js';
@@ -66,9 +66,21 @@ export class DiscordService {
     userId: string,
     meta?: DiscordUserSetting['meta'],
   ): Promise<DiscordUserSetting> {
-    return this.prisma.discordUserSetting.create({
-      data: { userId, meta: meta || {} },
-    });
+    try {
+      const data = this.prisma.discordUserSetting.create({
+        data: { userId, meta: meta || {} },
+      });
+      return data;
+    } catch (error) {
+      if (error instanceof Prisma.PrismaClientKnownRequestError) {
+        if (error.code === 'P2002') {
+          this._logger.log(`The user ${userId} has already been created`);
+          return this.prisma.discordUserSetting.findUnique({
+            where: { userId: userId },
+          });
+        }
+      }
+    }
   }
 
   async updateUserMeta(

@@ -1,12 +1,10 @@
-import { Controller, Get, Param, UseGuards } from '@nestjs/common';
-import { DataResponse } from '../../../lib/response';
+import { DataResponse } from '@itsmillertimedev/data';
+import { Controller, Get, Param } from '@nestjs/common';
 
 import { PermissionsPublic } from '../../../common/decorators/auth.decorator';
-import { supabaseAuthGuard } from '../../../common/guards/supabaseAuth.guard';
 import { LastFMService } from './lastfm.service';
 
 @Controller({ version: '1', path: 'lastfm' })
-@UseGuards(supabaseAuthGuard)
 export class LastFMController {
   constructor(private lastfm: LastFMService) {}
 

@@ -1,6 +1,6 @@
+import { DataResponse } from '@itsmillertimedev/data';
 import { Body, Controller, Logger, Post } from '@nestjs/common';
 import { ApiTags } from '@nestjs/swagger';
-import { DataResponse } from '../../../lib/response';
 import { AuthService } from '../../common/auth/auth.service';
 import { DiscordService } from '../discord/discord.service';
 import { ImageService } from '../image/image.service';

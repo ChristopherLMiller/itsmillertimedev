@@ -1,84 +1,54 @@
-import { Client, Collection, GatewayIntentBits } from 'discord.js';
-import fs from 'fs';
-import path from 'path';
-import DiscordClient from './DiscordClient';
+import { dirname, importx } from '@discordx/importer';
+import { DataResponse } from '@itsmillertimedev/data';
+import { Events, GatewayIntentBits } from 'discord.js';
+import { Client } from 'discordx';
+import { backendAPI } from './lib/fetcher.js';
+export class Main {
+  private static _client: Client;
 
-async function bootstrap() {
-  // Create the discord client
-  const client = new Client({
-    intents: [
-      GatewayIntentBits.Guilds,
-      GatewayIntentBits.GuildMembers,
-      GatewayIntentBits.MessageContent,
-      GatewayIntentBits.GuildPresences,
-      GatewayIntentBits.GuildMessages,
-    ],
-  }) as DiscordClient;
+  static get Client(): Client {
+    return this._client;
+  }
 
-  // Collection of commands available to the bot
-  console.log('Loading commands...');
-  client.commands = new Collection();
+  static async start(): Promise<void> {
+    this._client = new Client({
+      intents: [
+        GatewayIntentBits.Guilds,
+        GatewayIntentBits.GuildMembers,
+        GatewayIntentBits.MessageContent,
+        GatewayIntentBits.GuildPresences,
+        GatewayIntentBits.GuildMessages,
+      ],
+      silent: false,
+    });
 
-  const foldersPath = path.join(__dirname, 'commands');
-  const commandFolders = fs.readdirSync(foldersPath);
+    this._client.once(Events.ClientReady, async () => {
+      this._client.initApplicationCommands();
 
-  // loop through the folders to get the commands available
-  for (const folder of commandFolders) {
-    const commandsPath = path.join(foldersPath, folder);
-    const commandFiles = fs
-      .readdirSync(commandsPath)
-      .filter((file) => file.endsWith('.js'));
+      console.log(`${this._client.user.username} bot has started`);
+    });
 
-    console.log(`.found folder ${folder}`);
-    // Loop through the command files and add them to the client
-    for (const file of commandFiles) {
-      const filePath = path.join(commandsPath, file);
-      // eslint-disable-next-line @typescript-eslint/no-var-requires
-      const command = require(filePath);
+    this._client.on(Events.InteractionCreate, (interaction) => {
+      this._client.executeInteraction(interaction);
+    });
 
-      // Verify that both the data an executor exist
-      if ('data' in command && 'execute' in command) {
-        client.commands.set(command.data.name, command);
-        console.log(`...loading ${command.data.name}`);
-      } else {
-        console.log(
-          `Unable to load command at ${filePath} as either the "data" or "execute" property are missing `,
-        );
-      }
+    await importx(`${dirname(import.meta.url)}/{commands,events}/**/*.{js,ts}`);
+
+    try {
+      /*const response = await fetch(
+        `http://localhost:3000/api/settings/setting?key=discord&field=bot-token`,
+        { headers: { 'x-api-key': process.env.API_KEY } },
+      );*/
+      const { data } = await backendAPI.get<DataResponse<string>>(
+        '/settings/setting?key=discord&field=bot-token',
+      );
+
+      //extract out the bot token
+      await this._client.login(data);
+    } catch (error) {
+      throw new Error('Unable to load the bots token');
     }
   }
-  console.log('Commands loaded successfully');
-
-  // Load he events
-  console.log('Loading events...');
-  const eventsPath = path.join(__dirname, 'events');
-  const eventFiles = fs
-    .readdirSync(eventsPath)
-    .filter((file) => file.endsWith('.js'));
-
-  for (const file of eventFiles) {
-    const filePath = path.join(eventsPath, file);
-    // eslint-disable-next-line @typescript-eslint/no-var-requires
-    const event = require(filePath);
-    console.log(`...loading event '${event.name}'`);
-    if (event.once) {
-      client.once(event.name, (...args) => event.execute(...args));
-    } else {
-      client.on(event.name, (...args) => event.execute(...args));
-    }
-  }
-  console.log('Events loaded successfully');
-
-  // Fetch the bot token from the backend
-  const response = await fetch(
-    `${process.env.API_BASE_ENDPOINT}/api/settings/setting?key=discord&field=bot-token`,
-    { headers: { 'x-api-key': process.env.API_KEY } },
-  );
-  //extract out the bot token
-  const { data: bot_token } = await await response.json();
-
-  // Log the bot in, final step in the init process
-  client.login(bot_token);
 }
 
-bootstrap();
+Main.start();

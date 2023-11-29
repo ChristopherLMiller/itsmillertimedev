@@ -10,13 +10,13 @@ import { Reflector } from '@nestjs/core';
 import { AuthService } from '../../app/common/auth/auth.service';
 
 @Injectable()
-export class supabaseAuthGuard implements CanActivate {
+export class SupabaseAuthGuard implements CanActivate {
   constructor(
     private authService: AuthService,
     private reflector: Reflector,
   ) {}
 
-  private readonly _logger = new Logger(supabaseAuthGuard.name);
+  private readonly _logger = new Logger(SupabaseAuthGuard.name);
 
   async canActivate(context: ExecutionContext): Promise<boolean> {
     const handler = context.getHandler();
@@ -71,10 +71,6 @@ export class supabaseAuthGuard implements CanActivate {
             throw new BadRequestException(`${error.status}: ${error.message}`);
           }
         }
-      } else {
-        throw new UnauthorizedException(
-          'Must be authenticated to access this endpoint',
-        );
       }
     }
 

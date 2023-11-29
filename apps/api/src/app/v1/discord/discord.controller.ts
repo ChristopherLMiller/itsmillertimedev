@@ -1,18 +1,15 @@
-import { Body, Controller, Get, Param, Post, UseGuards } from '@nestjs/common';
+import { DataResponse } from '@itsmillertimedev/data';
+import { Body, Controller, Get, Param, Post } from '@nestjs/common';
 import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { DiscordUserSetting } from '@prisma/client';
 import { HttpStatusCode } from 'axios';
 import { Collection, User } from 'discord.js';
 import { PermissionsNodes } from '../../../common/decorators/auth.decorator';
-import { ApiKeyAuthGuard } from '../../../common/guards/apiKeyAuth.guard';
-import { supabaseAuthGuard } from '../../../common/guards/supabaseAuth.guard';
-import { DataResponse } from '../../../lib/response';
 import { DiscordService } from './discord.service';
 import { DiscordPermissionNodes } from './permissions.nodes';
 
 @Controller({ version: '1', path: 'discord' })
 @ApiTags('Discord')
-@UseGuards(supabaseAuthGuard, ApiKeyAuthGuard)
 export class DiscordController {
   constructor(private discord: DiscordService) {}
 

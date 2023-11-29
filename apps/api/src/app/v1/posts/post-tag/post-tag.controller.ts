@@ -1,3 +1,4 @@
+import { DataResponse } from '@itsmillertimedev/data';
 import {
   Body,
   Controller,
@@ -6,7 +7,6 @@ import {
   Param,
   Patch,
   Post,
-  UseGuards,
 } from '@nestjs/common';
 import { ApiOperation, ApiParam, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { PostTag, Prisma } from '@prisma/client';
@@ -15,14 +15,11 @@ import {
   PermissionsNodes,
   PermissionsPublic,
 } from '../../../../common/decorators/auth.decorator';
-import { supabaseAuthGuard } from '../../../../common/guards/supabaseAuth.guard';
-import { DataResponse } from '../../../../lib/response';
 import { PostsTagsPermissionNodes } from './permissions.nodes';
 import { PostTagService } from './post-tag.service';
 
 @Controller({ version: '1', path: 'post-tag' })
 @ApiTags('Post', 'Post Tag')
-@UseGuards(supabaseAuthGuard)
 export class PostTagController {
   constructor(private readonly postTagService: PostTagService) {}
 

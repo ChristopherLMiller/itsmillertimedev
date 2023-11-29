@@ -19,7 +19,8 @@ export class ResponseInterceptor implements NestInterceptor {
     return next.handle().pipe(
       map((data) => {
         const totalTime = Math.round(performance.now() - startTime);
-        return { ...data, meta: { ...data.meta, totalTime }, statusCode };
+        const meta = data?.meta ? { ...data.meta } : { totalTime };
+        return { ...data, meta, statusCode };
       }),
     );
   }

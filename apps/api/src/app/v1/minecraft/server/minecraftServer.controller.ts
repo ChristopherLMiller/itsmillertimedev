@@ -1,20 +1,12 @@
-import {
-  Controller,
-  Get,
-  NotFoundException,
-  Param,
-  UseGuards,
-} from '@nestjs/common';
+import { DataResponse } from '@itsmillertimedev/data';
+import { Controller, Get, NotFoundException, Param } from '@nestjs/common';
 import { ApiTags } from '@nestjs/swagger';
 import { MinecraftRule, MinecraftRuleCategory } from '@prisma/client';
-import { PermissionsPublic } from 'apps/api/src/common/decorators/auth.decorator';
-import { supabaseAuthGuard } from '../../../../common/guards/supabaseAuth.guard';
-import { DataResponse } from '../../../../lib/response';
+import { PermissionsPublic } from '../../../../common/decorators/auth.decorator';
 import { MinecraftService } from '../minecraft.service';
 
 @Controller({ version: '1', path: 'minecraft/server' })
 @ApiTags('Minecraft Server')
-@UseGuards(supabaseAuthGuard)
 export class MinecraftServerController {
   constructor(private minecraft: MinecraftService) {}
 

@@ -25,6 +25,9 @@ export class SettingsController {
     @Query('key') key: Settings['key'],
     @Query('field') field: string,
   ): DataResponse<Settings> {
-    return { data: await this.settings.getFieldValue(key, field) };
+    return {
+      data: await this.settings.getFieldValue(key, field),
+      meta: { field, key },
+    };
   }
 }

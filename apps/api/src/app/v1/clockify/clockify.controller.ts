@@ -29,7 +29,6 @@ import {
 } from '../../../common/decorators/auth.decorator';
 import { ResponseTimeLimit } from '../../../common/decorators/responseTime.decorator';
 import { HookdeckGuard } from '../../../common/guards/hookdeck.guard';
-import { supabaseAuthGuard } from '../../../common/guards/supabaseAuth.guard';
 import { DataResponse } from '../../../lib/response';
 import { SettingsService } from '../../common/settings/settings.service';
 import { DiscordService } from '../discord/discord.service';
@@ -38,7 +37,6 @@ import { ClockifyPermissionNodes } from './permissions.nodes';
 
 @Controller({ version: '1', path: 'clockify' })
 @ApiTags('Clockify')
-@UseGuards(supabaseAuthGuard)
 @ResponseTimeLimit(700)
 export class ClockifyController {
   constructor(

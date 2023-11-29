@@ -4,7 +4,9 @@ import { APP_GUARD, APP_INTERCEPTOR } from '@nestjs/core';
 import MemoryStore from 'cache-manager-memory-store';
 import { redisStore } from 'cache-manager-redis-yet';
 import { RedisClientOptions } from 'redis';
-import { supabaseAuthGuard } from '../common/guards/supabaseAuth.guard';
+import { ComboAuthGuard } from '../common/guards/ComboAuth.guard';
+import { ApiKeyAuthGuard } from '../common/guards/apiKeyAuth.guard';
+import { SupabaseAuthGuard } from '../common/guards/supabaseAuth.guard';
 import { LoggingInterceptor } from '../common/interceptors/logging.interceptor';
 import { ResponseInterceptor } from '../common/interceptors/response.interceptor';
 import { UserInterceptor } from '../common/interceptors/user.interceptor';
@@ -73,13 +75,15 @@ import { V1Module } from './v1/v1.module';
     },
     {
       provide: APP_GUARD,
-      useClass: supabaseAuthGuard,
+      useClass: ComboAuthGuard,
     },
     {
       provide: APP_INTERCEPTOR,
       useClass: ResponseInterceptor,
     },
     Logger,
+    ApiKeyAuthGuard,
+    SupabaseAuthGuard,
   ],
 })
 export class GlobalModule {}

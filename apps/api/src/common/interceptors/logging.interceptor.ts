@@ -22,7 +22,13 @@ export class LoggingInterceptor<T> implements NestInterceptor<T> {
     const response = context.switchToHttp().getResponse();
     const request = context.switchToHttp().getRequest();
     const { statusCode } = response;
-    const { originalUrl, method, params, query, body } = request;
+    const { originalUrl, method, params, query, body, connection } = request;
+
+    // The remote client can be one of two fields because of proxy server, figure it out
+    const remoteIP =
+      request.headers['x-forwarded-for'] !== undefined
+        ? request.headers['x-forwarded-for']
+        : connection.remoteAddress;
 
     // Grab out the allowable timing information from the reflector
     const allowableTimings =
@@ -38,9 +44,7 @@ export class LoggingInterceptor<T> implements NestInterceptor<T> {
 
         /// log this information out now
         this._logger.log(
-          `[${method}] Req: ${originalUrl}: Client IP: ${
-            request.headers['x-forwarded-for']
-          } Res: ${statusCode} - Total Time: ${totalTime}ms ${
+          `[${method}] Req: ${originalUrl}: Client IP: ${remoteIP} Res: ${statusCode} - Total Time: ${totalTime}ms ${
             totalTime < allowableTimings ? '✅' : '❌'
           }`,
         );

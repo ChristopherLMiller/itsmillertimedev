@@ -7,7 +7,6 @@ import {
   Patch,
   Post,
   Query,
-  UseGuards,
 } from '@nestjs/common';
 import { ApiOperation, ApiQuery, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { Prisma, Post as PrismaPost } from '@prisma/client';
@@ -16,14 +15,12 @@ import {
   PermissionsNodes,
   PermissionsPublic,
 } from '../../../../common/decorators/auth.decorator';
-import { supabaseAuthGuard } from '../../../../common/guards/supabaseAuth.guard';
 import { DataResponse } from '../../../../lib/response';
 import { PostPermissionNodes } from './permissions.nodes';
 import { PostService } from './post.service';
 
 @Controller({ version: '1', path: 'post' })
 @ApiTags('Post')
-@UseGuards(supabaseAuthGuard)
 export class PostController {
   constructor(private readonly postService: PostService) {}
 

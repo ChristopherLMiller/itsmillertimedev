@@ -4,7 +4,6 @@ import {
   Get,
   Query,
   UnsupportedMediaTypeException,
-  UseGuards,
   UseInterceptors,
 } from '@nestjs/common';
 import { ApiOperation, ApiQuery, ApiResponse, ApiTags } from '@nestjs/swagger';
@@ -14,7 +13,6 @@ import {
   PermissionsNodes,
   PermissionsPublic,
 } from '../../../common/decorators/auth.decorator';
-import { supabaseAuthGuard } from '../../../common/guards/supabaseAuth.guard';
 import { CloudinaryTransformInterceptor } from '../../../common/interceptors/cloudinaryTransform.interceptor';
 import { DataResponse } from '../../../lib/response';
 import { ImageService } from './image.service';
@@ -22,7 +20,6 @@ import { CloudinaryPermissionNodes } from './permissions.nodes';
 
 @Controller({ version: '1', path: 'image' })
 @ApiTags('Image')
-@UseGuards(supabaseAuthGuard)
 @UseInterceptors(CloudinaryTransformInterceptor)
 export class ImageController {
   constructor(private imageService: ImageService) {}

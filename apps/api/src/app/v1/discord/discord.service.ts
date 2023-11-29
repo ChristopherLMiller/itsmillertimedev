@@ -36,7 +36,7 @@ export class DiscordService {
         channel_id: '',
       }),
     );
-    this._logger.log(`Message sent to discord channel :${channel}`);
+    this._logger.log(`Message sent to discord channel ${channel}`);
   }
 
   async getDiscordClientUsers(): Promise<Collection<string, User>> {

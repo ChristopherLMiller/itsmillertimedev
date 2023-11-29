@@ -1,18 +1,16 @@
-import { Body, Controller, Get, Post, UseGuards } from '@nestjs/common';
+import { Body, Controller, Get, Post } from '@nestjs/common';
 import { ApiTags } from '@nestjs/swagger';
 import { Marker } from '@prisma/client';
 import {
   PermissionsNodes,
   PermissionsPublic,
 } from '../../../common/decorators/auth.decorator';
-import { supabaseAuthGuard } from '../../../common/guards/supabaseAuth.guard';
 import { DataResponse } from '../../../lib/response';
 import { MapsService } from './maps.service';
 import { MapsPermissionNodes } from './permissions.nodes';
 
 @Controller({ version: '1', path: 'maps' })
 @ApiTags('Maps')
-@UseGuards(supabaseAuthGuard)
 export class MapsController {
   constructor(private maps: MapsService) {}
 

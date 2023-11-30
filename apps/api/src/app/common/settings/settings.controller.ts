@@ -1,9 +1,9 @@
 import { DataResponse } from '@itsmillertimedev/data';
+import { CacheTTL } from '@nestjs/cache-manager';
 import { Controller, Get, Query, UseGuards } from '@nestjs/common';
 import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { Settings } from '@prisma/client';
 import { HttpStatusCode } from 'axios';
-import { PermissionsPublic } from '../../../common/decorators/auth.decorator';
 import { ApiKeyAuthGuard } from '../../../common/guards/apiKeyAuth.guard';
 import { SettingsService } from './settings.service';
 
@@ -20,7 +20,7 @@ export class SettingsController {
     status: HttpStatusCode.Unauthorized,
     description: 'Invalid API key',
   })
-  @PermissionsPublic() // we need this to bypass the supabase auth guard
+  @CacheTTL(0)
   async getSetting(
     @Query('key') key: Settings['key'],
     @Query('field') field: string,

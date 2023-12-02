@@ -1,10 +1,12 @@
 import { DataResponse } from '@itsmillertimedev/data';
-import { Controller, Get, Param } from '@nestjs/common';
+import { Controller, Get, Param, UseInterceptors } from '@nestjs/common';
 
+import { CacheInterceptor } from '@nestjs/cache-manager';
 import { PermissionsPublic } from '../../../common/decorators/auth.decorator';
 import { LastFMService } from './lastfm.service';
 
 @Controller({ version: '1', path: 'lastfm' })
+@UseInterceptors(CacheInterceptor)
 export class LastFMController {
   constructor(private lastfm: LastFMService) {}
 

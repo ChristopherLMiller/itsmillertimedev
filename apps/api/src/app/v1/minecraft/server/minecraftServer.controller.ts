@@ -1,5 +1,12 @@
 import { DataResponse } from '@itsmillertimedev/data';
-import { Controller, Get, NotFoundException, Param } from '@nestjs/common';
+import { CacheInterceptor } from '@nestjs/cache-manager';
+import {
+  Controller,
+  Get,
+  NotFoundException,
+  Param,
+  UseInterceptors,
+} from '@nestjs/common';
 import { ApiTags } from '@nestjs/swagger';
 import { MinecraftRule, MinecraftRuleCategory } from '@prisma/client';
 import { PermissionsPublic } from '../../../../common/decorators/auth.decorator';
@@ -7,6 +14,7 @@ import { MinecraftService } from '../minecraft.service';
 
 @Controller({ version: '1', path: 'minecraft/server' })
 @ApiTags('Minecraft Server')
+@UseInterceptors(CacheInterceptor)
 export class MinecraftServerController {
   constructor(private minecraft: MinecraftService) {}
 

@@ -1,11 +1,13 @@
 import { DataResponse, GithubUser } from '@itsmillertimedev/data';
-import { Controller, Get, Param } from '@nestjs/common';
+import { CacheInterceptor } from '@nestjs/cache-manager';
+import { Controller, Get, Param, UseInterceptors } from '@nestjs/common';
 import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { HttpStatusCode } from 'axios';
 import { PermissionsPublic } from '../../../common/decorators/auth.decorator';
 import { GithubService } from './github.service';
 @Controller({ version: '1', path: 'github' })
 @ApiTags('Github')
+@UseInterceptors(CacheInterceptor)
 export class GithubController {
   constructor(private github: GithubService) {}
 

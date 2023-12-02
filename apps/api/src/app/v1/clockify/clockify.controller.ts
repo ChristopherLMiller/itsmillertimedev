@@ -6,6 +6,7 @@ import {
   User,
   Workspace,
 } from '@itsmillertimedev/data';
+import { CacheInterceptor } from '@nestjs/cache-manager';
 import {
   BadRequestException,
   Body,
@@ -19,6 +20,7 @@ import {
   Put,
   Query,
   UseGuards,
+  UseInterceptors,
 } from '@nestjs/common';
 import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { ClockifyTimer } from '@prisma/client';
@@ -38,6 +40,7 @@ import { ClockifyPermissionNodes } from './permissions.nodes';
 @Controller({ version: '1', path: 'clockify' })
 @ApiTags('Clockify')
 @ResponseTimeLimit(700)
+@UseInterceptors(CacheInterceptor)
 export class ClockifyController {
   constructor(
     private clockify: ClockifyService,

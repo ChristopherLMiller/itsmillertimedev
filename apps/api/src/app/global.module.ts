@@ -1,4 +1,4 @@
-import { CacheInterceptor, CacheModule } from '@nestjs/cache-manager';
+import { CacheModule } from '@nestjs/cache-manager';
 import { Logger, Module } from '@nestjs/common';
 import { APP_GUARD, APP_INTERCEPTOR } from '@nestjs/core';
 import MemoryStore from 'cache-manager-memory-store';
@@ -61,10 +61,6 @@ import { V1Module } from './v1/v1.module';
     AuthModule,
   ],
   providers: [
-    {
-      provide: APP_INTERCEPTOR,
-      useClass: CacheInterceptor,
-    },
     {
       provide: APP_INTERCEPTOR,
       useClass: UserInterceptor,

@@ -1,4 +1,5 @@
 import { DataResponse } from '@itsmillertimedev/data';
+import { CacheInterceptor } from '@nestjs/cache-manager';
 import {
   Body,
   Controller,
@@ -8,6 +9,7 @@ import {
   Patch,
   Post,
   Query,
+  UseInterceptors,
 } from '@nestjs/common';
 import { ApiOperation, ApiQuery, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { Prisma, Post as PrismaPost } from '@prisma/client';
@@ -21,6 +23,7 @@ import { PostService } from './post.service';
 
 @Controller({ version: '1', path: 'post' })
 @ApiTags('Post')
+@UseInterceptors(CacheInterceptor)
 export class PostController {
   constructor(private readonly postService: PostService) {}
 

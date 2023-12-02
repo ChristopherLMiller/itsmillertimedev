@@ -1,4 +1,5 @@
 import { DataResponse } from '@itsmillertimedev/data';
+import { CacheInterceptor } from '@nestjs/cache-manager';
 import {
   Body,
   Controller,
@@ -7,6 +8,7 @@ import {
   Param,
   Patch,
   Post,
+  UseInterceptors,
 } from '@nestjs/common';
 import { ApiOperation, ApiParam, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { PostTag, Prisma } from '@prisma/client';
@@ -19,6 +21,7 @@ import { PostsTagsPermissionNodes } from './permissions.nodes';
 import { PostTagService } from './post-tag.service';
 
 @Controller({ version: '1', path: 'post-tag' })
+@UseInterceptors(CacheInterceptor)
 @ApiTags('Post', 'Post Tag')
 export class PostTagController {
   constructor(private readonly postTagService: PostTagService) {}

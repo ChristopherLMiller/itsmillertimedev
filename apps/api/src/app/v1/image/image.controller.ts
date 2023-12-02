@@ -1,4 +1,5 @@
 import { DataResponse } from '@itsmillertimedev/data';
+import { CacheInterceptor } from '@nestjs/cache-manager';
 import {
   Controller,
   Delete,
@@ -20,7 +21,7 @@ import { CloudinaryPermissionNodes } from './permissions.nodes';
 
 @Controller({ version: '1', path: 'image' })
 @ApiTags('Image')
-@UseInterceptors(CloudinaryTransformInterceptor)
+@UseInterceptors(CloudinaryTransformInterceptor, CacheInterceptor)
 export class ImageController {
   constructor(private imageService: ImageService) {}
 

@@ -1,5 +1,6 @@
 import { DataResponse } from '@itsmillertimedev/data';
-import { Body, Controller, Get, Post } from '@nestjs/common';
+import { CacheInterceptor } from '@nestjs/cache-manager';
+import { Body, Controller, Get, Post, UseInterceptors } from '@nestjs/common';
 import { ApiTags } from '@nestjs/swagger';
 import { Marker } from '@prisma/client';
 import {
@@ -11,6 +12,7 @@ import { MapsPermissionNodes } from './permissions.nodes';
 
 @Controller({ version: '1', path: 'maps' })
 @ApiTags('Maps')
+@UseInterceptors(CacheInterceptor)
 export class MapsController {
   constructor(private maps: MapsService) {}
 

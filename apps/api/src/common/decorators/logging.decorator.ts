@@ -1,4 +1,4 @@
 import { CustomDecorator, SetMetadata } from '@nestjs/common';
 
-export const NoLogging = (): CustomDecorator<string> =>
-  SetMetadata('no-logging', true);
+export const IgnoreLogging = (): CustomDecorator<string> =>
+  SetMetadata('ignore-logging', true);

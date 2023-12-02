@@ -6,6 +6,7 @@ import {
   User,
   Workspace,
 } from '@itsmillertimedev/data';
+import { CacheInterceptor } from '@nestjs/cache-manager';
 import {
   BadRequestException,
   Body,
@@ -19,15 +20,13 @@ import {
   Put,
   Query,
   UseGuards,
+  UseInterceptors,
 } from '@nestjs/common';
 import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { ClockifyTimer } from '@prisma/client';
 import { HttpStatusCode } from 'axios';
 import { formatDistanceStrict, parseISO } from 'date-fns';
-import {
-  PermissionsNodes,
-  PermissionsPublic,
-} from '../../../common/decorators/auth.decorator';
+import { PermissionsNodes } from '../../../common/decorators/auth.decorator';
 import { ResponseTimeLimit } from '../../../common/decorators/responseTime.decorator';
 import { HookdeckGuard } from '../../../common/guards/hookdeck.guard';
 import { SettingsService } from '../../common/settings/settings.service';
@@ -38,6 +37,7 @@ import { ClockifyPermissionNodes } from './permissions.nodes';
 @Controller({ version: '1', path: 'clockify' })
 @ApiTags('Clockify')
 @ResponseTimeLimit(700)
+@UseInterceptors(CacheInterceptor)
 export class ClockifyController {
   constructor(
     private clockify: ClockifyService,
@@ -75,7 +75,6 @@ export class ClockifyController {
     status: HttpStatusCode.BadGateway,
     description: 'Bad Request',
   })
-  @PermissionsPublic()
   async getWorkspaces(): DataResponse<Array<Workspace>> {
     return { data: await this.clockify.getWorkspaces() };
   }
@@ -89,7 +88,6 @@ export class ClockifyController {
     status: HttpStatusCode.BadGateway,
     description: "Bad Request'",
   })
-  @PermissionsPublic()
   async getClients(
     @Query('page') page?: number,
     @Query('page-size') pageSize?: number,
@@ -107,7 +105,6 @@ export class ClockifyController {
     status: HttpStatusCode.BadGateway,
     description: "Bad Request'",
   })
-  @PermissionsPublic()
   async getClient(@Param('id') id: string): DataResponse<Client> {
     return {
       data: await this.clockify.getClient(id),
@@ -171,7 +168,6 @@ export class ClockifyController {
     status: HttpStatusCode.BadRequest,
     description: 'Bad Request',
   })
-  @PermissionsPublic()
   async getProjects(
     @Query('archived') archived?: boolean,
     @Query('clients') clients?: string,
@@ -201,7 +197,6 @@ export class ClockifyController {
     status: HttpStatusCode.BadRequest,
     description: 'Bad Request',
   })
-  @PermissionsPublic()
   async getProject(@Param('id') id: string): DataResponse<Project> {
     const project = await this.clockify.getProject(id);
 
@@ -274,7 +269,6 @@ export class ClockifyController {
     description: 'Invalid API Key',
   })
   @Get('users')
-  @PermissionsPublic()
   async getUsers(): DataResponse<Array<User>> {
     return {
       data: await this.clockify.getUsers(),
@@ -290,7 +284,6 @@ export class ClockifyController {
     description: 'Bad Request - Must provide ProjectID',
   })
   @Get('buildtime/:id')
-  @PermissionsPublic()
   async getBuildTime(@Param('id') id: string): DataResponse<Partial<Project>> {
     const response = await this.clockify.getProject(id);
     return {
@@ -350,7 +343,6 @@ export class ClockifyController {
     status: HttpStatusCode.Unauthorized,
     description: 'Invalid clockify signature provided',
   })
-  @PermissionsPublic()
   @UseGuards(HookdeckGuard)
   async clockifyTimeStart(
     @Body('timeInterval') timeInterval: TimeInterval,
@@ -383,7 +375,6 @@ export class ClockifyController {
     status: HttpStatusCode.Unauthorized,
     description: 'Invalid clockify signature provided',
   })
-  @PermissionsPublic()
   @UseGuards(HookdeckGuard)
   async webhookClockifyStop(
     @Body('project') project: Project,
@@ -412,7 +403,6 @@ export class ClockifyController {
     status: HttpStatusCode.Unauthorized,
     description: 'Invalid clockify signature provided',
   })
-  @PermissionsPublic()
   @UseGuards(HookdeckGuard)
   async webhookClockifyDelete(
     @Body('project') project: Project,

@@ -1,4 +1,5 @@
 import { DataResponse } from '@itsmillertimedev/data';
+import { CacheInterceptor } from '@nestjs/cache-manager';
 import {
   Body,
   Controller,
@@ -7,19 +8,18 @@ import {
   Param,
   Patch,
   Post,
+  UseInterceptors,
 } from '@nestjs/common';
 import { ApiOperation, ApiParam, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { PostCategory, Prisma } from '@prisma/client';
 import { HttpStatusCode } from 'axios';
-import {
-  PermissionsNodes,
-  PermissionsPublic,
-} from '../../../../common/decorators/auth.decorator';
+import { PermissionsNodes } from '../../../../common/decorators/auth.decorator';
 import { PostCategoryPermissionNodes } from './permissions.nodes';
 import { PostCategoryService } from './post-category.service';
 
 @Controller({ version: '1', path: 'post-category' })
 @ApiTags('Post', 'Post Category')
+@UseInterceptors(CacheInterceptor)
 export class PostCategoryController {
   constructor(private readonly postCategoryService: PostCategoryService) {}
 
@@ -53,7 +53,6 @@ export class PostCategoryController {
     status: HttpStatusCode.Unauthorized,
     description: 'Forbidden',
   })
-  @PermissionsPublic()
   async findAll(): DataResponse<PostCategory[]> {
     return { data: await this.postCategoryService.findAll(), meta: {} };
   }
@@ -69,7 +68,6 @@ export class PostCategoryController {
     status: HttpStatusCode.Unauthorized,
     description: 'Forbidden',
   })
-  @PermissionsPublic()
   async findOne(@Param('slug') slug: string) {
     return {
       data: await this.postCategoryService.findOne(slug),

@@ -2,7 +2,6 @@ import { Module } from '@nestjs/common';
 import { ClockifyModule } from './clockify/clockify.module';
 import { DiscordModule } from './discord/discord.module';
 import { GithubModule } from './github/github.module';
-import { HealthController } from './health/health.controller';
 import { ImageModule } from './image/image.module';
 import { LastFMModule } from './lastfm/lastfm.module';
 import { MapsModule } from './maps/maps.module';
@@ -28,6 +27,5 @@ import { WeatherModule } from './weather/weather.module';
     PostModule,
     PagesModule,
   ],
-  controllers: [HealthController],
 })
 export class V1Module {}

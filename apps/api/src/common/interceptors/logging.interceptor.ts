@@ -18,6 +18,15 @@ export class LoggingInterceptor<T> implements NestInterceptor<T> {
     context: ExecutionContext,
     next: CallHandler<T>,
   ): Observable<T> | Promise<Observable<T>> {
+    // Fetch the logging reflector element if available
+    const ignoreLogging = this.reflector.get(
+      'ignore-logging',
+      context.getHandler(),
+    );
+
+    // if logging is faled, exit now
+    if (ignoreLogging) return next.handle();
+
     // setup and retrieve varabiales for the current request
     const response = context.switchToHttp().getResponse();
     const request = context.switchToHttp().getRequest();

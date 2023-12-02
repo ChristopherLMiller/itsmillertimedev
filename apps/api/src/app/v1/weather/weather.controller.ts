@@ -8,7 +8,6 @@ import {
 import { Controller, Get, Query } from '@nestjs/common';
 import { ApiResponse, ApiTags } from '@nestjs/swagger';
 import { HttpStatusCode } from 'axios';
-import { PermissionsPublic } from '../../../common/decorators/auth.decorator';
 import { WeatherService } from './weather.service';
 
 @Controller({ version: '1', path: 'weather' })
@@ -27,7 +26,6 @@ export class WeatherController {
     description:
       'Forbidden, invalid api key supplied or not authorized to access this resource',
   })
-  @PermissionsPublic()
   async getCurrentWeather(
     @Query('lat') lat: string,
     @Query('lon') lon: string,
@@ -46,7 +44,6 @@ export class WeatherController {
     description:
       'Forbidden, invalid api key supplied or not authorized to access this resource',
   })
-  @PermissionsPublic()
   async getMinutelyForecast(
     @Query('lat') lat: string,
     @Query('lon') lon: string,
@@ -65,7 +62,6 @@ export class WeatherController {
     description:
       'Forbidden, invalid api key supplied or not authorized to access this resource',
   })
-  @PermissionsPublic()
   async getHourlyForecast(
     @Query('lat') lat: string,
     @Query('lon') lon: string,
@@ -84,7 +80,6 @@ export class WeatherController {
     description:
       'Forbidden, invalid api key supplied or not authorized to access this resource',
   })
-  @PermissionsPublic()
   async getDailyForecast(
     @Query('lat') lat: string,
     @Query('lon') lon: string,
@@ -103,7 +98,6 @@ export class WeatherController {
     description:
       'Forbidden, invalid api key supplied or not authorized to access this resource',
   })
-  @PermissionsPublic()
   async getAlerts(
     @Query('lat') lat: string,
     @Query('lon') lon: string,

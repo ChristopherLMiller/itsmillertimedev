@@ -1,21 +1,19 @@
 import { DataResponse } from '@itsmillertimedev/data';
-import { Body, Controller, Get, Post } from '@nestjs/common';
+import { CacheInterceptor } from '@nestjs/cache-manager';
+import { Body, Controller, Get, Post, UseInterceptors } from '@nestjs/common';
 import { ApiTags } from '@nestjs/swagger';
 import { Marker } from '@prisma/client';
-import {
-  PermissionsNodes,
-  PermissionsPublic,
-} from '../../../common/decorators/auth.decorator';
+import { PermissionsNodes } from '../../../common/decorators/auth.decorator';
 import { MapsService } from './maps.service';
 import { MapsPermissionNodes } from './permissions.nodes';
 
 @Controller({ version: '1', path: 'maps' })
 @ApiTags('Maps')
+@UseInterceptors(CacheInterceptor)
 export class MapsController {
   constructor(private maps: MapsService) {}
 
   @Get('markers')
-  @PermissionsPublic()
   async getMarkers(): DataResponse<Array<Marker>> {
     const data = await this.maps.findMapMarkers();
     return { data, meta: { totalRecords: data.length } };

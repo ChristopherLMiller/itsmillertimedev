@@ -1,4 +1,5 @@
 import { DataResponse } from '@itsmillertimedev/data';
+import { CacheInterceptor } from '@nestjs/cache-manager';
 import {
   Body,
   Controller,
@@ -7,18 +8,17 @@ import {
   Param,
   Patch,
   Post,
+  UseInterceptors,
 } from '@nestjs/common';
 import { ApiOperation, ApiParam, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { PostTag, Prisma } from '@prisma/client';
 import { HttpStatusCode } from 'axios';
-import {
-  PermissionsNodes,
-  PermissionsPublic,
-} from '../../../../common/decorators/auth.decorator';
+import { PermissionsNodes } from '../../../../common/decorators/auth.decorator';
 import { PostsTagsPermissionNodes } from './permissions.nodes';
 import { PostTagService } from './post-tag.service';
 
 @Controller({ version: '1', path: 'post-tag' })
+@UseInterceptors(CacheInterceptor)
 @ApiTags('Post', 'Post Tag')
 export class PostTagController {
   constructor(private readonly postTagService: PostTagService) {}
@@ -53,7 +53,6 @@ export class PostTagController {
     status: HttpStatusCode.Unauthorized,
     description: 'Forbidden',
   })
-  @PermissionsPublic()
   async findAll(): DataResponse<PostTag[]> {
     return { data: await this.postTagService.findAll(), meta: {} };
   }
@@ -69,7 +68,6 @@ export class PostTagController {
     status: HttpStatusCode.Unauthorized,
     description: 'Forbidden',
   })
-  @PermissionsPublic()
   async findOne(@Param('slug') slug: string): DataResponse<PostTag> {
     return { data: await this.postTagService.findOne(slug), meta: { slug } };
   }

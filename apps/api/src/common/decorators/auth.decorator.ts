@@ -10,6 +10,3 @@ export const AuthAllowed = (level: AuthLevels) =>
 
 export const PermissionsNodes = (...nodes: string[]) =>
   SetMetadata('auth_permission_node', nodes);
-
-export const PermissionsPublic = () =>
-  SetMetadata('auth_permission_node', ['PUBLIC']);

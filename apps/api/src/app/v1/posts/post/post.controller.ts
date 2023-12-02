@@ -1,4 +1,5 @@
 import { DataResponse } from '@itsmillertimedev/data';
+import { CacheInterceptor } from '@nestjs/cache-manager';
 import {
   Body,
   Controller,
@@ -8,19 +9,18 @@ import {
   Patch,
   Post,
   Query,
+  UseInterceptors,
 } from '@nestjs/common';
 import { ApiOperation, ApiQuery, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { Prisma, Post as PrismaPost } from '@prisma/client';
 import { HttpStatusCode } from 'axios';
-import {
-  PermissionsNodes,
-  PermissionsPublic,
-} from '../../../../common/decorators/auth.decorator';
+import { PermissionsNodes } from '../../../../common/decorators/auth.decorator';
 import { PostPermissionNodes } from './permissions.nodes';
 import { PostService } from './post.service';
 
 @Controller({ version: '1', path: 'post' })
 @ApiTags('Post')
+@UseInterceptors(CacheInterceptor)
 export class PostController {
   constructor(private readonly postService: PostService) {}
 
@@ -47,7 +47,6 @@ export class PostController {
     status: HttpStatusCode.Ok,
     description: 'All posts',
   })
-  @PermissionsPublic()
   async findAll(
     @Query() query: Prisma.PostFindManyArgs,
   ): DataResponse<Partial<PrismaPost[]>> {
@@ -61,7 +60,6 @@ export class PostController {
     status: HttpStatusCode.Ok,
     description: 'Post to get',
   })
-  @PermissionsPublic()
   async findOne(@Param('slug') slug: string): DataResponse<PrismaPost> {
     return { data: await this.postService.findOne(slug), meta: { slug } };
   }

@@ -10,16 +10,12 @@ import { SupabaseAuthGuard } from '../common/guards/supabaseAuth.guard';
 import { LoggingInterceptor } from '../common/interceptors/logging.interceptor';
 import { ResponseInterceptor } from '../common/interceptors/response.interceptor';
 import { UserInterceptor } from '../common/interceptors/user.interceptor';
-import { AuthModule } from './common/auth/auth.module';
-import { PrismaModule } from './common/prisma/prisma.module';
-import { SettingsModule } from './common/settings/settings.module';
+import { CommonModule } from './common/common.module';
 import { V1Module } from './v1/v1.module';
 
 @Module({
   controllers: [],
   imports: [
-    SettingsModule,
-    PrismaModule,
     CacheModule.registerAsync<RedisClientOptions>({
       isGlobal: true,
       useFactory: async () => {
@@ -58,7 +54,7 @@ import { V1Module } from './v1/v1.module';
       },
     }),
     V1Module,
-    AuthModule,
+    CommonModule,
   ],
   providers: [
     {

@@ -14,10 +14,7 @@ import {
 import { ApiOperation, ApiQuery, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { Prisma, Post as PrismaPost } from '@prisma/client';
 import { HttpStatusCode } from 'axios';
-import {
-  PermissionsNodes,
-  PermissionsPublic,
-} from '../../../../common/decorators/auth.decorator';
+import { PermissionsNodes } from '../../../../common/decorators/auth.decorator';
 import { PostPermissionNodes } from './permissions.nodes';
 import { PostService } from './post.service';
 
@@ -50,7 +47,6 @@ export class PostController {
     status: HttpStatusCode.Ok,
     description: 'All posts',
   })
-  @PermissionsPublic()
   async findAll(
     @Query() query: Prisma.PostFindManyArgs,
   ): DataResponse<Partial<PrismaPost[]>> {
@@ -64,7 +60,6 @@ export class PostController {
     status: HttpStatusCode.Ok,
     description: 'Post to get',
   })
-  @PermissionsPublic()
   async findOne(@Param('slug') slug: string): DataResponse<PrismaPost> {
     return { data: await this.postService.findOne(slug), meta: { slug } };
   }

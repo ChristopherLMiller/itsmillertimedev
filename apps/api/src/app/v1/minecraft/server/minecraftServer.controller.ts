@@ -9,7 +9,6 @@ import {
 } from '@nestjs/common';
 import { ApiTags } from '@nestjs/swagger';
 import { MinecraftRule, MinecraftRuleCategory } from '@prisma/client';
-import { PermissionsPublic } from '../../../../common/decorators/auth.decorator';
 import { MinecraftService } from '../minecraft.service';
 
 @Controller({ version: '1', path: 'minecraft/server' })
@@ -19,7 +18,6 @@ export class MinecraftServerController {
   constructor(private minecraft: MinecraftService) {}
 
   @Get('rules')
-  @PermissionsPublic()
   async getRules(): DataResponse<MinecraftRule[]> {
     const data = await this.minecraft
       .findRules()
@@ -28,7 +26,6 @@ export class MinecraftServerController {
   }
 
   @Get('rules/:id')
-  @PermissionsPublic()
   async getRule(@Param('id') ruleId): DataResponse<MinecraftRule> {
     const data = await this.minecraft
       .findRule(parseInt(ruleId))
@@ -42,7 +39,6 @@ export class MinecraftServerController {
   }
 
   @Get('rules-categories')
-  @PermissionsPublic()
   async getRulesCategories(): DataResponse<MinecraftRuleCategory[]> {
     const data = await this.minecraft.findRulesCategories();
     return { data, meta: { totalRecords: data.length } };

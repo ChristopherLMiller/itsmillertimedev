@@ -36,13 +36,10 @@ export class SupabaseAuthGuard implements CanActivate {
 
     // We flow through the following to determine if the user is able to access the resource or not
 
-    // Verify we received any nodes at all
-    if (permissionNodes && permissionNodes.length > 0) {
-      // Check for public access, eject if so returning true
-      if (permissionNodes[0] === 'PUBLIC') {
-        return true;
-      }
-
+    // Verify we received any nodes at all, if we didn't then assume that its a public resource
+    if (permissionNodes === undefined || permissionNodes.length === 0) {
+      return true;
+    } else {
       // Extract the JWT
       const jwt = request.headers?.authorization as string | null;
 

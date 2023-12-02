@@ -11,10 +11,7 @@ import {
 import { ApiOperation, ApiQuery, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { Image } from '@prisma/client';
 import { HttpStatusCode } from 'axios';
-import {
-  PermissionsNodes,
-  PermissionsPublic,
-} from '../../../common/decorators/auth.decorator';
+import { PermissionsNodes } from '../../../common/decorators/auth.decorator';
 import { CloudinaryTransformInterceptor } from '../../../common/interceptors/cloudinaryTransform.interceptor';
 import { ImageService } from './image.service';
 import { CloudinaryPermissionNodes } from './permissions.nodes';
@@ -37,7 +34,6 @@ export class ImageController {
     status: HttpStatusCode.BadRequest,
     description: 'Image not found',
   })
-  @PermissionsPublic()
   async getImage(@Query('public_id') public_id): DataResponse<Image> {
     return {
       data: await this.imageService.getImage(public_id),
@@ -53,7 +49,6 @@ export class ImageController {
     status: HttpStatusCode.Unauthorized,
     description: 'Forbidden',
   })
-  @PermissionsPublic()
   async getExifData(
     @Query('public_id') public_id,
   ): DataResponse<Partial<Image>> {
@@ -81,7 +76,6 @@ export class ImageController {
     status: HttpStatusCode.Unauthorized,
     description: 'Forbidden',
   })
-  @PermissionsPublic()
   async getThumbnail(
     @Query('public_id') public_id,
   ): DataResponse<Partial<Image>> {

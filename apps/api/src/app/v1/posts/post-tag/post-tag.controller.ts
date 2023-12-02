@@ -13,10 +13,7 @@ import {
 import { ApiOperation, ApiParam, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { PostTag, Prisma } from '@prisma/client';
 import { HttpStatusCode } from 'axios';
-import {
-  PermissionsNodes,
-  PermissionsPublic,
-} from '../../../../common/decorators/auth.decorator';
+import { PermissionsNodes } from '../../../../common/decorators/auth.decorator';
 import { PostsTagsPermissionNodes } from './permissions.nodes';
 import { PostTagService } from './post-tag.service';
 
@@ -56,7 +53,6 @@ export class PostTagController {
     status: HttpStatusCode.Unauthorized,
     description: 'Forbidden',
   })
-  @PermissionsPublic()
   async findAll(): DataResponse<PostTag[]> {
     return { data: await this.postTagService.findAll(), meta: {} };
   }
@@ -72,7 +68,6 @@ export class PostTagController {
     status: HttpStatusCode.Unauthorized,
     description: 'Forbidden',
   })
-  @PermissionsPublic()
   async findOne(@Param('slug') slug: string): DataResponse<PostTag> {
     return { data: await this.postTagService.findOne(slug), meta: { slug } };
   }

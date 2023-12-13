@@ -5,8 +5,8 @@ import {
   TimeInterval,
   User,
   Workspace,
-} from '@itsmillertimedev/data';
-import { CacheInterceptor } from '@nestjs/cache-manager';
+} from "@itsmillertimedev/data";
+import { CacheInterceptor } from "@nestjs/cache-manager";
 import {
   BadRequestException,
   Body,
@@ -21,21 +21,21 @@ import {
   Query,
   UseGuards,
   UseInterceptors,
-} from '@nestjs/common';
-import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
-import { ClockifyTimer } from '@prisma/client';
-import { HttpStatusCode } from 'axios';
-import { formatDistanceStrict, parseISO } from 'date-fns';
-import { PermissionsNodes } from '../../../common/decorators/auth.decorator';
-import { ResponseTimeLimit } from '../../../common/decorators/responseTime.decorator';
-import { HookdeckGuard } from '../../../common/guards/hookdeck.guard';
-import { SettingsService } from '../../common/settings/settings.service';
-import { DiscordService } from '../discord/discord.service';
-import { ClockifyService } from './clockify.service';
-import { ClockifyPermissionNodes } from './permissions.nodes';
+} from "@nestjs/common";
+import { ApiOperation, ApiResponse, ApiTags } from "@nestjs/swagger";
+import { ClockifyTimer } from "@prisma/client";
+import { HttpStatusCode } from "axios";
+import { formatDistanceStrict, parseISO } from "date-fns";
+import { PermissionsNodes } from "../../../common/decorators/auth.decorator";
+import { ResponseTimeLimit } from "../../../common/decorators/responseTime.decorator";
+import { HookdeckGuard } from "../../../common/guards/hookdeck.guard";
+import { SettingsService } from "../../common/settings/settings.service";
+import { DiscordService } from "../discord/discord.service";
+import { ClockifyPermissionNodes } from "./clockify.permissions";
+import { ClockifyService } from "./clockify.service";
 
-@Controller({ version: '1', path: 'clockify' })
-@ApiTags('Clockify')
+@Controller({ version: "1", path: "clockify" })
+@ApiTags("Clockify")
 @ResponseTimeLimit(700)
 @UseInterceptors(CacheInterceptor)
 export class ClockifyController {
@@ -46,7 +46,7 @@ export class ClockifyController {
   ) {
     this.loadSettings().then((settings) => {
       this.discordNotificationSettings = settings.discordNotificationSettings;
-      this._logger.log('Settings loaded successfully');
+      this._logger.log("Settings loaded successfully");
     });
   }
 
@@ -57,8 +57,8 @@ export class ClockifyController {
   async loadSettings() {
     try {
       const discordNotificationSettings = await this.settings.getField(
-        'clockify',
-        'discord-notifications',
+        "clockify",
+        "discord-notifications",
       );
       return { discordNotificationSettings };
     } catch (error) {
@@ -68,12 +68,12 @@ export class ClockifyController {
   }
 
   //#region workspaces
-  @Get('workspaces')
-  @ApiOperation({ summary: 'Get list of workspaces' })
-  @ApiResponse({ status: HttpStatusCode.Ok, description: 'Success' })
+  @Get("workspaces")
+  @ApiOperation({ summary: "Get list of workspaces" })
+  @ApiResponse({ status: HttpStatusCode.Ok, description: "Success" })
   @ApiResponse({
     status: HttpStatusCode.BadGateway,
-    description: 'Bad Request',
+    description: "Bad Request",
   })
   async getWorkspaces(): DataResponse<Array<Workspace>> {
     return { data: await this.clockify.getWorkspaces() };
@@ -81,46 +81,46 @@ export class ClockifyController {
   //#endregion
 
   //#region Clients
-  @Get('clients')
-  @ApiOperation({ summary: 'Get list of clients in workspace' })
-  @ApiResponse({ status: HttpStatusCode.Ok, description: 'Success' })
+  @Get("clients")
+  @ApiOperation({ summary: "Get list of clients in workspace" })
+  @ApiResponse({ status: HttpStatusCode.Ok, description: "Success" })
   @ApiResponse({
     status: HttpStatusCode.BadGateway,
     description: "Bad Request'",
   })
   async getClients(
-    @Query('page') page?: number,
-    @Query('page-size') pageSize?: number,
-    @Query('archived') archived?: boolean,
+    @Query("page") page?: number,
+    @Query("page-size") pageSize?: number,
+    @Query("archived") archived?: boolean,
   ): DataResponse<Array<Client>> {
     return {
       data: await this.clockify.getClients({ page, pageSize, archived }),
     };
   }
 
-  @Get('clients/:id')
-  @ApiOperation({ summary: 'Get client in workspace' })
-  @ApiResponse({ status: HttpStatusCode.Ok, description: 'Success' })
+  @Get("clients/:id")
+  @ApiOperation({ summary: "Get client in workspace" })
+  @ApiResponse({ status: HttpStatusCode.Ok, description: "Success" })
   @ApiResponse({
     status: HttpStatusCode.BadGateway,
     description: "Bad Request'",
   })
-  async getClient(@Param('id') id: string): DataResponse<Client> {
+  async getClient(@Param("id") id: string): DataResponse<Client> {
     return {
       data: await this.clockify.getClient(id),
     };
   }
 
-  @Put('clients/:id')
-  @ApiOperation({ summary: 'Get client in workspace' })
-  @ApiResponse({ status: HttpStatusCode.Ok, description: 'Success' })
+  @Put("clients/:id")
+  @ApiOperation({ summary: "Get client in workspace" })
+  @ApiResponse({ status: HttpStatusCode.Ok, description: "Success" })
   @ApiResponse({
     status: HttpStatusCode.BadGateway,
     description: "Bad Request'",
   })
   @PermissionsNodes(ClockifyPermissionNodes.UPDATE_CLIENT)
   async updateClient(
-    @Param('id') id: string,
+    @Param("id") id: string,
     @Body() body: Client,
   ): DataResponse<Client> {
     return {
@@ -128,52 +128,52 @@ export class ClockifyController {
     };
   }
 
-  @Delete('clients/:id')
-  @ApiOperation({ summary: 'Delete client' })
-  @ApiResponse({ status: HttpStatusCode.Ok, description: 'Success' })
+  @Delete("clients/:id")
+  @ApiOperation({ summary: "Delete client" })
+  @ApiResponse({ status: HttpStatusCode.Ok, description: "Success" })
   @ApiResponse({
     status: HttpStatusCode.BadGateway,
     description: "Bad Request'",
   })
   @PermissionsNodes(ClockifyPermissionNodes.DELETE_CLIENT)
-  async deleteClient(@Param('id') id: string): DataResponse<Client> {
+  async deleteClient(@Param("id") id: string): DataResponse<Client> {
     return {
       data: await this.clockify.deleteClient(id),
     };
   }
 
-  @Post('clients')
+  @Post("clients")
   @ApiOperation({
-    summary: 'Create a new clockify client on the specified workspace',
+    summary: "Create a new clockify client on the specified workspace",
   })
   @ApiResponse({
     status: HttpStatusCode.Ok,
-    description: 'Successfully created new client',
+    description: "Successfully created new client",
   })
   @ApiResponse({
     status: HttpStatusCode.Unauthorized,
-    description: 'Forbidden.  Must have permission to add new client',
+    description: "Forbidden.  Must have permission to add new client",
   })
   @PermissionsNodes(ClockifyPermissionNodes.CREATE_CLIENT)
-  async createClient(@Body('name') name: string): DataResponse<Client> {
+  async createClient(@Body("name") name: string): DataResponse<Client> {
     return { data: await this.clockify.createClient({ name }) };
   }
   //#endregion
 
   //#region Projects
-  @Get('projects')
-  @ApiOperation({ summary: 'Get list of projects' })
-  @ApiResponse({ status: HttpStatusCode.Ok, description: 'Success' })
+  @Get("projects")
+  @ApiOperation({ summary: "Get list of projects" })
+  @ApiResponse({ status: HttpStatusCode.Ok, description: "Success" })
   @ApiResponse({
     status: HttpStatusCode.BadRequest,
-    description: 'Bad Request',
+    description: "Bad Request",
   })
   async getProjects(
-    @Query('archived') archived?: boolean,
-    @Query('clients') clients?: string,
-    @Query('page-size') pageSize?: number,
-    @Query('name') name?: string,
-    @Query('page') page?: number,
+    @Query("archived") archived?: boolean,
+    @Query("clients") clients?: string,
+    @Query("page-size") pageSize?: number,
+    @Query("name") name?: string,
+    @Query("page") page?: number,
   ): DataResponse<Array<Project>> {
     const projects = await this.clockify.getProjects({
       archived,
@@ -189,15 +189,15 @@ export class ClockifyController {
     };
   }
 
-  @Get('projects/:id')
+  @Get("projects/:id")
   @HttpCode(HttpStatusCode.Ok)
-  @ApiOperation({ summary: 'Get a specific clockify project' })
-  @ApiResponse({ status: HttpStatusCode.Ok, description: 'Success' })
+  @ApiOperation({ summary: "Get a specific clockify project" })
+  @ApiResponse({ status: HttpStatusCode.Ok, description: "Success" })
   @ApiResponse({
     status: HttpStatusCode.BadRequest,
-    description: 'Bad Request',
+    description: "Bad Request",
   })
-  async getProject(@Param('id') id: string): DataResponse<Project> {
+  async getProject(@Param("id") id: string): DataResponse<Project> {
     const project = await this.clockify.getProject(id);
 
     return {
@@ -206,69 +206,69 @@ export class ClockifyController {
     };
   }
 
-  @Post('projects')
+  @Post("projects")
   @ApiOperation({
-    summary: 'Create a new clockify project on the workspace',
+    summary: "Create a new clockify project on the workspace",
   })
   @ApiResponse({
     status: HttpStatusCode.Ok,
-    description: 'Successfully created new project',
+    description: "Successfully created new project",
   })
   @ApiResponse({
     status: HttpStatusCode.Unauthorized,
-    description: 'Forbidden.  Must have permission to add new project',
+    description: "Forbidden.  Must have permission to add new project",
   })
   @PermissionsNodes(ClockifyPermissionNodes.CREATE_PROJECT)
   async createProject(@Body() body: Project): DataResponse<Project> {
     return { data: await this.clockify.createProject(body) };
   }
 
-  @Put('projects/:id')
+  @Put("projects/:id")
   @ApiOperation({
-    summary: 'Update a clockify project on the workspace',
+    summary: "Update a clockify project on the workspace",
   })
   @ApiResponse({
     status: HttpStatusCode.Ok,
-    description: 'Successfully updated project',
+    description: "Successfully updated project",
   })
   @ApiResponse({
     status: HttpStatusCode.Unauthorized,
-    description: 'Forbidden.  Must have permission to update project',
+    description: "Forbidden.  Must have permission to update project",
   })
   @PermissionsNodes(ClockifyPermissionNodes.UPDATE_PROJECT)
   async updateProject(
-    @Param('id') id: string,
+    @Param("id") id: string,
     @Body() body: Project,
   ): DataResponse<Project> {
     return { data: await this.clockify.updateProject(id, body) };
   }
 
-  @Delete('projects/:id')
+  @Delete("projects/:id")
   @ApiOperation({
-    summary: 'Create a new clockify project on the workspace',
+    summary: "Create a new clockify project on the workspace",
   })
   @ApiResponse({
     status: HttpStatusCode.Ok,
-    description: 'Successfully created new project',
+    description: "Successfully created new project",
   })
   @ApiResponse({
     status: HttpStatusCode.Unauthorized,
-    description: 'Forbidden.  Must have permission to add new project',
+    description: "Forbidden.  Must have permission to add new project",
   })
   @PermissionsNodes(ClockifyPermissionNodes.DELETE_PROJECT)
-  async deleteProject(@Param('id') id: string): DataResponse<Project> {
+  async deleteProject(@Param("id") id: string): DataResponse<Project> {
     return { data: await this.clockify.deleteProject(id) };
   }
   //#endregion
 
   //#region Users
-  @ApiOperation({ summary: 'Get all the users on the workspace' })
-  @ApiResponse({ status: HttpStatusCode.Ok, description: 'Success' })
+  @ApiOperation({ summary: "Get all the users on the workspace" })
+  @ApiResponse({ status: HttpStatusCode.Ok, description: "Success" })
   @ApiResponse({
     status: HttpStatusCode.Unauthorized,
-    description: 'Invalid API Key',
+    description: "Invalid API Key",
   })
-  @Get('users')
+  @Get("users")
   async getUsers(): DataResponse<Array<User>> {
     return {
       data: await this.clockify.getUsers(),
@@ -277,14 +277,14 @@ export class ClockifyController {
   //#endregion
 
   //#region Build Time
-  @ApiOperation({ summary: 'Get build time of provided project' })
-  @ApiResponse({ status: HttpStatusCode.Ok, description: 'Success' })
+  @ApiOperation({ summary: "Get build time of provided project" })
+  @ApiResponse({ status: HttpStatusCode.Ok, description: "Success" })
   @ApiResponse({
     status: HttpStatusCode.BadRequest,
-    description: 'Bad Request - Must provide ProjectID',
+    description: "Bad Request - Must provide ProjectID",
   })
-  @Get('buildtime/:id')
-  async getBuildTime(@Param('id') id: string): DataResponse<Partial<Project>> {
+  @Get("buildtime/:id")
+  async getBuildTime(@Param("id") id: string): DataResponse<Partial<Project>> {
     const response = await this.clockify.getProject(id);
     return {
       data: { duration: response.duration },
@@ -296,35 +296,35 @@ export class ClockifyController {
   //#endregion
 
   //#region Timers
-  @ApiOperation({ summary: 'Start timer of provided project' })
-  @ApiResponse({ status: HttpStatusCode.Ok, description: 'Success' })
+  @ApiOperation({ summary: "Start timer of provided project" })
+  @ApiResponse({ status: HttpStatusCode.Ok, description: "Success" })
   @ApiResponse({
     status: HttpStatusCode.BadRequest,
-    description: 'Bad Request - Must provide ProjectID',
+    description: "Bad Request - Must provide ProjectID",
   })
   @ApiResponse({
     status: HttpStatusCode.Unauthorized,
-    description: 'Unauthorized',
+    description: "Unauthorized",
   })
-  @Post('start-timer/:id')
+  @Post("start-timer/:id")
   @PermissionsNodes(ClockifyPermissionNodes.START_TIMER)
-  async startTimer(@Param('id') id: string): DataResponse<unknown> {
+  async startTimer(@Param("id") id: string): DataResponse<unknown> {
     const data = this.clockify.startTimer(id);
     return { data, meta: { id } };
   }
 
   @HttpCode(HttpStatusCode.Ok)
-  @ApiOperation({ summary: 'Stop timer of provided project' })
-  @ApiResponse({ status: HttpStatusCode.Ok, description: 'Success' })
+  @ApiOperation({ summary: "Stop timer of provided project" })
+  @ApiResponse({ status: HttpStatusCode.Ok, description: "Success" })
   @ApiResponse({
     status: HttpStatusCode.BadRequest,
-    description: 'Bad Request - Must provide ProjectID',
+    description: "Bad Request - Must provide ProjectID",
   })
   @ApiResponse({
     status: HttpStatusCode.Unauthorized,
-    description: 'Forbidden',
+    description: "Forbidden",
   })
-  @Post('stop-timer/:id')
+  @Post("stop-timer/:id")
   @PermissionsNodes(ClockifyPermissionNodes.STOP_TIMER)
   async stopTimer(): DataResponse<unknown> {
     return {
@@ -334,19 +334,19 @@ export class ClockifyController {
   //#endregion
 
   //#region Webhooks
-  @Post('webhook/start')
+  @Post("webhook/start")
   @ApiOperation({
     summary:
-      'Webhook endpoint for clockify to call to when starting a new timer',
+      "Webhook endpoint for clockify to call to when starting a new timer",
   })
   @ApiResponse({
     status: HttpStatusCode.Unauthorized,
-    description: 'Invalid clockify signature provided',
+    description: "Invalid clockify signature provided",
   })
   @UseGuards(HookdeckGuard)
   async clockifyTimeStart(
-    @Body('timeInterval') timeInterval: TimeInterval,
-    @Body('project') project: Project,
+    @Body("timeInterval") timeInterval: TimeInterval,
+    @Body("project") project: Project,
   ): DataResponse<ClockifyTimer> {
     // short circuit execution if project wasn't provided, it can happen
     if (project === null) {
@@ -354,11 +354,11 @@ export class ClockifyController {
     }
 
     // send a discord notification if its enabled in the settings
-    if (this.discordNotificationSettings['webhook-start']['value']) {
+    if (this.discordNotificationSettings["webhook-start"]["value"]) {
       // send a message to discord
       this.discord.sendDiscordMessage(
         `Clockify timer started for '${project.name}'`,
-        'spam-channel',
+        "spam-channel",
       );
     }
 
@@ -370,15 +370,15 @@ export class ClockifyController {
     };
   }
 
-  @Post('webhook/stop')
+  @Post("webhook/stop")
   @ApiResponse({
     status: HttpStatusCode.Unauthorized,
-    description: 'Invalid clockify signature provided',
+    description: "Invalid clockify signature provided",
   })
   @UseGuards(HookdeckGuard)
   async webhookClockifyStop(
-    @Body('project') project: Project,
-    @Body('timeInterval') timeInterval: TimeInterval,
+    @Body("project") project: Project,
+    @Body("timeInterval") timeInterval: TimeInterval,
   ): DataResponse<ClockifyTimer> {
     // convert the timeInterval to a number
     const timeElapsed = formatDistanceStrict(
@@ -387,37 +387,37 @@ export class ClockifyController {
     );
 
     // send a discord notification if its enabled in the settings
-    if (this.discordNotificationSettings['webhook-stop']['value']) {
+    if (this.discordNotificationSettings["webhook-stop"]["value"]) {
       // send a message to discord
       this.discord.sendDiscordMessage(
         `Clockify timer stopped for '${project.name}'; Elapsed time ${timeElapsed}`,
-        'spam-channel',
+        "spam-channel",
       );
     }
 
     return { data: await this.clockify.removeClockifyTimer(project.id) };
   }
 
-  @Post('webhook/delete')
+  @Post("webhook/delete")
   @ApiResponse({
     status: HttpStatusCode.Unauthorized,
-    description: 'Invalid clockify signature provided',
+    description: "Invalid clockify signature provided",
   })
   @UseGuards(HookdeckGuard)
   async webhookClockifyDelete(
-    @Body('project') project: Project,
+    @Body("project") project: Project,
   ): DataResponse<ClockifyTimer> {
     // if the projectId is null we just will ignore this
     if (project.id == null) {
-      this._logger.error('Must provide projectID');
-      throw new BadRequestException('Must provide projectId');
+      this._logger.error("Must provide projectID");
+      throw new BadRequestException("Must provide projectId");
     }
 
     // send a discord notification if its enabled in the settings
-    if (this.discordNotificationSettings['webhook-delete']['value']) {
+    if (this.discordNotificationSettings["webhook-delete"]["value"]) {
       this.discord.sendDiscordMessage(
         `Clockify timer deleted for '${project.name}'`,
-        'spam-channel',
+        "spam-channel",
       );
     }
     return { data: await this.clockify.removeClockifyTimer(project.id) };

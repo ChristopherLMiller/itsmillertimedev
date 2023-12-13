@@ -1,5 +1,5 @@
-import { PrismaClient } from '@prisma/client';
-import slugify from 'slugify';
+import { PrismaClient } from "@prisma/client";
+import slugify from "slugify";
 
 export class PrismaLib extends PrismaClient {
   private prisma = new PrismaClient();
@@ -7,19 +7,18 @@ export class PrismaLib extends PrismaClient {
   generateSlug = async (
     title: string,
     prismaModel: string,
-    max = 10
+    max = 10,
   ): Promise<string> => {
     let result = null;
     let counter = 0;
-    let slug = '';
+    let slug = "";
 
     // Loop till condition is met, executes at least once
     do {
-      slug = slugify(`${title}${counter ? '-' + counter : ''}`, {
+      slug = slugify(`${title}${counter ? "-" + counter : ""}`, {
         lower: true,
         strict: true,
       });
-
       result = await this.prisma[prismaModel].findUnique({
         where: { slug },
       });

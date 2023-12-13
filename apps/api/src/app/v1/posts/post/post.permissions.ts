@@ -1,0 +1,5 @@
+export const PostPermissionNodes = {
+  CREATE_POST: "POST.CREATE_POST",
+  UPDATE_POST: "POST.UPDATE_POST",
+  DELETE_POST: "POST.DELETE_POST",
+};

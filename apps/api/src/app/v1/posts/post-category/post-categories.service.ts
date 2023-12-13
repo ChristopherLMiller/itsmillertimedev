@@ -1,17 +1,17 @@
 import { Injectable } from '@nestjs/common';
-import { PostTag, Prisma } from '@prisma/client';
+import { PostCategory, Prisma } from '@prisma/client';
 import { PrismaLib } from 'libs/prisma/lib';
 import { PrismaService } from '../../../common/prisma/prisma.service';
 
 @Injectable()
-export class PostTagService {
+export class PostCategoriesService {
   constructor(private prisma: PrismaService) {}
 
   prismaLib = new PrismaLib();
 
   async create(
-    newData: PostTag | PostTag[],
-  ): Promise<PostTag | Prisma.BatchPayload> {
+    newData: PostCategory | PostCategory[],
+  ): Promise<PostCategory | Prisma.BatchPayload> {
     // check if a singular item or an array
     if (Array.isArray(newData)) {
       // handle as an array
@@ -19,17 +19,14 @@ export class PostTagService {
         newData.flatMap(async (item) => {
           const slug = await this.prismaLib.generateSlug(
             item.slug ? item.slug : item.title,
-            'postTag',
+            'postCategory',
           );
 
-          return {
-            title: item.title,
-            slug,
-          };
+          return { ...item, slug };
         }),
       );
 
-      return this.prisma.postTag.createMany({
+      return this.prisma.postCategory.createMany({
         data: insertableItems,
       });
     } else {
@@ -42,10 +39,10 @@ export class PostTagService {
           const title = newData.title;
           const slug = await this.prismaLib.generateSlug(
             newData.slug ? newData.slug : newData.title,
-            'postTag',
+            'postCategory',
           );
 
-          result = await this.prisma.postTag.create({
+          result = await this.prisma.postCategory.create({
             data: { title, slug },
           });
         } catch (error) {
@@ -66,24 +63,25 @@ export class PostTagService {
     return null;
   }
 
-  findAll(): Promise<PostTag[]> {
-    return this.prisma.postTag.findMany();
+  findAll(): Promise<PostCategory[]> {
+    return this.prisma.postCategory.findMany();
   }
 
   findOne(slug: string) {
-    return this.prisma.postTag.findUnique({
-      where: { slug },
-    });
+    return this.prisma.postCategory.findUnique({ where: { slug } });
   }
 
-  update(slug: string, updatePostTag: PostTag): Promise<PostTag> {
-    return this.prisma.postTag.update({
+  update(
+    slug: string,
+    updatePostCategory: PostCategory,
+  ): Promise<PostCategory> {
+    return this.prisma.postCategory.update({
       where: { slug: slug },
-      data: { ...updatePostTag },
+      data: { ...updatePostCategory },
     });
   }
 
   remove(slug: string) {
-    return this.prisma.postTag.delete({ where: { slug } });
+    return this.prisma.postCategory.delete({ where: { slug } });
   }
 }

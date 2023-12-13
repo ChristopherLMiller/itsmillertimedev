@@ -14,13 +14,13 @@ import { AuthService } from '../../../common/auth/auth.service';
 import { PrismaService } from '../../../common/prisma/prisma.service';
 
 @Injectable({ scope: Scope.REQUEST })
-export class PostService {
+export class PostsService {
   constructor(
     @Inject(REQUEST) private readonly request: ExpressRequest,
     private prisma: PrismaService,
     private authService: AuthService,
   ) {}
-  private readonly _logger = new Logger(PostService.name);
+  private readonly _logger = new Logger(PostsService.name);
 
   async create(newData: Prisma.PostCreateInput): Promise<Post> {
     try {

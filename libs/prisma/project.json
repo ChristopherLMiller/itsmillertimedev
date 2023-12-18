@@ -4,13 +4,33 @@
   "sourceRoot": "libs/prisma/src",
   "projectType": "library",
   "targets": {
-    "generate": {
+    "generate-all": {
       "executor": "nx:run-commands",
       "options": {
         "cwd": "libs/prisma",
         "parallel": false,
         "commands": [
           "prisma generate --schema schema.prisma"
+        ]
+      }
+    },
+    "generate-client": {
+      "executor": "nx:run-commands",
+      "options": {
+        "cwd": "libs/prisma",
+        "parallel": false,
+        "commands": [
+          "prisma generate --schema schema.prisma --generator client"
+        ]
+      }
+    },
+    "generate-classes": {
+      "executor": "nx:run-commands",
+      "options": {
+        "cwd": "libs/prisma",
+        "parallel": false,
+        "commands": [
+          "prisma generate --schema schema.prisma --generator prismaClassGenerator"
         ]
       }
     },
@@ -33,5 +53,5 @@
       }
     }
   },
-  "tags": []
+  "tags": ["scope:prisma"]
 }

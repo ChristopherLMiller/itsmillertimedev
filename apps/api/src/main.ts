@@ -1,31 +1,31 @@
-import { ValidationPipe, VersioningType } from '@nestjs/common';
-import { NestFactory } from '@nestjs/core';
-import { NestExpressApplication } from '@nestjs/platform-express';
-import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
-import * as Sentry from '@sentry/node';
-import helmet from 'helmet';
+import { ValidationPipe, VersioningType } from "@nestjs/common";
+import { NestFactory } from "@nestjs/core";
+import { NestExpressApplication } from "@nestjs/platform-express";
+import { DocumentBuilder, SwaggerModule } from "@nestjs/swagger";
+import * as Sentry from "@sentry/node";
+import helmet from "helmet";
 import {
   WinstonModule,
   utilities as nestWinstonModuleUtilities,
-} from 'nest-winston';
-import * as winston from 'winston';
-import { createLogger } from 'winston';
-import { GlobalModule } from './app/global.module';
-import { SentryInterceptor } from './common/interceptors/sentry.interceptor';
+} from "nest-winston";
+import * as winston from "winston";
+import { createLogger } from "winston";
+import { GlobalModule } from "./app/global.module";
+import { SentryInterceptor } from "./common/interceptors/sentry.interceptor";
 // eslint-disable-next-line @typescript-eslint/no-var-requires
-const packageData = require('../../../package.json');
+const packageData = require("../../../package.json");
 
 async function bootstrap() {
   // Create an instance of Winston
   const winstonInstance = createLogger({
     transports: [
       new winston.transports.Console({
-        level: 'debug',
+        level: "debug",
         format: winston.format.combine(
           winston.format.timestamp(),
           winston.format.ms(),
           winston.format.colorize(),
-          nestWinstonModuleUtilities.format.nestLike('API', {
+          nestWinstonModuleUtilities.format.nestLike("API", {
             colors: true,
             prettyPrint: true,
           }),
@@ -40,7 +40,7 @@ async function bootstrap() {
     release: packageData.version,
     environment: process.env.ENVIRONMENT,
     ignoreErrors: [
-      'UnsupportedMediaTypeException: No Exif segment found in the given image.',
+      "UnsupportedMediaTypeException: No Exif segment found in the given image.",
     ],
   });
 
@@ -53,18 +53,20 @@ async function bootstrap() {
 
   //Register global pieces
   app.useGlobalInterceptors(new SentryInterceptor());
-  app.useGlobalPipes(new ValidationPipe());
-  app.setGlobalPrefix('api');
+  app.useGlobalPipes(new ValidationPipe({ whitelist: true }));
+  app.setGlobalPrefix("api");
 
   // Setup Swagger
   const swaggerOptions = new DocumentBuilder()
-    .setTitle('Its Miller Time - Dev API')
-    .setDescription('API Docs for all itsmillertime.dev sites')
-    .setVersion('1.0')
+    .setTitle("Its Miller Time - Dev API")
+    .setDescription("API Docs for all itsmillertime.dev sites")
+    .setVersion("1.0")
     .addBearerAuth()
     .build();
-  const swaggerDocument = SwaggerModule.createDocument(app, swaggerOptions);
-  SwaggerModule.setup('/', app, swaggerDocument);
+  const swaggerDocument = SwaggerModule.createDocument(app, swaggerOptions, {
+    //extraModels: [...PrismaModel.extraModels],
+  });
+  SwaggerModule.setup("/", app, swaggerDocument);
 
   // Enable versioning
   app.enableVersioning({
@@ -80,7 +82,7 @@ async function bootstrap() {
   app.use(helmet());
 
   // Start the application
-  await app.listen(process.env.PORT, '0.0.0.0');
+  await app.listen(process.env.PORT, "0.0.0.0");
   winstonInstance.info(
     `🚀 Application v${
       packageData.version

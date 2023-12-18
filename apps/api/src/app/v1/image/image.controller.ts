@@ -1,5 +1,5 @@
-import { DataResponse } from '@itsmillertimedev/data';
-import { CacheInterceptor } from '@nestjs/cache-manager';
+import { DataResponse } from "@itsmillertimedev/data";
+import { CacheInterceptor } from "@nestjs/cache-manager";
 import {
   Controller,
   Delete,
@@ -7,50 +7,50 @@ import {
   Query,
   UnsupportedMediaTypeException,
   UseInterceptors,
-} from '@nestjs/common';
-import { ApiOperation, ApiQuery, ApiResponse, ApiTags } from '@nestjs/swagger';
-import { Image } from '@prisma/client';
-import { HttpStatusCode } from 'axios';
-import { PermissionsNodes } from '../../../common/decorators/auth.decorator';
-import { CloudinaryTransformInterceptor } from '../../../common/interceptors/cloudinaryTransform.interceptor';
-import { ImageService } from './image.service';
-import { CloudinaryPermissionNodes } from './permissions.nodes';
+} from "@nestjs/common";
+import { ApiOperation, ApiQuery, ApiResponse, ApiTags } from "@nestjs/swagger";
+import { Image } from "@prisma/client";
+import { HttpStatusCode } from "axios";
+import { PermissionsNodes } from "../../../common/decorators/auth.decorator";
+import { CloudinaryTransformInterceptor } from "../../../common/interceptors/cloudinaryTransform.interceptor";
+import { ImagePermissionNodes } from "./image.permissions";
+import { ImageService } from "./image.service";
 
-@Controller({ version: '1', path: 'image' })
-@ApiTags('Image')
+@Controller({ version: "1", path: "image" })
+@ApiTags("Image")
 @UseInterceptors(CloudinaryTransformInterceptor, CacheInterceptor)
 export class ImageController {
   constructor(private imageService: ImageService) {}
 
-  @Get('/')
-  @ApiOperation({ summary: 'Gets an Image' })
-  @ApiQuery({ name: 'public_id', description: 'Image ID from Cloudinary' })
-  @ApiResponse({ status: HttpStatusCode.Ok, description: 'Success' })
+  @Get("/")
+  @ApiOperation({ summary: "Gets an Image" })
+  @ApiQuery({ name: "public_id", description: "Image ID from Cloudinary" })
+  @ApiResponse({ status: HttpStatusCode.Ok, description: "Success" })
   @ApiResponse({
     status: HttpStatusCode.Unauthorized,
-    description: 'Forbidden',
+    description: "Forbidden",
   })
   @ApiResponse({
     status: HttpStatusCode.BadRequest,
-    description: 'Image not found',
+    description: "Image not found",
   })
-  async getImage(@Query('public_id') public_id): DataResponse<Image> {
+  async getImage(@Query("public_id") public_id): DataResponse<Image> {
     return {
       data: await this.imageService.getImage(public_id),
       meta: { public_id },
     };
   }
 
-  @Get('exif')
-  @ApiOperation({ summary: 'Get an Images EXIF data' })
-  @ApiQuery({ name: 'public_id', description: 'Image ID from Cloudinary' })
-  @ApiResponse({ status: HttpStatusCode.Ok, description: 'Success' })
+  @Get("exif")
+  @ApiOperation({ summary: "Get an Images EXIF data" })
+  @ApiQuery({ name: "public_id", description: "Image ID from Cloudinary" })
+  @ApiResponse({ status: HttpStatusCode.Ok, description: "Success" })
   @ApiResponse({
     status: HttpStatusCode.Unauthorized,
-    description: 'Forbidden',
+    description: "Forbidden",
   })
   async getExifData(
-    @Query('public_id') public_id,
+    @Query("public_id") public_id,
   ): DataResponse<Partial<Image>> {
     // try and get the contents
     try {
@@ -65,19 +65,19 @@ export class ImageController {
     }
   }
 
-  @Get('thumbnail')
-  @ApiOperation({ summary: 'Base64 encode the provided image' })
+  @Get("thumbnail")
+  @ApiOperation({ summary: "Base64 encode the provided image" })
   @ApiQuery({
-    name: 'public_id',
-    description: 'The public_id from cloudinary to encode',
+    name: "public_id",
+    description: "The public_id from cloudinary to encode",
   })
-  @ApiResponse({ status: HttpStatusCode.Ok, description: 'Success' })
+  @ApiResponse({ status: HttpStatusCode.Ok, description: "Success" })
   @ApiResponse({
     status: HttpStatusCode.Unauthorized,
-    description: 'Forbidden',
+    description: "Forbidden",
   })
   async getThumbnail(
-    @Query('public_id') public_id,
+    @Query("public_id") public_id,
   ): DataResponse<Partial<Image>> {
     return {
       data: { thumbnail: await this.imageService.getThumbnail(public_id) },
@@ -85,9 +85,9 @@ export class ImageController {
     };
   }
 
-  @Delete('/')
-  @PermissionsNodes(CloudinaryPermissionNodes.DELETE_FILE)
-  async deleteImage(@Query('public_id') public_id): DataResponse<string> {
+  @Delete("/")
+  @PermissionsNodes(ImagePermissionNodes.DELETE_FILE)
+  async deleteImage(@Query("public_id") public_id): DataResponse<string> {
     return {
       data: await this.imageService.deleteImage(public_id),
       meta: {

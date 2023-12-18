@@ -3,6 +3,12 @@ generator client {
   provider = "prisma-client-js"
 }
 
+generator prismaClassGenerator {
+  provider = "prisma-class-generator"
+  dryRun   = false
+  output   = "../../apps/api/src/lib/prisma/classes"
+}
+
 // The connection to the database itself
 datasource db {
   provider     = "postgresql"
@@ -92,6 +98,8 @@ model Manufacturer {
   title String
   slug  String  @unique
   Model Model[]
+
+  @@index([id, slug])
 }
 
 model Marker {

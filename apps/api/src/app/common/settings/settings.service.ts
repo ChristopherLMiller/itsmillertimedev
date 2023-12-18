@@ -1,6 +1,6 @@
-import { Injectable, Logger } from '@nestjs/common';
-import { Settings } from '@prisma/client';
-import { PrismaService } from '../prisma/prisma.service';
+import { Injectable, Logger } from "@nestjs/common";
+import { Settings } from "@prisma/client";
+import { PrismaService } from "../prisma/prisma.service";
 
 @Injectable()
 export class SettingsService {
@@ -8,7 +8,7 @@ export class SettingsService {
 
   constructor(private prisma: PrismaService) {}
 
-  async getSetting(key: string): Promise<Settings['value']> {
+  async getSetting(key: string): Promise<Settings["value"]> {
     const data = await this.prisma.settings.findUnique({ where: { key } });
 
     return data.value;
@@ -21,12 +21,12 @@ export class SettingsService {
   }
 
   async getField<T>(key: string, field: string): Promise<T> {
-    return (await this.getSetting(key))['fields'][field];
+    return (await this.getSetting(key))["fields"][field];
   }
 
   async getFieldValue<T>(key: string, field: string): Promise<T> {
     try {
-      return (await this.getSetting(key))['fields'][field].value;
+      return (await this.getSetting(key))["fields"][field].value;
     } catch (error) {
       this._logger.error(`Unable to load setting value of ${field} for ${key}`);
     }

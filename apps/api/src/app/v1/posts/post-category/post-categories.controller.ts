@@ -11,9 +11,10 @@ import {
   UseInterceptors,
 } from "@nestjs/common";
 import { ApiOperation, ApiParam, ApiResponse, ApiTags } from "@nestjs/swagger";
-import { PostCategory, Prisma } from "@prisma/client";
+import { PostCategory } from "@prisma/client";
 import { HttpStatusCode } from "axios";
 import { PermissionsNodes } from "../../../../common/decorators/auth.decorator";
+import { PostCategory as PostcategoryEntity } from "../../../../lib/prisma/classes/post_category";
 import { PostCategoriesService } from "./post-categories.service";
 import { PostCategoryPermissionNodes } from "./post-category.permissions";
 
@@ -35,10 +36,10 @@ export class PostCategoriesController {
   })
   @PermissionsNodes(PostCategoryPermissionNodes.CATEGORY_CREATE)
   async create(
-    @Body() createPostCategoryDto: PostCategory,
-  ): DataResponse<PostCategory | Prisma.BatchPayload> {
+    @Body() postCategories: PostcategoryEntity,
+  ): DataResponse<PostCategory> {
     return {
-      data: await this.postCategoriesService.create(createPostCategoryDto),
+      data: await this.postCategoriesService.create(postCategories),
     };
   }
 

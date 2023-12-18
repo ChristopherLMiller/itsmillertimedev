@@ -11,9 +11,10 @@ import {
   UseInterceptors,
 } from "@nestjs/common";
 import { ApiOperation, ApiParam, ApiResponse, ApiTags } from "@nestjs/swagger";
-import { PostTag, Prisma } from "@prisma/client";
+import { PostTag } from "@prisma/client";
 import { HttpStatusCode } from "axios";
 import { PermissionsNodes } from "../../../../common/decorators/auth.decorator";
+import { PostTag as PostTagEntity } from "../../../../lib/prisma/classes/post_tag";
 import { PostsTagsPermissionNodes } from "./post-tag.permissions";
 import { PostTagsService } from "./post-tags.service";
 
@@ -35,11 +36,9 @@ export class PostTagsController {
     description: "Forbidden",
   })
   @PermissionsNodes(PostsTagsPermissionNodes.CREATE_TAG)
-  async create(
-    @Body() createPostTagDto: PostTag,
-  ): DataResponse<PostTag | Prisma.BatchPayload> {
+  async create(@Body() postTag: PostTagEntity): DataResponse<PostTag> {
     return {
-      data: await this.postTagService.create(createPostTagDto),
+      data: await this.postTagService.create(postTag),
       meta: {},
     };
   }

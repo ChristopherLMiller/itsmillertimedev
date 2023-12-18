@@ -3,6 +3,12 @@ generator client {
   provider = "prisma-client-js"
 }
 
+generator prismaClassGenerator {
+  provider = "prisma-class-generator"
+  dryRun   = false
+  output   = "../../apps/api/src/lib/prisma/classes"
+}
+
 // The connection to the database itself
 datasource db {
   provider     = "postgresql"

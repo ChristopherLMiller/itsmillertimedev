@@ -16,12 +16,12 @@
         "@nrwl/nx/enforce-module-boundaries": [
           "error",
           {
-            "enforceBuildableLibDependency": true,
+            "enforceBuildableLibDependency": false,
             "allow": [],
             "depConstraints": [
               {
-                "sourceTag": "*",
-                "onlyDependOnLibsWithTags": ["*"]
+                "sourceTag": "scope:api",
+                "onlyDependOnLibsWithTags": ["scope:prisma", "scope:data"]
               }
             ]
           }

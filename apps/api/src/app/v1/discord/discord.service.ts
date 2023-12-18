@@ -1,12 +1,12 @@
-import { HttpService } from '@nestjs/axios';
-import { BadRequestException, Injectable, Logger } from '@nestjs/common';
-import { DiscordUserSetting, Prisma } from '@prisma/client';
+import { HttpService } from "@nestjs/axios";
+import { BadRequestException, Injectable, Logger } from "@nestjs/common";
+import { DiscordUserSetting, Prisma } from "@prisma/client";
 
-import { InjectDiscordClient } from '@discord-nestjs/core';
-import { Client, Collection, User } from 'discord.js';
-import { dataFetcher } from '../../../common/handlers/dataFetcher';
-import { PrismaService } from '../../common/prisma/prisma.service';
-import { SettingsService } from '../../common/settings/settings.service';
+import { InjectDiscordClient } from "@discord-nestjs/core";
+import { Client, Collection, User } from "discord.js";
+import { dataFetcher } from "../../../common/handlers/dataFetcher";
+import { PrismaService } from "../../common/prisma/prisma.service";
+import { SettingsService } from "../../common/settings/settings.service";
 
 @Injectable()
 export class DiscordService {
@@ -22,18 +22,18 @@ export class DiscordService {
 
   async sendDiscordMessage(message: string, channel: string): Promise<void> {
     const discordChannel = (await this.settings.getFieldValue(
-      'discord',
+      "discord",
       channel,
     )) as string;
 
     // There is no response from discord, so nothing to return, just run it
     dataFetcher(
       this.httpService.post(discordChannel, {
-        username: 'ItsMillerTime',
+        username: "ItsMillerTime",
         avatar_url:
-          'https://images.itsmillertime.dev/v1664470345/clm-new/assets/discord-avatar.png',
+          "https://images.itsmillertime.dev/v1664470345/clm-new/assets/discord-avatar.png",
         content: message,
-        channel_id: '',
+        channel_id: "",
       }),
     );
     this._logger.log(`Message sent to discord channel ${channel}`);
@@ -51,20 +51,20 @@ export class DiscordService {
     } catch (error) {
       this._logger.log(error);
       throw new BadRequestException(
-        'User was not found in the Discord server cache',
+        "User was not found in the Discord server cache",
       );
     }
   }
 
   async getUsersMeta(
-    userId?: DiscordUserSetting['userId'],
+    userId?: DiscordUserSetting["userId"],
   ): Promise<Array<DiscordUserSetting>> {
     return this.prisma.discordUserSetting.findMany({ where: { userId } });
   }
 
   async createUserMeta(
     userId: string,
-    meta?: DiscordUserSetting['meta'],
+    meta?: DiscordUserSetting["meta"],
   ): Promise<DiscordUserSetting> {
     try {
       const data = this.prisma.discordUserSetting.create({
@@ -73,7 +73,7 @@ export class DiscordService {
       return data;
     } catch (error) {
       if (error instanceof Prisma.PrismaClientKnownRequestError) {
-        if (error.code === 'P2002') {
+        if (error.code === "P2002") {
           this._logger.log(`The user ${userId} has already been created`);
           return this.prisma.discordUserSetting.findUnique({
             where: { userId: userId },

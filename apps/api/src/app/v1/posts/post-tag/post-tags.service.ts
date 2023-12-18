@@ -1,26 +1,16 @@
-import { BadRequestException, Injectable, Logger } from "@nestjs/common";
+import { Injectable, Logger } from "@nestjs/common";
 import { PostTag } from "@prisma/client";
-import { PrismaLib } from "libs/prisma/lib";
+import { PostTag as PostTagEntity } from "../../../../lib/prisma/classes/post_tag";
 import { PrismaService } from "../../../common/prisma/prisma.service";
 
 @Injectable()
 export class PostTagsService {
   constructor(private prisma: PrismaService) {}
 
-  prismaLib = new PrismaLib();
   private readonly _logger = new Logger(PostTagsService.name);
 
-  async create(tag: PostTag): Promise<PostTag> {
-    if (Array.isArray(tag))
-      throw new BadRequestException("Can only create one tag at a time");
-
-    const title = tag.title;
-    const slug = tag.slug ?? null; // Slug generation is handled by the middleware
-    const result = await this.prisma.create<PostTag>("postTag", {
-      title,
-      slug,
-    });
-    return result;
+  create(tag: PostTagEntity): Promise<PostTag> {
+    return this.prisma.create<PostTag>("postTag", tag);
   }
 
   findAll(): Promise<PostTag[]> {

@@ -5,7 +5,6 @@ import {
   OnModuleInit,
 } from "@nestjs/common";
 import { Prisma, PrismaClient } from "@prisma/client";
-import { GenerateSlugMiddleware } from "../../../common/middleware/generateSlug.middleware";
 
 @Injectable()
 export class PrismaService
@@ -23,16 +22,12 @@ export class PrismaService
   async onModuleInit(): Promise<void> {
     this.$on("error", (event) => {
       this._logger.log(event);
-      process.exit(1);
     });
 
     // lets log when in dev mode
     if (process.env.ENVIRONMENT === "development") {
       this.$on("query", (e) => this._logger.debug(`${e.query} ${e.params}`));
     }
-
-    // Register middleware here for our app
-    this.$use(GenerateSlugMiddleware());
 
     try {
       await this.$connect();
@@ -65,5 +60,12 @@ export class PrismaService
         throw new Error(error);
       }
     }
+  }
+
+  async createMany<T>(model: string, data: any): Promise<T> {
+    const result = await this[model].createMany({ data });
+    console.log(result);
+
+    return result;
   }
 }

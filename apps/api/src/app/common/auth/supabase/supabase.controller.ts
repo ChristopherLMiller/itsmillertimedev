@@ -2,14 +2,11 @@ import { SupabaseWebhookResponse } from "@itsmillertimedev/data";
 import { Body, Controller, Logger, Post, UseGuards } from "@nestjs/common";
 import { ApiTags } from "@nestjs/swagger";
 import { User } from "@prisma/client";
-import { ApiKeyAuthGuard } from "../../../../common/guards/apiKeyAuth.guard";
 import { HookdeckGuard } from "../../../../common/guards/hookdeck.guard";
-import { SupabaseAuthGuard } from "../../../../common/guards/supabaseAuth.guard";
 import { SupabaseService } from "./supabase.service";
 
 @Controller({ path: "auth/supabase" })
 @ApiTags("Authentication", "Permissions")
-@UseGuards(SupabaseAuthGuard, ApiKeyAuthGuard)
 export class SupabaseController {
   constructor(private supabaseService: SupabaseService) {}
 

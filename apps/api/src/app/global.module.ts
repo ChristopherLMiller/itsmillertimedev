@@ -1,17 +1,17 @@
-import { CacheModule } from '@nestjs/cache-manager';
-import { Logger, Module } from '@nestjs/common';
-import { APP_GUARD, APP_INTERCEPTOR } from '@nestjs/core';
-import MemoryStore from 'cache-manager-memory-store';
-import { redisStore } from 'cache-manager-redis-yet';
-import { RedisClientOptions } from 'redis';
-import { ComboAuthGuard } from '../common/guards/ComboAuth.guard';
-import { ApiKeyAuthGuard } from '../common/guards/apiKeyAuth.guard';
-import { SupabaseAuthGuard } from '../common/guards/supabaseAuth.guard';
-import { LoggingInterceptor } from '../common/interceptors/logging.interceptor';
-import { ResponseInterceptor } from '../common/interceptors/response.interceptor';
-import { UserInterceptor } from '../common/interceptors/user.interceptor';
-import { CommonModule } from './common/common.module';
-import { V1Module } from './v1/v1.module';
+import { CacheModule } from "@nestjs/cache-manager";
+import { Logger, Module } from "@nestjs/common";
+import { APP_GUARD, APP_INTERCEPTOR } from "@nestjs/core";
+import MemoryStore from "cache-manager-memory-store";
+import { redisStore } from "cache-manager-redis-yet";
+import { RedisClientOptions } from "redis";
+import { ComboAuthGuard } from "../common/guards/ComboAuth.guard";
+import { ApiKeyAuthGuard } from "../common/guards/apiKeyAuth.guard";
+import { SupabaseAuthGuard } from "../common/guards/supabaseAuth.guard";
+import { LoggingInterceptor } from "../common/interceptors/logging.interceptor";
+import { ResponseInterceptor } from "../common/interceptors/response.interceptor";
+import { UserInterceptor } from "../common/interceptors/user.interceptor";
+import { CommonModule } from "./common/common.module";
+import { V1Module } from "./v1/v1.module";
 
 @Module({
   controllers: [],
@@ -22,13 +22,13 @@ import { V1Module } from './v1/v1.module';
         const logger = new Logger(GlobalModule.name);
         // If we don't want caching eject now
         if (!process.env.CACHING_ENABLED) {
-          logger.log('Caching Service - Disabled');
+          logger.log("Caching Service - Disabled");
           return {};
         }
 
         // If we are in dev mode, set memory cache
-        if (process.env.ENVIRONMENT === 'development') {
-          logger.log('Caching Service - Development mode; memory cache');
+        if (process.env.ENVIRONMENT === "development") {
+          logger.log("Caching Service - Development mode; memory cache");
           return { store: MemoryStore };
         }
 
@@ -42,11 +42,37 @@ import { V1Module } from './v1/v1.module';
           const store = await redisStore({
             url: `redis://${process.env.REDIS_USERNAME}:${process.env.REDIS_PASSWORD}@${process.env.REDIS_HOST}:${process.env.REDIS_PORT}`,
             ttl: +process.env.CACHE_TTL,
+            pingInterval: 1000 * 10,
+            disableOfflineQueue: false,
+          });
+
+          store.client.on("connect", () => {
+            logger.log("Connected to Redis");
+          });
+
+          store.client.on("error", (err) => {
+            logger.log(err.message);
+          });
+
+          store.client.on("ready", () => {
+            logger.log("Redis is ready");
+          });
+
+          store.client.on("reconnecting", () => {
+            logger.log("Redis client is reconnecting");
+          });
+
+          store.client.on("end", () => {
+            logger.log("Redis connection ended");
+          });
+
+          process.on("SIGINT", () => {
+            store.client.quit();
           });
           return { store };
         } catch (error) {
           logger.log(
-            'Unable to connect to redis store, falling back to memory cache',
+            "Unable to connect to redis store, falling back to memory cache",
           );
           logger.log(error);
           return { store: MemoryStore };

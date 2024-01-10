@@ -10,7 +10,7 @@ export class PermissionsToRoles {
   roleId: number;
 
   @ApiProperty({ type: () => Permission })
-  Permission: Permission;
+  permission: Permission;
 
   @ApiProperty({ type: Number })
   permissionId: number;

@@ -1,5 +1,5 @@
 import { PermissionsToRoles } from "./permissions_to_roles";
-import { User } from "./user";
+import { UserProfile } from "./user_profile";
 import { ApiProperty } from "@nestjs/swagger";
 
 export class Role {
@@ -12,6 +12,6 @@ export class Role {
   @ApiProperty({ isArray: true, type: () => PermissionsToRoles })
   permissions: PermissionsToRoles[];
 
-  @ApiProperty({ isArray: true, type: () => User })
-  User: User[];
+  @ApiProperty({ isArray: true, type: () => UserProfile })
+  User: UserProfile[];
 }

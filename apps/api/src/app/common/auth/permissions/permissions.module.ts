@@ -1,11 +1,12 @@
-import { Module } from "@nestjs/common";
+import { Global, Module } from "@nestjs/common";
 import { PermissionsController } from "./permissions.controller";
 import { PermissionsService } from "./permissions.service";
 
+@Global()
 @Module({
   imports: [],
   providers: [PermissionsService],
-  exports: [],
+  exports: [PermissionsService],
   controllers: [PermissionsController],
 })
 export class PermissionsModule {}

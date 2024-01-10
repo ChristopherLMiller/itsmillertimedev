@@ -1,24 +1,24 @@
-import { DataResponse } from '@itsmillertimedev/data';
-import { countWords } from '@itsmillertimedev/utility-functions';
+import { DataResponse } from "@itsmillertimedev/data";
+import { countWords } from "@itsmillertimedev/utility-functions";
 import {
   BadRequestException,
   Inject,
   Injectable,
   Logger,
-  Scope,
-} from '@nestjs/common';
-import { REQUEST } from '@nestjs/core';
-import { Post, Prisma } from '@prisma/client';
-import { Request as ExpressRequest } from 'express';
-import { AuthService } from '../../../common/auth/auth.service';
-import { PrismaService } from '../../../common/prisma/prisma.service';
+} from "@nestjs/common";
+import { REQUEST } from "@nestjs/core";
+import { Post, Prisma } from "@prisma/client";
+import { SupabaseService } from "../../../common/auth/supabase/supabase.service";
+import { UserProfilesService } from "../../../common/auth/userProfiles/userProfiles.service";
+import { PrismaService } from "../../../common/prisma/prisma.service";
 
-@Injectable({ scope: Scope.REQUEST })
+@Injectable()
 export class PostsService {
   constructor(
-    @Inject(REQUEST) private readonly request: ExpressRequest,
+    @Inject(REQUEST) private readonly request: Request,
     private prisma: PrismaService,
-    private authService: AuthService,
+    private userProfile: UserProfilesService,
+    private supabaseService: SupabaseService,
   ) {}
   private readonly _logger = new Logger(PostsService.name);
 
@@ -35,7 +35,7 @@ export class PostsService {
       if (error instanceof Prisma.PrismaClientValidationError) {
         this._logger.log(error.message);
         throw new BadRequestException(
-          'Unable to validate the post',
+          "Unable to validate the post",
           error.message,
         );
       } else {
@@ -76,25 +76,23 @@ export class PostsService {
     };
 
     // Extract the user if provided, as this is used to determine some filtering parameters
-    const isLoggedIn = await this.authService.isLoggedIn(
-      this.request.headers.authorization,
-    );
+    const isLoggedIn = await this.supabaseService.isLoggedIn();
 
     // Check that the user is logged in, showing draft pieces requires authentication
     if (isLoggedIn) {
-      const user = await this.authService.getUser(
-        this.authService.getJWT(this.request.headers.authorization),
-      );
+      const user = await this.supabaseService.getUserFromRequest();
 
       // If user isn't null we can fetch their role
       if (user != null) {
-        const userRole = await this.authService.getUserRole(user.data.user.id);
+        const userRole = await this.userProfile.getUserRole(user.id);
         // Determine the level of publishedStatus based on the user role
-        if (userRole.name.toUpperCase() === 'ADMINISTRATOR') {
+        if (userRole.name.toUpperCase() === "ADMINISTRATOR") {
           where.published = undefined; // this won't filter out anything
         }
       }
     }
+
+    this._logger.log(where);
 
     // Add in where query parameters to the existing where object
     if (whereQuery !== undefined) {
@@ -110,7 +108,7 @@ export class PostsService {
 
         // Split apart the select fields if provided
         if (selectQuery !== null) {
-          const selectKeys = (selectQuery as string).split(',');
+          const selectKeys = (selectQuery as string).split(",");
           const selectObjet = {};
           for (let i = 0; i < selectKeys.length; i++) {
             selectObjet[selectKeys[i]] = true;
@@ -167,12 +165,20 @@ export class PostsService {
     };
   }
 
-  findOne(slug: string): Promise<Post> {
+  findOne(id: string): Promise<Post> {
+    // create the where object to use
+    const where = {} as Prisma.PostWhereUniqueInput;
+
+    // To decide if its slug or id, lets see if we can parse it as an int
+    if (isNaN(parseInt(id))) {
+      where["slug"] = id;
+    } else {
+      where["id"] = +id;
+    }
+
     return this.prisma.post.findUnique({
       include: { category: true, tags: true, featuredImage: true },
-      where: {
-        slug,
-      },
+      where: where,
     });
   }
 }

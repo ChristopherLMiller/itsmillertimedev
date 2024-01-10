@@ -36,8 +36,9 @@ model ClockifyTimer {
 }
 
 model DiscordUserSetting {
-  userId String @id @unique
-  meta   Json
+  userId      String        @id @unique
+  meta        Json
+  UserProfile UserProfile[]
 }
 
 model Gallery {
@@ -278,7 +279,7 @@ model Role {
   id          Int                  @id @default(autoincrement())
   name        String
   permissions PermissionsToRoles[]
-  User        User[]
+  User        UserProfile[]
 
   @@index([id])
 }
@@ -294,19 +295,21 @@ model Permission {
 model PermissionsToRoles {
   Role         Role       @relation(fields: [roleId], references: [id])
   roleId       Int
-  Permission   Permission @relation(fields: [permissionId], references: [id])
+  permission   Permission @relation(fields: [permissionId], references: [id])
   permissionId Int
 
   @@id([roleId, permissionId])
 }
 
-model User {
-  id         Int    @id @default(autoincrement())
-  supabaseId String @unique
-  email      String
-  role       Role   @relation(fields: [roleId], references: [id])
-  roleId     Int
-  meta       Json?
+model UserProfile {
+  id                       Int                 @id @default(autoincrement())
+  supabaseId               String              @unique
+  email                    String
+  role                     Role                @relation(fields: [roleId], references: [id])
+  roleId                   Int
+  meta                     Json?
+  discord                  DiscordUserSetting? @relation(fields: [discordUserSettingUserId], references: [userId])
+  discordUserSettingUserId String?
 
   @@index([id])
 }

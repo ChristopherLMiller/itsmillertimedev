@@ -22,7 +22,7 @@ import { Session as _Session } from "./session";
 import { Role as _Role } from "./role";
 import { Permission as _Permission } from "./permission";
 import { PermissionsToRoles as _PermissionsToRoles } from "./permissions_to_roles";
-import { User as _User } from "./user";
+import { UserProfile as _UserProfile } from "./user_profile";
 
 export namespace PrismaModel {
   export class Alert extends _Alert {}
@@ -49,7 +49,7 @@ export namespace PrismaModel {
   export class Role extends _Role {}
   export class Permission extends _Permission {}
   export class PermissionsToRoles extends _PermissionsToRoles {}
-  export class User extends _User {}
+  export class UserProfile extends _UserProfile {}
 
   export const extraModels = [
     Alert,
@@ -76,6 +76,6 @@ export namespace PrismaModel {
     Role,
     Permission,
     PermissionsToRoles,
-    User,
+    UserProfile,
   ];
 }

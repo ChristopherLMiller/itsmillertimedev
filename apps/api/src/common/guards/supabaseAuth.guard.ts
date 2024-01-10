@@ -1,36 +1,30 @@
 import {
-  BadRequestException,
   CanActivate,
   ExecutionContext,
   Injectable,
   Logger,
-  UnauthorizedException,
-} from '@nestjs/common';
-import { Reflector } from '@nestjs/core';
-import { AuthService } from '../../app/common/auth/auth.service';
+} from "@nestjs/common";
+import { Reflector } from "@nestjs/core";
+import { PermissionsService } from "../../app/common/auth/permissions/permissions.service";
+import { SupabaseService } from "../../app/common/auth/supabase/supabase.service";
+import { UserProfilesService } from "../../app/common/auth/userProfiles/userProfiles.service";
 
 @Injectable()
 export class SupabaseAuthGuard implements CanActivate {
   constructor(
-    private authService: AuthService,
+    private supabaseService: SupabaseService,
+    private userProfileService: UserProfilesService,
     private reflector: Reflector,
+    private permissionsService: PermissionsService,
   ) {}
 
   private readonly _logger = new Logger(SupabaseAuthGuard.name);
 
   async canActivate(context: ExecutionContext): Promise<boolean> {
     const handler = context.getHandler();
-    const request = context.switchToHttp().getRequest();
-
-    // Check if the requesting user is localhost, and also only in dev mode, if so just return true now
-    if (
-      request.hostname === 'localhost' &&
-      process.env.NODE_ENV === 'development'
-    )
-      return true;
 
     const permissionNodes = this.reflector.get<string[]>(
-      'auth_permission_node',
+      "auth_permission_node",
       handler,
     );
 
@@ -40,34 +34,20 @@ export class SupabaseAuthGuard implements CanActivate {
     if (permissionNodes === undefined || permissionNodes.length === 0) {
       return true;
     } else {
-      // Extract the JWT
-      const jwt = request.headers?.authorization as string | null;
+      // Get the logged in user from the request
+      const user = await this.supabaseService.getUserFromRequest();
 
-      if (jwt) {
-        const { data, error } = await this.authService.getUser(
-          jwt.split(' ')[1],
+      // If the users roles is 'authenticated', that means they were logged into supabase successfully
+      if (user.role === "authenticated") {
+        // Fetch the users permissions nodes applicable to them.
+        const usersPermissionsNodes =
+          await this.userProfileService.getUsersPermissions(user.id);
+
+        // Check if they have permission to do so or not
+        return this.permissionsService.hasPermission(
+          usersPermissionsNodes,
+          permissionNodes,
         );
-
-        // Verify we got a user
-        if (!error) {
-          if (data.user.role === 'authenticated') {
-            // User was authenticated successfully, now lets get their role and all the permission nodes they have
-            // this is whats used to compare and verify if they have permission or not
-
-            const user = await this.authService.getUserPermissions(
-              data.user.id,
-            );
-            return true;
-          }
-        } else {
-          if (error.status === 401) {
-            throw new UnauthorizedException(
-              `${error.status}: ${error.message}`,
-            );
-          } else {
-            throw new BadRequestException(`${error.status}: ${error.message}`);
-          }
-        }
       }
     }
 

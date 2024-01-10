@@ -3,9 +3,9 @@ import {
   ExecutionContext,
   Injectable,
   Logger,
-} from '@nestjs/common';
-import { ApiKeyAuthGuard } from './apiKeyAuth.guard';
-import { SupabaseAuthGuard } from './supabaseAuth.guard';
+} from "@nestjs/common";
+import { ApiKeyAuthGuard } from "./apiKeyAuth.guard";
+import { SupabaseAuthGuard } from "./supabaseAuth.guard";
 
 @Injectable()
 export class ComboAuthGuard implements CanActivate {

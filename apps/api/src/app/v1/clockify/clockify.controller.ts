@@ -22,7 +22,13 @@ import {
   UseGuards,
   UseInterceptors,
 } from "@nestjs/common";
-import { ApiOperation, ApiResponse, ApiTags } from "@nestjs/swagger";
+import {
+  ApiBadRequestResponse,
+  ApiOkResponse,
+  ApiOperation,
+  ApiResponse,
+  ApiTags,
+} from "@nestjs/swagger";
 import { ClockifyTimer } from "@prisma/client";
 import { HttpStatusCode } from "axios";
 import { formatDistanceStrict, parseISO } from "date-fns";
@@ -70,9 +76,8 @@ export class ClockifyController {
   //#region workspaces
   @Get("workspaces")
   @ApiOperation({ summary: "Get list of workspaces" })
-  @ApiResponse({ status: HttpStatusCode.Ok, description: "Success" })
-  @ApiResponse({
-    status: HttpStatusCode.BadGateway,
+  @ApiOkResponse({ description: "Success" })
+  @ApiBadRequestResponse({
     description: "Bad Request",
   })
   async getWorkspaces(): DataResponse<Array<Workspace>> {
@@ -83,10 +88,9 @@ export class ClockifyController {
   //#region Clients
   @Get("clients")
   @ApiOperation({ summary: "Get list of clients in workspace" })
-  @ApiResponse({ status: HttpStatusCode.Ok, description: "Success" })
-  @ApiResponse({
-    status: HttpStatusCode.BadGateway,
-    description: "Bad Request'",
+  @ApiOkResponse({ description: "Success" })
+  @ApiBadRequestResponse({
+    description: "Bad Request",
   })
   async getClients(
     @Query("page") page?: number,

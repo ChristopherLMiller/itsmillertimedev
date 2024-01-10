@@ -1,7 +1,6 @@
 import { DataResponse } from "@itsmillertimedev/data";
 import { Body, Controller, Logger, Post } from "@nestjs/common";
 import { ApiTags } from "@nestjs/swagger";
-import { AuthService } from "../../common/auth/auth.service";
 import { DiscordService } from "../discord/discord.service";
 import { ImageService } from "../image/image.service";
 
@@ -11,7 +10,6 @@ export class WebhooksController {
   constructor(
     private discord: DiscordService,
     private image: ImageService,
-    private auth: AuthService,
   ) {}
 
   logger = new Logger(WebhooksController.name);

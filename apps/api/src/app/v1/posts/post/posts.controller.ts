@@ -11,14 +11,20 @@ import {
   Query,
   UseInterceptors,
 } from "@nestjs/common";
-import { ApiOperation, ApiQuery, ApiResponse, ApiTags } from "@nestjs/swagger";
+import {
+  ApiOkResponse,
+  ApiOperation,
+  ApiQuery,
+  ApiResponse,
+  ApiTags,
+} from "@nestjs/swagger";
 import { Prisma, Post as PrismaPost } from "@prisma/client";
 import { HttpStatusCode } from "axios";
 import { PermissionsNodes } from "../../../../common/decorators/auth.decorator";
 import { PostPermissionNodes } from "./post.permissions";
 import { PostsService } from "./posts.service";
 
-@Controller({ version: "1", path: "post" })
+@Controller({ version: "1", path: "posts/posts" })
 @ApiTags("Post")
 @UseInterceptors(CacheInterceptor)
 export class PostsController {
@@ -53,15 +59,14 @@ export class PostsController {
     return { ...(await this.postService.findAll(query)) };
   }
 
-  @Get(":slug")
+  @Get(":id")
   @ApiOperation({ summary: "Get Specific Post" })
-  @ApiQuery({ name: "slug", description: "Slug of the post to fetch" })
-  @ApiResponse({
-    status: HttpStatusCode.Ok,
+  @ApiQuery({ name: "id", description: "Slug or ID of the post to fetch" })
+  @ApiOkResponse({
     description: "Post to get",
   })
-  async findOne(@Param("slug") slug: string): DataResponse<PrismaPost> {
-    return { data: await this.postService.findOne(slug), meta: { slug } };
+  async findOne(@Param("id") id: string): DataResponse<PrismaPost> {
+    return { data: await this.postService.findOne(id), meta: { id } };
   }
 
   @Patch(":id")

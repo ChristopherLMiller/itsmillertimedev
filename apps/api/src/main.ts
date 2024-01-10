@@ -39,7 +39,7 @@ async function bootstrap() {
   Sentry.init({
     dsn: process.env.SENTRY_DSN,
     release: packageData.version,
-    environment: process.env.ENVIRONMENT,
+    environment: process.env.NODE_ENV,
     ignoreErrors: [
       "UnsupportedMediaTypeException: No Exif segment found in the given image.",
     ],

@@ -8,7 +8,13 @@ import { PrismaService } from "../../prisma/prisma.service";
 export class PermissionsService {
   constructor(private prisma: PrismaService) {}
 
-  async updatePermissionNodes(): Promise<any> {
+  async updatePermissionNodes(): Promise<{
+    nodes: string[];
+    meta: {
+      total: number;
+      new: number;
+    };
+  }> {
     const files = await glob("**/*.permissions.{ts,js}");
     const regex = /(?<=")(.*?)(?=")/g;
 
@@ -41,5 +47,16 @@ export class PermissionsService {
 
   async getPermissionsNodes(): Promise<Permission[]> {
     return this.prisma.permission.findMany();
+  }
+
+  //  Compare the users permission nodes to those of an acceptable permission node array
+  hasPermission(
+    userPermissionNodes: string[],
+    nodesToCheck: string[],
+  ): boolean {
+    if (userPermissionNodes.some((node) => nodesToCheck.includes(node))) {
+      return true;
+    }
+    return false;
   }
 }

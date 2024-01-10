@@ -25,7 +25,7 @@ export class PrismaService
     });
 
     // lets log when in dev mode
-    if (process.env.ENVIRONMENT === "development") {
+    if (process.env.NODE_ENV === "development") {
       this.$on("query", (e) => this._logger.debug(`${e.query} ${e.params}`));
     }
 

@@ -1,13 +1,13 @@
 import { Global, Module } from "@nestjs/common";
-import { AuthService } from "./auth.service";
 import { PermissionsModule } from "./permissions/permissions.module";
 import { SupabaseModule } from "./supabase/supabase.module";
+import { UserProfilesModule } from "./userProfiles/userProfiles.module";
 
 @Global()
 @Module({
-  imports: [PermissionsModule, SupabaseModule],
-  providers: [AuthService],
-  exports: [AuthService],
+  imports: [PermissionsModule, UserProfilesModule, SupabaseModule],
+  providers: [],
+  exports: [],
   controllers: [],
 })
 export class AuthModule {}

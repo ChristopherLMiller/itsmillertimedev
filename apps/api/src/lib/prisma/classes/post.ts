@@ -1,7 +1,7 @@
-import { ApiProperty, ApiPropertyOptional } from "@nestjs/swagger";
 import { Image } from "./image";
 import { PostCategory } from "./post_category";
 import { PostTag } from "./post_tag";
+import { ApiProperty, ApiPropertyOptional } from "@nestjs/swagger";
 
 export class Post {
   @ApiProperty({ type: Number })

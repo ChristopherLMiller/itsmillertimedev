@@ -4,9 +4,9 @@ import {
   Injectable,
   Logger,
   NestInterceptor,
-} from '@nestjs/common';
-import { Reflector } from '@nestjs/core';
-import { Observable, tap } from 'rxjs';
+} from "@nestjs/common";
+import { Reflector } from "@nestjs/core";
+import { Observable, tap } from "rxjs";
 
 @Injectable()
 export class LoggingInterceptor<T> implements NestInterceptor<T> {
@@ -20,7 +20,7 @@ export class LoggingInterceptor<T> implements NestInterceptor<T> {
   ): Observable<T> | Promise<Observable<T>> {
     // Fetch the logging reflector element if available
     const ignoreLogging = this.reflector.get(
-      'ignore-logging',
+      "ignore-logging",
       context.getHandler(),
     );
 
@@ -35,13 +35,13 @@ export class LoggingInterceptor<T> implements NestInterceptor<T> {
 
     // The remote client can be one of two fields because of proxy server, figure it out
     const remoteIP =
-      request.headers['x-forwarded-for'] !== undefined
-        ? request.headers['x-forwarded-for']
+      request.headers["x-forwarded-for"] !== undefined
+        ? request.headers["x-forwarded-for"]
         : connection.remoteAddress;
 
     // Grab out the allowable timing information from the reflector
     const allowableTimings =
-      this.reflector.get('response-time-limit', context.getHandler()) || 30;
+      this.reflector.get("response-time-limit", context.getHandler()) || 30;
 
     // Start perf timer to measure the response time
     const startTime = performance.now();
@@ -54,7 +54,7 @@ export class LoggingInterceptor<T> implements NestInterceptor<T> {
         /// log this information out now
         this._logger.log(
           `[${method}] Req: ${originalUrl}: Client IP: ${remoteIP} Res: ${statusCode} - Total Time: ${totalTime}ms ${
-            totalTime < allowableTimings ? '✅' : '❌'
+            totalTime < allowableTimings ? "✅" : "❌"
           }`,
         );
 

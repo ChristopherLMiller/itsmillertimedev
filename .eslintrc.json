@@ -21,7 +21,7 @@
             "depConstraints": [
               {
                 "sourceTag": "scope:api",
-                "onlyDependOnLibsWithTags": ["scope:prisma", "scope:data"]
+                "onlyDependOnLibsWithTags": ["scope:prisma", "scope:data", "scope:utility-functions"]
               }
             ]
           }

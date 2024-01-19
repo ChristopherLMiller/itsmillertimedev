@@ -22,7 +22,7 @@ export class PermissionsService {
     const nodes = [];
 
     // Iterate through the files
-    files.forEach(async (file) => {
+    files.forEach((file) => {
       const fileContents = readFileSync(file).toString();
       const matches = fileContents.match(regex);
 

@@ -1,9 +1,9 @@
-import { Client, Project, User, Workspace } from '@itsmillertimedev/data';
-import { HttpService } from '@nestjs/axios';
-import { BadRequestException, Injectable, Logger } from '@nestjs/common';
-import { dataFetcher } from '../../../common/handlers/dataFetcher';
-import { PrismaService } from '../../common/prisma/prisma.service';
-import { SettingsService } from '../../common/settings/settings.service';
+import { Client, Project, User, Workspace } from "@itsmillertimedev/data";
+import { HttpService } from "@nestjs/axios";
+import { BadRequestException, Injectable, Logger } from "@nestjs/common";
+import { dataFetcher } from "../../../common/handlers/dataFetcher";
+import { PrismaService } from "../../common/prisma/prisma.service";
+import { SettingsService } from "../../common/settings/settings.service";
 
 @Injectable()
 export class ClockifyService {
@@ -15,7 +15,7 @@ export class ClockifyService {
     this.loadSettings().then((settings) => {
       this.workspaceId = settings.workspaceId;
       this.userId = settings.userId;
-      this._logger.log('Settings loaded successfully');
+      this._logger.log("Settings loaded successfully");
     });
   }
 
@@ -28,10 +28,10 @@ export class ClockifyService {
   async loadSettings() {
     try {
       const workspaceId = await this.settings.getFieldValue(
-        'clockify',
-        'workspace-id',
+        "clockify",
+        "workspace-id",
       );
-      const userId = await this.settings.getFieldValue('clockify', 'user-id');
+      const userId = await this.settings.getFieldValue("clockify", "user-id");
 
       return { workspaceId, userId };
     } catch (error) {
@@ -46,8 +46,8 @@ export class ClockifyService {
     startTime = Date.now().toLocaleString(),
   ) {
     if (projectId === null) {
-      this._logger.error('ProjectID was required, but one was not provided');
-      throw new BadRequestException('must provide project ID');
+      this._logger.error("ProjectID was required, but one was not provided");
+      throw new BadRequestException("must provide project ID");
     }
 
     try {
@@ -97,7 +97,7 @@ export class ClockifyService {
 
   // Get list of workspaces
   async getWorkspaces(): Promise<Array<Workspace>> {
-    return await dataFetcher(this.http.get('workspaces'));
+    return await dataFetcher(this.http.get("workspaces"));
   }
 
   // Create client
@@ -119,7 +119,7 @@ export class ClockifyService {
       this.http.get(`/workspaces/${this.workspaceId}/clients`, {
         params: {
           archived,
-          'page-size': pageSize,
+          "page-size": pageSize,
           page,
         },
       }),
@@ -159,7 +159,7 @@ export class ClockifyService {
       this.http.get(`/workspaces/${this.workspaceId}/projects`, {
         params: {
           archived,
-          'page-size': pageSize,
+          "page-size": pageSize,
           page,
           name,
           clients,
@@ -222,7 +222,7 @@ export class ClockifyService {
   // Function to run when timers are started
   async startTimer(projectId: string): Promise<any> {
     if (!projectId) {
-      throw new BadRequestException('Must provide projectId');
+      throw new BadRequestException("Must provide projectId");
     }
 
     const data = await dataFetcher(

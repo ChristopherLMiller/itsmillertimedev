@@ -1,12 +1,6 @@
 import { DataResponse } from "@itsmillertimedev/data";
 import { countWords } from "@itsmillertimedev/utility-functions";
-import {
-  BadRequestException,
-  Inject,
-  Injectable,
-  Logger,
-} from "@nestjs/common";
-import { REQUEST } from "@nestjs/core";
+import { BadRequestException, Injectable, Logger } from "@nestjs/common";
 import { Post, Prisma } from "@prisma/client";
 import { SupabaseService } from "../../../common/auth/supabase/supabase.service";
 import { UserProfilesService } from "../../../common/auth/userProfiles/userProfiles.service";
@@ -15,7 +9,6 @@ import { PrismaService } from "../../../common/prisma/prisma.service";
 @Injectable()
 export class PostsService {
   constructor(
-    @Inject(REQUEST) private readonly request: Request,
     private prisma: PrismaService,
     private userProfile: UserProfilesService,
     private supabaseService: SupabaseService,
@@ -92,8 +85,6 @@ export class PostsService {
       }
     }
 
-    this._logger.log(where);
-
     // Add in where query parameters to the existing where object
     if (whereQuery !== undefined) {
       const parsed = JSON.parse(whereQuery as string);
@@ -109,11 +100,11 @@ export class PostsService {
         // Split apart the select fields if provided
         if (selectQuery !== null) {
           const selectKeys = (selectQuery as string).split(",");
-          const selectObjet = {};
+          const selectObject = {};
           for (let i = 0; i < selectKeys.length; i++) {
-            selectObjet[selectKeys[i]] = true;
+            selectObject[selectKeys[i]] = true;
           }
-          Object.assign(select, selectObjet);
+          Object.assign(select, selectObject);
         }
 
         data = await this.prisma.post.findMany({

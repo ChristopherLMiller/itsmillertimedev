@@ -1,4 +1,3 @@
-import { Record } from "@itsmillertimedev/data";
 import { Injectable, Logger } from "@nestjs/common";
 import { Role, UserProfile } from "@prisma/client";
 import { PrismaService } from "../../prisma/prisma.service";
@@ -54,13 +53,13 @@ export class UserProfilesService {
   }
 
   // Create a prisma user
-  async createUser(record: Record): Promise<UserProfile> {
-    const { id, email } = record;
+  async createUser(record: Partial<UserProfile>): Promise<UserProfile> {
+    const { supabaseId, email } = record;
     const meta = { email: record.email };
 
     const result = await this.prisma.userProfile.create({
       data: {
-        supabaseId: id,
+        supabaseId,
         email,
         roleId: 2,
         meta,

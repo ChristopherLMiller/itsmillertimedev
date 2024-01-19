@@ -1,4 +1,5 @@
 import { Module } from "@nestjs/common";
+import { BoardGamesModule } from "./board-games/board-games.module";
 import { ClockifyModule } from "./clockify/clockify.module";
 import { DiscordModule } from "./discord/discord.module";
 import { GithubModule } from "./github/github.module";
@@ -22,6 +23,7 @@ import { WeatherModule } from "./weather/weather.module";
     LastFMModule,
     PostsTypeModule,
     PagesModule,
+    BoardGamesModule,
   ],
 })
 export class V1Module {}

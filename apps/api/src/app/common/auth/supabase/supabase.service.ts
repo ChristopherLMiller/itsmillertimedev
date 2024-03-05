@@ -35,17 +35,12 @@ export class SupabaseService {
         // We need to see if the user's profile exists, if not create it
         const userProfile = await this.userProfile.getUser(session.user.id);
         if (userProfile === undefined || userProfile === null) {
-          const result = await this.userProfile.createUser({
-            supabaseId: session.user.id,
-            email: session.user.email,
-          });
+          const result = await this.userProfile.createUser(session.user);
           if (result !== null) {
             this._logger.log(
               `Successfully created userProfile for ${result.email}`,
             );
           }
-        } else {
-          this._logger.log("User profile loaded");
         }
         break;
       }

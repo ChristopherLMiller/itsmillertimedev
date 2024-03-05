@@ -1,4 +1,4 @@
-import { DataResponse } from "@itsmillertimedev/data";
+import { DataResponse, Image } from "@itsmillertimedev/data";
 import { CacheInterceptor } from "@nestjs/cache-manager";
 import {
   Controller,
@@ -9,8 +9,8 @@ import {
   UseInterceptors,
 } from "@nestjs/common";
 import { ApiOperation, ApiQuery, ApiResponse, ApiTags } from "@nestjs/swagger";
-import { Image } from "@prisma/client";
 import { HttpStatusCode } from "axios";
+import { DeleteResult, Selectable } from "kysely";
 import { PermissionsNodes } from "../../../common/decorators/auth.decorator";
 import { CloudinaryTransformInterceptor } from "../../../common/interceptors/cloudinaryTransform.interceptor";
 import { ImagePermissionNodes } from "./image.permissions";
@@ -34,7 +34,9 @@ export class ImageController {
     status: HttpStatusCode.BadRequest,
     description: "Image not found",
   })
-  async getImage(@Query("public_id") public_id): DataResponse<Image> {
+  async getImage(
+    @Query("public_id") public_id,
+  ): DataResponse<Selectable<Image>> {
     return {
       data: await this.imageService.getImage(public_id),
       meta: { public_id },
@@ -51,7 +53,7 @@ export class ImageController {
   })
   async getExifData(
     @Query("public_id") public_id,
-  ): DataResponse<Partial<Image>> {
+  ): DataResponse<Partial<Selectable<Image>>> {
     // try and get the contents
     try {
       const data = await this.imageService.getExifData(public_id);
@@ -87,7 +89,9 @@ export class ImageController {
 
   @Delete("/")
   @PermissionsNodes(ImagePermissionNodes.DELETE_FILE)
-  async deleteImage(@Query("public_id") public_id): DataResponse<string> {
+  async deleteImage(
+    @Query("public_id") public_id,
+  ): DataResponse<DeleteResult[]> {
     return {
       data: await this.imageService.deleteImage(public_id),
       meta: {

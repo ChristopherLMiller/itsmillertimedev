@@ -1,17 +1,40 @@
-import { Injectable, Logger } from "@nestjs/common";
-import { Settings } from "@prisma/client";
-import { PrismaService } from "../prisma/prisma.service";
+import { DB, Settings } from "@itsmillertimedev/data";
+import { Injectable, Logger, OnApplicationBootstrap } from "@nestjs/common";
+import { Kysely } from "kysely";
+import { InjectKysely } from "nestjs-kysely";
 
 @Injectable()
-export class SettingsService {
-  private readonly _logger = new Logger(SettingsService.name);
+export class SettingsService implements OnApplicationBootstrap {
+  constructor(@InjectKysely() private readonly db: Kysely<DB>) {}
 
-  constructor(private prisma: PrismaService) {}
+  private readonly _logger = new Logger(SettingsService.name);
+  private settings = null;
+
+  // Called when the module is initialized, loads settings from the database
+  onApplicationBootstrap() {
+    this.loadSettings();
+  }
+
+  // Function to query the settings fron the DB
+  async loadSettings() {
+    const settingsDB = await this.db
+      .selectFrom("Settings")
+      .selectAll()
+      .execute();
+
+    // Object to hold the mapped out settings, where the key is the key from the DB
+    const looped = {};
+    for (let i = 0; i < settingsDB.length; i++) {
+      looped[settingsDB[i]["key"]] = settingsDB[i]["value"];
+    }
+    this.settings = looped;
+  }
 
   async getSetting(key: string): Promise<Settings["value"]> {
-    const data = await this.prisma.settings.findUnique({ where: { key } });
-
-    return data.value;
+    if (this.settings === null) {
+      await this.loadSettings();
+    }
+    return this.settings[key];
   }
 
   // @deprecated use getField instead
@@ -20,13 +43,15 @@ export class SettingsService {
     return data[field];
   }
 
-  async getField<T>(key: string, field: string): Promise<T> {
-    return (await this.getSetting(key))["fields"][field];
+  async getField(key: string, field: string): Promise<unknown> {
+    const data = await this.getSetting(key);
+    return data["fields"][field];
   }
 
-  async getFieldValue<T>(key: string, field: string): Promise<T> {
+  async getFieldValue(key: string, field: string): Promise<string | unknown> {
     try {
-      return (await this.getSetting(key))["fields"][field].value;
+      const setting = await this.getSetting(key);
+      return setting["fields"][field]["value"];
     } catch (error) {
       this._logger.error(`Unable to load setting value of ${field} for ${key}`);
     }

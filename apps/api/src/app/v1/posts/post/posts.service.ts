@@ -1,175 +1,92 @@
-import { DataResponse } from "@itsmillertimedev/data";
+import {
+  DB,
+  Post,
+  withCategory,
+  withImage,
+  withTags,
+} from "@itsmillertimedev/data";
 import { countWords } from "@itsmillertimedev/utility-functions";
-import { BadRequestException, Injectable, Logger } from "@nestjs/common";
-import { Post, Prisma } from "@prisma/client";
+import { Injectable, Logger } from "@nestjs/common";
+import { Insertable, Kysely, Selectable } from "kysely";
+import { InjectKysely } from "nestjs-kysely";
 import { SupabaseService } from "../../../common/auth/supabase/supabase.service";
-import { UserProfilesService } from "../../../common/auth/userProfiles/userProfiles.service";
-import { PrismaService } from "../../../common/prisma/prisma.service";
 
 @Injectable()
 export class PostsService {
   constructor(
-    private prisma: PrismaService,
-    private userProfile: UserProfilesService,
+    @InjectKysely() private readonly db: Kysely<DB>,
     private supabaseService: SupabaseService,
   ) {}
   private readonly _logger = new Logger(PostsService.name);
 
-  async create(newData: Prisma.PostCreateInput): Promise<Post> {
-    try {
-      const metaTitle = newData.metaTitle || newData.title;
-      const wordCount = newData.content && countWords(newData.content);
-      const data = await this.prisma.post.create({
-        data: { ...newData, metaTitle, wordCount },
-      });
-
-      return data;
-    } catch (error) {
-      if (error instanceof Prisma.PrismaClientValidationError) {
-        this._logger.log(error.message);
-        throw new BadRequestException(
-          "Unable to validate the post",
-          error.message,
-        );
-      } else {
-        throw new Error(error);
-      }
-    }
+  async create(newData: Insertable<Post>): Promise<Insertable<Post>> {
+    const wordCount = newData.content && countWords(newData.content);
+    return this.db
+      .insertInto("Post")
+      .values([{ ...newData, wordCount }])
+      .returningAll()
+      .execute();
   }
 
-  async findAll(
-    query?: Prisma.PostFindManyArgs,
-  ): DataResponse<Partial<Post[]>> {
-    // Immediately verify that both select and include aren't included, if they
-    // are then error and exit immediately
-    if (query.select && query.include) {
-      throw new BadRequestException(
-        `Cannot query using both select and include fields, use one or the other`,
-      );
-    }
-    // Extract out the query parameters and set some default values
-    const orderBy = JSON.parse(
-      (query.orderBy as string) || '{"createdAt":"asc"}',
-    );
-    const skip = +query.skip || 0;
-    const take = +query.take || undefined;
-    const whereQuery = query.where || undefined;
-    const selectQuery = query.select || undefined;
-    const includeQuery = query.include || undefined;
+  async findAll(params: any): Promise<unknown> {
+    const limit = +params.limit || 10;
+    const sortField = params.orderBy || "publishedAt";
+    const sortDirection = params.orderDirection || "desc";
+    const relatedFields = params.include ? params.include.split(",") : null;
 
-    interface whereInterface {
-      published?: boolean;
-      [key: string]: unknown;
-    }
+    // setup the initial query
+    const query = this.db
+      .selectFrom("Post")
+      .limit(limit)
+      .orderBy(sortField, sortDirection)
+      .$if(params.skip && params.skip > 0, (qb) =>
+        qb.offset(parseInt(params.skip)),
+      )
+      .$if(relatedFields && relatedFields.includes("tags"), (qb) =>
+        qb.select((eb) => [withTags(eb, "Post.id")]),
+      )
+      .$if(relatedFields && relatedFields.includes("category"), (qb) =>
+        qb.select((eb) => [withCategory(eb)]),
+      )
+      .select((eb) =>
+        withImage<"Post">(eb, "Post.imagePublic_id", [
+          "Image.alt",
+          "Image.public_id",
+          "Image.caption",
+        ]),
+      )
+      .$if(params.fields !== undefined, (qb) =>
+        qb.select(params.fields.split(",")),
+      )
+      .$if(params.fields === undefined, (qb) => qb.selectAll());
 
-    // Create some variables to store data in
-    let data;
-    const where: whereInterface = {
-      published: true,
-    };
-
-    // Extract the user if provided, as this is used to determine some filtering parameters
-    const isLoggedIn = await this.supabaseService.isLoggedIn();
-
-    // Check that the user is logged in, showing draft pieces requires authentication
-    if (isLoggedIn) {
-      const user = await this.supabaseService.getUserFromRequest();
-
-      // If user isn't null we can fetch their role
-      if (user != null) {
-        const userRole = await this.userProfile.getUserRole(user.id);
-        // Determine the level of publishedStatus based on the user role
-        if (userRole.name.toUpperCase() === "ADMINISTRATOR") {
-          where.published = undefined; // this won't filter out anything
-        }
-      }
-    }
-
-    // Add in where query parameters to the existing where object
-    if (whereQuery !== undefined) {
-      const parsed = JSON.parse(whereQuery as string);
-      Object.assign(where, parsed);
-    }
-
-    // Query differs  depending on if its got a select or include, or neither
-    try {
-      if (selectQuery !== undefined) {
-        // Only select the fields asked for by the user
-        const select = {};
-
-        // Split apart the select fields if provided
-        if (selectQuery !== null) {
-          const selectKeys = (selectQuery as string).split(",");
-          const selectObject = {};
-          for (let i = 0; i < selectKeys.length; i++) {
-            selectObject[selectKeys[i]] = true;
-          }
-          Object.assign(select, selectObject);
-        }
-
-        data = await this.prisma.post.findMany({
-          where,
-          select,
-          orderBy,
-          take,
-          skip,
-        });
-      } else if (includeQuery !== undefined) {
-        // We are including fileds provided, aka relationships
-        const include = {};
-
-        // Extrapolate the include parameters
-        if (includeQuery !== undefined && includeQuery !== null) {
-          const parsed = JSON.parse(includeQuery as string);
-          Object.assign(include, parsed);
-        }
-        data = await this.prisma.post.findMany({
-          where,
-          include,
-          orderBy,
-          take,
-          skip,
-        });
-      } else {
-        // No select or include, so we just query with the params provided
-        data = await this.prisma.post.findMany({
-          where,
-          orderBy,
-          take,
-          skip,
-        });
-      }
-    } catch (error) {
-      this._logger.error(error);
-      throw new BadRequestException(error.message, error);
-    }
-
-    // Get the total count to pass back as meta
-    const totalRecords = await this.prisma.post.count({
-      where,
-    });
-
-    // Lets return some data now
-    return {
-      data,
-      meta: { total: totalRecords, take, skip },
-    };
+    return query.execute();
   }
 
-  findOne(id: string): Promise<Post> {
-    // create the where object to use
-    const where = {} as Prisma.PostWhereUniqueInput;
-
+  findOne(id: string): Promise<Selectable<Post>> {
     // To decide if its slug or id, lets see if we can parse it as an int
     if (isNaN(parseInt(id))) {
-      where["slug"] = id;
+      return this.db
+        .selectFrom("Post")
+        .where("slug", "=", id)
+        .select((eb) => [
+          withCategory(eb),
+          withTags(eb, "Post.id"),
+          withImage(eb, "Post.imagePublic_id"),
+        ])
+        .selectAll()
+        .executeTakeFirst();
     } else {
-      where["id"] = +id;
+      return this.db
+        .selectFrom("Post")
+        .where("id", "=", +id)
+        .select((eb) => [
+          withCategory(eb),
+          withTags(eb, "Post.id"),
+          withImage(eb, "Post.imagePublic_id"),
+        ])
+        .selectAll()
+        .executeTakeFirst();
     }
-
-    return this.prisma.post.findUnique({
-      include: { category: true, tags: true, featuredImage: true },
-      where: where,
-    });
   }
 }

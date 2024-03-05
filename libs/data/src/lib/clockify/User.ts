@@ -1,4 +1,4 @@
-import { Settings } from './Settings';
+import { ClockifySettings as Settings } from "./Settings";
 
 export interface User {
   id: string;

@@ -5,10 +5,8 @@ import {
   HealthCheckService,
   HttpHealthIndicator,
   MemoryHealthIndicator,
-  PrismaHealthIndicator,
 } from "@nestjs/terminus";
 import { IgnoreLogging } from "../../../common/decorators/logging.decorator";
-import { PrismaService } from "../prisma/prisma.service";
 
 @Controller({ path: "health" })
 export class HealthController {
@@ -16,8 +14,6 @@ export class HealthController {
     private health: HealthCheckService,
     private http: HttpHealthIndicator,
     private memory: MemoryHealthIndicator,
-    private prismaHealth: PrismaHealthIndicator,
-    private prisma: PrismaService,
   ) {}
 
   @Get("/status")
@@ -40,7 +36,6 @@ export class HealthController {
     return this.health.check([
       () => this.http.pingCheck("nestjs-docs", "https://docs.nestjs.com"),
       () => this.memory.checkHeap("memory_heap", 158 * 1024 * 1024),
-      () => this.prismaHealth.pingCheck("prisma", this.prisma),
     ]);
   }
 }

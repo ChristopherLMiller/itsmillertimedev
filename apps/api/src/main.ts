@@ -12,7 +12,6 @@ import * as winston from "winston";
 import { createLogger } from "winston";
 import { GlobalModule } from "./app/global.module";
 import { SentryInterceptor } from "./common/interceptors/sentry.interceptor";
-import { PrismaModel } from "./lib/prisma/classes";
 // eslint-disable-next-line @typescript-eslint/no-var-requires
 const packageData = require("../../../package.json");
 
@@ -77,7 +76,7 @@ async function bootstrap() {
     .addBearerAuth()
     .build();
   const swaggerDocument = SwaggerModule.createDocument(app, swaggerOptions, {
-    extraModels: [...PrismaModel.extraModels],
+    extraModels: [],
   });
   SwaggerModule.setup("/", app, swaggerDocument);
 

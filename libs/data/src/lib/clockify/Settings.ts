@@ -1,6 +1,6 @@
-import { SummaryReportSettings } from './SummaryReportSetting';
+import { SummaryReportSettings } from "./SummaryReportSetting";
 
-export interface Settings {
+export interface ClockifySettings {
   weekStart: string;
   timeZone: string;
   timeFormat: string;

@@ -1,37 +1,44 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
-import { PrismaService } from '../../common/prisma/prisma.service';
+import { DB, Page } from "@itsmillertimedev/data";
+import { Injectable, UnauthorizedException } from "@nestjs/common";
+import { Kysely, Selectable } from "kysely";
+import { ClsService } from "nestjs-cls";
+import { InjectKysely } from "nestjs-kysely";
+import { SupabaseService } from "../../common/auth/supabase/supabase.service";
+import { UserProfilesService } from "../../common/auth/userProfiles/userProfiles.service";
 
 @Injectable()
 export class PagesService {
-  constructor(private prisma: PrismaService) {}
+  constructor(
+    @InjectKysely() private readonly db: Kysely<DB>,
+    private readonly asyncLocalStorage: ClsService,
+    private readonly supabaseService: SupabaseService,
+    private readonly userProfiles: UserProfilesService,
+  ) {}
 
   async findAll() {
-    const data = await this.prisma.page.findMany();
-    const count = await this.prisma.page.count();
+    const data = await this.db.selectFrom("Page").selectAll().execute();
 
     return {
       data,
       meta: {
-        count,
+        count: data.length,
       },
     };
   }
-  async findOne(slug: string) {
-    const data = await this.prisma.page.findUnique({
-      where: {
-        slug: slug,
-      },
-    });
+  async findOne(slug: string): Promise<Selectable<Page>> {
+    const bearerToken = this.asyncLocalStorage.get("bearer_token");
 
-    if (data === null) {
-      throw new NotFoundException(`${slug} was not found in pages`);
+    // Grab the entry from the DB
+    const page = this.db
+      .selectFrom("Page")
+      .selectAll()
+      .where("Page.slug", "=", slug)
+      .executeTakeFirst();
+
+    if (bearerToken !== undefined && !(await page).isPublic) {
+      throw new UnauthorizedException("Page is not public");
+    } else {
+      return page;
     }
-
-    return {
-      data,
-      meta: {
-        slug,
-      },
-    };
   }
 }

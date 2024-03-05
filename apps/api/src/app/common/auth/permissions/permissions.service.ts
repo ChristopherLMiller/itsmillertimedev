@@ -1,12 +1,15 @@
-import { Injectable } from "@nestjs/common";
-import { Permission } from "@prisma/client";
+import { DB, Permission } from "@itsmillertimedev/data";
+import { Injectable, Logger } from "@nestjs/common";
 import { glob } from "glob";
+import { Kysely, Selectable } from "kysely";
+import { InjectKysely } from "nestjs-kysely";
 import { readFileSync } from "node:fs";
-import { PrismaService } from "../../prisma/prisma.service";
 
 @Injectable()
 export class PermissionsService {
-  constructor(private prisma: PrismaService) {}
+  constructor(@InjectKysely() private readonly db: Kysely<DB>) {}
+
+  private readonly _logger = new Logger(PermissionsService.name);
 
   async updatePermissionNodes(): Promise<{
     nodes: string[];
@@ -37,24 +40,31 @@ export class PermissionsService {
       node,
     }));
 
-    const newItems = await this.prisma.permission.createMany({
-      data: mapped,
-      skipDuplicates: true,
-    });
+    const newItems = await this.db
+      .insertInto("Permission")
+      .values([...mapped])
+      .returningAll()
+      .onConflict((oc) => oc.column("node").doNothing())
+      .execute();
 
-    return { nodes, meta: { total: nodes.length, new: newItems.count } };
+    return { nodes, meta: { total: nodes.length, new: newItems.length } };
   }
 
-  async getPermissionsNodes(): Promise<Permission[]> {
-    return this.prisma.permission.findMany();
+  async getPermissionsNodes(): Promise<{
+    nodes: Selectable<Permission>[];
+    total: number;
+  }> {
+    const permissions = await this.db
+      .selectFrom("Permission")
+      .selectAll()
+      .execute();
+
+    return { nodes: permissions, total: permissions.length };
   }
 
   //  Compare the users permission nodes to those of an acceptable permission node array
-  hasPermission(
-    userPermissionNodes: string[],
-    nodesToCheck: string[],
-  ): boolean {
-    if (userPermissionNodes.some((node) => nodesToCheck.includes(node))) {
+  hasPermission(userPermissionNodes, nodesToCheck): boolean {
+    if (userPermissionNodes.some((node) => nodesToCheck.includes(node.node))) {
       return true;
     }
     return false;

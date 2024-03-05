@@ -1,18 +1,19 @@
 import { HttpService } from "@nestjs/axios";
 import { BadRequestException, Injectable, Logger } from "@nestjs/common";
-import { DiscordUserSetting, Prisma } from "@prisma/client";
 
 import { InjectDiscordClient } from "@discord-nestjs/core";
+import { DB, DiscordUserSetting } from "@itsmillertimedev/data";
 import { Client, Collection, User } from "discord.js";
+import { Insertable, Kysely, Selectable, Updateable } from "kysely";
+import { InjectKysely } from "nestjs-kysely";
 import { dataFetcher } from "../../../common/handlers/dataFetcher";
-import { PrismaService } from "../../common/prisma/prisma.service";
 import { SettingsService } from "../../common/settings/settings.service";
 
 @Injectable()
 export class DiscordService {
   constructor(
+    @InjectKysely() private readonly db: Kysely<DB>,
     private httpService: HttpService,
-    private prisma: PrismaService,
     private settings: SettingsService,
     @InjectDiscordClient() private readonly client: Client,
   ) {}
@@ -58,36 +59,31 @@ export class DiscordService {
 
   async getUsersMeta(
     userId?: DiscordUserSetting["userId"],
-  ): Promise<Array<DiscordUserSetting>> {
-    return this.prisma.discordUserSetting.findMany({ where: { userId } });
+  ): Promise<Selectable<DiscordUserSetting>[]> {
+    return this.db
+      .selectFrom("DiscordUserSetting")
+      .where("userId", "=", userId)
+      .selectAll()
+      .execute();
   }
 
   async createUserMeta(
     userId: string,
     meta?: DiscordUserSetting["meta"],
-  ): Promise<DiscordUserSetting> {
-    try {
-      const data = this.prisma.discordUserSetting.create({
-        data: { userId, meta: meta || {} },
-      });
-      return data;
-    } catch (error) {
-      if (error instanceof Prisma.PrismaClientKnownRequestError) {
-        if (error.code === "P2002") {
-          this._logger.log(`The user ${userId} has already been created`);
-          return this.prisma.discordUserSetting.findUnique({
-            where: { userId: userId },
-          });
-        }
-      }
-    }
+  ): Promise<Insertable<DiscordUserSetting>> {
+    return this.db
+      .insertInto("DiscordUserSetting")
+      .values({ userId, meta })
+      .returningAll()
+      .onConflict((oc) => oc.column("userId").doNothing())
+      .execute();
   }
 
   async updateUserMeta(
     userId: string,
     key: string,
     value: string,
-  ): Promise<DiscordUserSetting> {
+  ): Promise<Updateable<DiscordUserSetting>> {
     // first get the user meta
     const userData = await this.getUsersMeta(userId)[0];
     const meta = userData ? userData.meta : {};
@@ -95,17 +91,12 @@ export class DiscordService {
     // update the field
     meta[key] = value;
 
-    // Upsert the data to the database and then return it
-    return this.prisma.discordUserSetting.upsert({
-      where: { userId },
-      create: {
-        userId,
-        meta,
-      },
-      update: {
-        userId,
-        meta,
-      },
-    });
+    // update the data to the database and then return it
+    return this.db
+      .updateTable("DiscordUserSetting")
+      .where("userId", "=", userId)
+      .set(meta)
+      .returningAll()
+      .executeTakeFirst();
   }
 }

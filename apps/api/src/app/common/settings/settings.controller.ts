@@ -1,8 +1,8 @@
-import { DataResponse } from "@itsmillertimedev/data";
+import { DataResponse, Settings } from "@itsmillertimedev/data";
 import { Controller, Get, Query, UseGuards } from "@nestjs/common";
 import { ApiOperation, ApiResponse, ApiTags } from "@nestjs/swagger";
-import { Settings } from "@prisma/client";
 import { HttpStatusCode } from "axios";
+import { Selectable } from "kysely";
 import { ApiKeyAuthGuard } from "../../../common/guards/apiKeyAuth.guard";
 import { SettingsService } from "./settings.service";
 
@@ -22,7 +22,7 @@ export class SettingsController {
   async getSetting(
     @Query("key") key: Settings["key"],
     @Query("field") field: string,
-  ): DataResponse<Settings> {
+  ): DataResponse<Partial<Selectable<Settings>>> {
     return {
       data: await this.settings.getFieldValue(key, field),
       meta: { field, key },

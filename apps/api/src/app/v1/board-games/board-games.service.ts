@@ -24,6 +24,7 @@ export class BoardGameService {
     return this.fetchData(`thing?id=${id}&type=${type}`);
   }
 
+  // TODO create the return type, need to fetch the data from the serer and then create it
   async fetchData(path: string): Promise<any> {
     const response = this.http.get(path);
     const data = await firstValueFrom(response);

@@ -1,71 +1,37 @@
-import { HttpService } from '@nestjs/axios';
-import { Injectable, Logger } from '@nestjs/common';
-import { Image, Prisma } from '@prisma/client';
+import { HttpService } from "@nestjs/axios";
+import { Injectable, Logger } from "@nestjs/common";
 
-import { dataFetcher } from '../../../common/handlers/dataFetcher';
-import { PrismaService } from '../../common/prisma/prisma.service';
-import { SettingsService } from '../../common/settings/settings.service';
-import streamifier = require('streamifier');
+import { DB, Image } from "@itsmillertimedev/data";
+import { DeleteResult, Kysely, Selectable } from "kysely";
+import { InjectKysely } from "nestjs-kysely";
+import { dataFetcher } from "../../../common/handlers/dataFetcher";
+import { SettingsService } from "../../common/settings/settings.service";
 
 // eslint-disable-next-line @typescript-eslint/no-var-requires
-const ExifImage = require('exif').ExifImage;
+const ExifImage = require("exif").ExifImage;
 
 @Injectable()
 export class ImageService {
   constructor(
+    @InjectKysely() private readonly db: Kysely<DB>,
     private httpService: HttpService,
-    private prisma: PrismaService,
     private readonly settings: SettingsService,
-  ) {
-    this.loadSettings().then((settings) => {
-      this.imageDomain = settings.imageDomain;
-      this.apiKey = settings.apiKey;
-      this.apiSecret = settings.apiSecret;
-      this.cloudName = settings.cloudName;
-      this._logger.log('Settings loaded successfully');
-    });
-  }
-
-  async loadSettings() {
-    const imageDomain = await this.settings.getFieldValue(
-      'cloudinary',
-      'image-domain',
-    );
-    const apiKey = await this.settings.getFieldValue('cloudinary', 'api-key');
-    const apiSecret = await this.settings.getFieldValue(
-      'cloudinary',
-      'api-secret',
-    );
-    const cloudName = await this.settings.getFieldValue(
-      'cloudinary',
-      'cloud-name',
-    );
-    const uploadPreset = await this.settings.getFieldValue(
-      'cloudinary',
-      'upload-preset',
-    );
-    const folder = await this.settings.getFieldValue('cloudinary', 'folder');
-
-    return { imageDomain, apiKey, apiSecret, cloudName, folder, uploadPreset };
-  }
+  ) {}
 
   // Local variables
   private readonly _logger = new Logger(ImageService.name);
-  private imageDomain;
-  private apiKey;
-  private apiSecret;
-  private cloudName;
-  private uploadPreset;
-  private folder;
 
-  async createImage(params): Promise<Image> {
+  async createImage(params): Promise<Selectable<Image>> {
     // check that the image doesn't exist first
-    const ImageExists = await this.prisma.image.findUnique({
-      where: { public_id: params.public_id },
-    });
-    if (ImageExists) {
+    const imageExists = await this.db
+      .selectFrom("Image")
+      .where("public_id", "=", params.public_id)
+      .selectAll()
+      .executeTakeFirst();
+
+    if (imageExists) {
       // short circuit out with the image data
-      return ImageExists;
+      return imageExists;
     }
 
     // Extract out the data necessary
@@ -85,55 +51,54 @@ export class ImageService {
     const exif = await this.createExif(public_id);
 
     // Insert into the DB
-    const result = this.prisma.image.create({
-      data: {
-        public_id,
-        version,
-        format,
-        bytes,
-        url,
-        secureUrl: secure_url,
-        width,
-        height,
-        thumbnail,
-        alt: public_id,
-        caption: public_id,
-        exif,
-      },
-    });
-    return result;
+    return this.db
+      .insertInto("Image")
+      .values([
+        {
+          public_id,
+          version,
+          format,
+          bytes,
+          url,
+          secureUrl: secure_url,
+          width,
+          height,
+          thumbnail,
+          alt: public_id,
+          caption: public_id,
+          exif,
+        },
+      ])
+      .returningAll()
+      .executeTakeFirst();
   }
 
-  async deleteImage(public_id: string): Promise<string> {
-    try {
-      await this.prisma.image.delete({
-        where: { public_id: public_id },
-      });
-      return 'Record deleted Successfully';
-    } catch (error) {
-      if (error instanceof Prisma.PrismaClientKnownRequestError) {
-        this._logger.log(error);
-        // Prisma error code for record doesn't exist
-        if (error.code === 'P2025') {
-          return error.meta['cause'] as string;
-        }
-      }
-    }
+  async deleteImage(public_id: string): Promise<DeleteResult[]> {
+    return await this.db
+      .deleteFrom("Image")
+      .where("public_id", "=", public_id)
+      .execute();
   }
 
   async createBase64(
     public_id: string,
-    width: number | 'auto',
+    width: number | "auto",
   ): Promise<string> {
     // Retrieve the image from cloudinary
     this._logger.log(
-      `${this.imageDomain}/w_${width},q_auto,f_auto/${public_id}`,
+      `${await this.settings.getFieldValue(
+        "cloudinary",
+        "image-domain",
+      )}/w_${width},q_auto,f_auto/${public_id}`,
     );
 
     const imageData = await dataFetcher(
       this.httpService.get(
-        `${this.imageDomain}/w_${width},q_auto,f_auto/${public_id}`,
-        { responseType: 'arraybuffer' },
+        `${await this.settings.getFieldValue(
+          "cloudinary",
+          "image-domain",
+        )}/w_${width},q_auto,f_auto/${public_id}`,
+        { responseType: "arraybuffer" },
       ),
     );
 
@@ -141,16 +106,22 @@ export class ImageService {
     // eslint-disable-next-line @typescript-eslint/ban-ts-comment
     // @ts-ignore
     // TODO: find out why this is erroring on linting
-    return Buffer.from(imageData, 'binary').toString('base64');
+    return Buffer.from(imageData, "binary").toString("base64");
   }
 
-  async createExif(public_id: string): Promise<Image['exif']> {
+  async createExif(public_id: string): Promise<Image["exif"]> {
     try {
       // Fetch the image
       const imageData = await dataFetcher(
-        this.httpService.get(`${this.imageDomain}/${public_id}`, {
-          responseType: 'arraybuffer',
-        }),
+        this.httpService.get(
+          `${await this.settings.getFieldValue(
+            "cloudinary",
+            "image-domain",
+          )}/${public_id}`,
+          {
+            responseType: "arraybuffer",
+          },
+        ),
       );
 
       // Extract the EXIF data from the image
@@ -165,7 +136,7 @@ export class ImageService {
       });
 
       // this is the meta of the image here
-      const exif = (await promiseReponse) as Image['exif'];
+      const exif = (await promiseReponse) as Image["exif"];
       return exif;
     } catch (exception) {
       //TODO: handle bad requests and such here
@@ -174,45 +145,49 @@ export class ImageService {
     }
   }
 
-  async getImage(public_id: string): Promise<Image> {
-    return this.prisma.image.findUnique({ where: { public_id } });
+  async getImage(public_id: string): Promise<Selectable<Image>> {
+    return this.db
+      .selectFrom("Image")
+      .where("public_id", "=", public_id)
+      .selectAll()
+      .executeTakeFirst();
   }
 
-  async getThumbnail(public_id: string): Promise<Image['thumbnail']> {
+  async getThumbnail(public_id: string): Promise<Image["thumbnail"]> {
     // Attempt to get the thumbnail from the DB first
-    const fromDB = await this.prisma.image.findUnique({ where: { public_id } });
+    const fromDB = await this.db
+      .selectFrom("Image")
+      .where("public_id", "=", public_id)
+      .select(["thumbnail", "public_id"])
+      .executeTakeFirst();
 
     if (fromDB?.thumbnail) {
       return fromDB.thumbnail;
     } else {
       // lets insert this into the DB
-      const result = await this.prisma.image.upsert({
-        where: {
-          public_id,
-        },
-        create: {
-          public_id,
-          thumbnail: await this.createBase64(public_id, 100),
-        },
-        update: {
-          public_id,
-          thumbnail: await this.createBase64(public_id, 100),
-        },
-      });
-
-      return result.thumbnail;
+      const thumbnail = await this.createBase64(public_id, 100);
+      return (
+        await this.db
+          .updateTable("Image")
+          .where("public_id", "=", public_id)
+          .set("thumbnail", thumbnail)
+          .returning("thumbnail")
+          .executeTakeFirst()
+      ).thumbnail;
     }
   }
 
-  async getExifData(public_id: string): Promise<Image> {
+  async getExifData(public_id: string): Promise<Partial<Selectable<Image>>> {
     // See if the data already exists
-    const fromDB = await this.prisma.image.findUnique({
-      where: { public_id },
-    });
+    const fromDB = await this.db
+      .selectFrom("Image")
+      .where("Image.public_id", "=", public_id)
+      .select("Image.exif")
+      .executeTakeFirst();
 
     // If we have exif data from the DB, exit now with it
     if (fromDB?.exif) {
-      this._logger.log('returning DB exif');
+      this._logger.log("returning DB exif");
       this._logger.log(fromDB.exif);
       return fromDB;
     }
@@ -221,12 +196,12 @@ export class ImageService {
     const exif = await this.createExif(public_id);
 
     // If we are caching the result, lets store that
-    const result = await this.prisma.image.upsert({
-      where: { public_id },
-      create: { public_id, exif },
-      update: { public_id, exif },
-    });
-    return result;
+    return this.db
+      .updateTable("Image")
+      .where("public_id", "=", public_id)
+      .set("exif", exif)
+      .returning("exif")
+      .executeTakeFirst();
   }
 
   async updateMetadata(public_id: string) {

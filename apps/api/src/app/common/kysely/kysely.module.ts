@@ -9,11 +9,11 @@ import { Pool } from "pg";
     KyselyModule.forRoot({
       dialect: new PostgresDialect({
         pool: new Pool({
-          database: "postgres",
-          host: "aws-0-us-east-1.pooler.supabase.com",
-          user: "postgres.jvhdgskxlevrvqfzanen",
-          password: "ElcuwEQINWQVBj7K",
-          port: 6543,
+          database: process.env.SUPABASE_DATABASE,
+          host: process.env.SUPABASE_HOST,
+          user: process.env.SUPABASE_USER,
+          password: process.env.SUPABASE_PASSWORD,
+          port: process.env.SUPABASE_PORT,
           max: 10,
         }),
       }),
@@ -21,3 +21,5 @@ import { Pool } from "pg";
   ],
 })
 export class KyselyDBModule {}
+
+// ElcuwEQINWQVBj7K

@@ -1,4 +1,4 @@
-import { DataResponse } from "@itsmillertimedev/data";
+import { DataResponse, Post as PostType } from "@itsmillertimedev/data";
 import { CacheInterceptor } from "@nestjs/cache-manager";
 import {
   Body,
@@ -18,8 +18,9 @@ import {
   ApiResponse,
   ApiTags,
 } from "@nestjs/swagger";
-import { Prisma, Post as PrismaPost } from "@prisma/client";
+
 import { HttpStatusCode } from "axios";
+import { Insertable, Selectable } from "kysely";
 import { PermissionsNodes } from "../../../../common/decorators/auth.decorator";
 import { PostPermissionNodes } from "./post.permissions";
 import { PostsService } from "./posts.service";
@@ -42,8 +43,8 @@ export class PostsController {
   })
   @PermissionsNodes(PostPermissionNodes.CREATE_POST)
   async create(
-    @Body() createPostData: Prisma.PostCreateInput,
-  ): DataResponse<PrismaPost | Prisma.BatchPayload> {
+    @Body() createPostData: Insertable<PostType>,
+  ): DataResponse<Selectable<PostType[]>> {
     return { data: await this.postService.create(createPostData) };
   }
 
@@ -53,10 +54,10 @@ export class PostsController {
     status: HttpStatusCode.Ok,
     description: "All posts",
   })
-  async findAll(
-    @Query() query: Prisma.PostFindManyArgs,
-  ): DataResponse<Partial<PrismaPost[]>> {
-    return { ...(await this.postService.findAll(query)) };
+  async findAll(@Query() query: unknown): Promise<unknown> {
+    return {
+      data: await this.postService.findAll(query),
+    };
   }
 
   @Get(":id")
@@ -65,7 +66,7 @@ export class PostsController {
   @ApiOkResponse({
     description: "Post to get",
   })
-  async findOne(@Param("id") id: string): DataResponse<PrismaPost> {
+  async findOne(@Param("id") id: string): DataResponse<Selectable<PostType>> {
     return { data: await this.postService.findOne(id), meta: { id } };
   }
 

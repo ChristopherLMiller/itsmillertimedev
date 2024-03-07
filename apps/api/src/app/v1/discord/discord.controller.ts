@@ -1,4 +1,4 @@
-import { DataResponse } from "@itsmillertimedev/data";
+import { DataResponse, DiscordUserSetting } from "@itsmillertimedev/data";
 import { CacheInterceptor } from "@nestjs/cache-manager";
 import {
   Body,
@@ -9,9 +9,9 @@ import {
   UseInterceptors,
 } from "@nestjs/common";
 import { ApiOperation, ApiResponse, ApiTags } from "@nestjs/swagger";
-import { DiscordUserSetting } from "@prisma/client";
 import { HttpStatusCode } from "axios";
 import { Collection, User } from "discord.js";
+import { Insertable, Selectable } from "kysely";
 import { PermissionsNodes } from "../../../common/decorators/auth.decorator";
 import { DiscordPermissionNodes } from "./discord.permissions";
 import { DiscordService } from "./discord.service";
@@ -44,7 +44,7 @@ export class DiscordController {
     description: "Forbidden",
   })
   @PermissionsNodes(DiscordPermissionNodes.GET_USER_META)
-  async getUsersMeta(): DataResponse<Array<DiscordUserSetting>> {
+  async getUsersMeta(): DataResponse<Selectable<DiscordUserSetting>[]> {
     return { data: await this.discord.getUsersMeta() };
   }
 
@@ -60,7 +60,7 @@ export class DiscordController {
   @PermissionsNodes(DiscordPermissionNodes.GET_USER_META)
   async getUserMeta(
     @Param("id") userId: DiscordUserSetting["userId"],
-  ): DataResponse<Array<DiscordUserSetting>> {
+  ): DataResponse<Selectable<DiscordUserSetting>[]> {
     return { data: await this.discord.getUsersMeta(userId) };
   }
 
@@ -78,7 +78,7 @@ export class DiscordController {
   async createUser(
     @Body("userId") userId: string,
     @Body("meta") meta?: DiscordUserSetting["meta"],
-  ): DataResponse<DiscordUserSetting> {
+  ): DataResponse<Insertable<DiscordUserSetting>> {
     return { data: await this.discord.createUserMeta(userId, meta) };
   }
   //#endregion

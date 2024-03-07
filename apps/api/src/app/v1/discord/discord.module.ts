@@ -1,10 +1,10 @@
-import { DiscordModule as NestDiscordModule } from '@discord-nestjs/core';
-import { HttpModule } from '@nestjs/axios';
-import { Module } from '@nestjs/common';
-import { SettingsModule } from '../../common/settings/settings.module';
-import { SettingsService } from '../../common/settings/settings.service';
-import { DiscordController } from './discord.controller';
-import { DiscordService } from './discord.service';
+import { DiscordModule as NestDiscordModule } from "@discord-nestjs/core";
+import { HttpModule } from "@nestjs/axios";
+import { Module } from "@nestjs/common";
+import { SettingsModule } from "../../common/settings/settings.module";
+import { SettingsService } from "../../common/settings/settings.service";
+import { DiscordController } from "./discord.controller";
+import { DiscordService } from "./discord.service";
 
 @Module({
   controllers: [DiscordController],
@@ -14,7 +14,7 @@ import { DiscordService } from './discord.service';
     NestDiscordModule.forRootAsync({
       inject: [SettingsService],
       useFactory: async (settings: SettingsService) => ({
-        token: await settings.getFieldValue('discord', 'bot-token'),
+        token: (await settings.getFieldValue("discord", "bot-token")) as string,
         discordClientOptions: {
           intents: [],
         },

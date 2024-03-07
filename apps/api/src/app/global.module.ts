@@ -13,7 +13,6 @@ import { V1Module } from "./v1/v1.module";
 @Module({
   controllers: [],
   imports: [
-    V1Module,
     CommonModule,
     ClsModule.forRoot({
       global: true,
@@ -26,6 +25,7 @@ import { V1Module } from "./v1/v1.module";
         },
       },
     }),
+    V1Module,
   ],
   providers: [
     {

@@ -1,35 +1,66 @@
+import { DB, PostCategory } from "@itsmillertimedev/data";
 import { Injectable } from "@nestjs/common";
-import { PostCategory } from "@prisma/client";
-import { PostCategory as PostCategoryEntity } from "../../../../lib/prisma/classes/post_category";
-import { PrismaService } from "../../../common/prisma/prisma.service";
+import {
+  DeleteResult,
+  Insertable,
+  Kysely,
+  Selectable,
+  UpdateObject,
+  UpdateResult,
+} from "kysely";
+import { InjectKysely } from "nestjs-kysely";
 
 @Injectable()
 export class PostCategoriesService {
-  constructor(private prisma: PrismaService) {}
+  constructor(@InjectKysely() private readonly db: Kysely<DB>) {}
 
-  async create(postCategories: PostCategoryEntity): Promise<PostCategory> {
-    return await this.prisma.create("postCategory", postCategories);
+  async create(
+    postCategories: Insertable<PostCategory>,
+  ): Promise<Insertable<PostCategory>> {
+    return this.db
+      .insertInto("PostCategory")
+      .values([postCategories])
+      .returningAll()
+      .execute();
   }
 
-  findAll(): Promise<PostCategory[]> {
-    return this.prisma.postCategory.findMany();
+  /**
+   * Retrieve all post categories from the database
+   * @returns A promise that resolves with an array of selectable post categories
+   */
+  async findAll(): Promise<Selectable<PostCategory>[]> {
+    return this.db.selectFrom("PostCategory").selectAll().execute();
   }
 
-  findOne(slug: string) {
-    return this.prisma.postCategory.findUnique({ where: { slug } });
+  /**
+   * Find one post category by slug.
+   *
+   * @param {string} slug - The slug of the post category to find
+   * @return {Promise<Selectable<PostCategory>>} A promise that resolves to the first post category found
+   */
+  findOne(slug: string): Promise<Selectable<PostCategory>> {
+    return this.db
+      .selectFrom("PostCategory")
+      .where("PostCategory.slug", "=", slug)
+      .selectAll()
+      .executeTakeFirst();
   }
 
   update(
     slug: string,
-    updatePostCategory: PostCategory,
-  ): Promise<PostCategory> {
-    return this.prisma.postCategory.update({
-      where: { slug: slug },
-      data: { ...updatePostCategory },
-    });
+    updatePostCategory: UpdateObject<DB, "PostCategory">,
+  ): Promise<UpdateResult[]> {
+    return this.db
+      .updateTable("PostCategory")
+      .where("PostCategory.slug", "=", slug)
+      .set(updatePostCategory)
+      .execute();
   }
 
-  remove(slug: string) {
-    return this.prisma.postCategory.delete({ where: { slug } });
+  remove(slug: string): Promise<DeleteResult[]> {
+    return this.db
+      .deleteFrom("PostCategory")
+      .where("PostCategory.slug", "=", slug)
+      .execute();
   }
 }

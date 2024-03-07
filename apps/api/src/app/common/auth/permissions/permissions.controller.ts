@@ -1,7 +1,7 @@
-import { DataResponse } from "@itsmillertimedev/data";
+import { DataResponse, Permission } from "@itsmillertimedev/data";
 import { Controller, Get } from "@nestjs/common";
 import { ApiTags } from "@nestjs/swagger";
-import { Permission } from "@prisma/client";
+import { Selectable } from "kysely";
 import { PermissionsNodes } from "../../../../common/decorators/auth.decorator";
 import { PermissionsPermissionNodes } from "./permissions.permissions";
 import { PermissionsService } from "./permissions.service";
@@ -19,7 +19,10 @@ export class PermissionsController {
 
   @Get("/")
   @PermissionsNodes(PermissionsPermissionNodes.GET_PERMISSIONS)
-  async getPermissionsNodes(): DataResponse<Permission[]> {
+  async getPermissionsNodes(): DataResponse<{
+    nodes: Selectable<Permission>[];
+    total: number;
+  }> {
     return { data: await this.permissionService.getPermissionsNodes() };
   }
 }

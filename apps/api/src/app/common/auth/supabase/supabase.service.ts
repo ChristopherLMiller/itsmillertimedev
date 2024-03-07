@@ -1,10 +1,25 @@
 import { Injectable, Logger, UnauthorizedException } from "@nestjs/common";
-import { AuthError, UserResponse, createClient } from "@supabase/supabase-js";
+import {
+  AuthChangeEvent,
+  AuthError,
+  Session,
+  UserResponse,
+  createClient,
+} from "@supabase/supabase-js";
 import { ClsService } from "nestjs-cls";
+import { UserProfilesService } from "../userProfiles/userProfiles.service";
 
 @Injectable()
 export class SupabaseService {
-  constructor(private readonly asyncLocalStorage: ClsService) {}
+  constructor(
+    private readonly asyncLocalStorage: ClsService,
+    private readonly userProfile: UserProfilesService,
+  ) {
+    // Listen for auth state changes to happen
+    this._supabase.auth.onAuthStateChange((event, session) =>
+      this.onAuthEvent(event, session),
+    );
+  }
 
   private readonly _logger = new Logger(SupabaseService.name);
 
@@ -12,6 +27,29 @@ export class SupabaseService {
     process.env.SUPABASE_URL,
     process.env.SUPABASE_KEY,
   );
+
+  // Function to handle authentication events with supabase
+  async onAuthEvent(event: AuthChangeEvent, session: Session): Promise<void> {
+    switch (event) {
+      case "SIGNED_IN": {
+        // We need to see if the user's profile exists, if not create it
+        const userProfile = await this.userProfile.getUser(session.user.id);
+        if (userProfile === undefined || userProfile === null) {
+          const result = await this.userProfile.createUser(session.user);
+          if (result !== null) {
+            this._logger.log(
+              `Successfully created userProfile for ${result.email}`,
+            );
+          }
+        }
+        break;
+      }
+      case "SIGNED_OUT": {
+        this._logger.log(`${session.user.email} has logged out`);
+        break;
+      }
+    }
+  }
 
   async getUser(token: string): Promise<UserResponse> {
     return this._supabase.auth.getUser(token);

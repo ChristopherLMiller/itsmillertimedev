@@ -1,37 +1,25 @@
-import { HttpService } from '@nestjs/axios';
-import { Injectable, Logger } from '@nestjs/common';
-import { dataFetcher } from '../../../common/handlers/dataFetcher';
-import { SettingsService } from '../../common/settings/settings.service';
+import { HttpService } from "@nestjs/axios";
+import { Injectable, Logger } from "@nestjs/common";
+import { dataFetcher } from "../../../common/handlers/dataFetcher";
+import { SettingsService } from "../../common/settings/settings.service";
 
 @Injectable()
 export class LastFMService {
   constructor(
     private http: HttpService,
     private readonly settings: SettingsService,
-  ) {
-    this.loadSettings().then((settings) => {
-      this.apiKey = settings.apiKey;
-      this._logger.log('Settings loaded successfully');
-    });
-  }
-
-  async loadSettings() {
-    const apiKey = await this.settings.getFieldValue('lastfm', 'api-key');
-
-    return { apiKey };
-  }
+  ) {}
 
   // local variables
   private readonly _logger = new Logger(LastFMService.name);
-  private apiKey;
 
   async getTopArtists() {
     const data = await dataFetcher(
-      this.http.get('', {
+      this.http.get("", {
         params: {
-          api_key: this.apiKey,
-          method: 'chart.gettopartists',
-          format: 'json',
+          api_key: await this.settings.getFieldValue("lastfm", "api-key"),
+          method: "chart.gettopartists",
+          format: "json",
         },
       }),
     );
@@ -40,12 +28,12 @@ export class LastFMService {
 
   async getUser(username: string) {
     const data = await dataFetcher(
-      this.http.get('', {
+      this.http.get("", {
         params: {
-          api_key: this.apiKey,
-          method: 'user.getinfo',
+          api_key: await this.settings.getFieldValue("lastfm", "api-key"),
+          method: "user.getinfo",
           user: username,
-          format: 'json',
+          format: "json",
         },
       }),
     );
@@ -54,12 +42,12 @@ export class LastFMService {
 
   async getRecentTracks(username: string) {
     const data = await dataFetcher(
-      this.http.get('', {
+      this.http.get("", {
         params: {
-          api_key: this.apiKey,
-          method: 'user.getRecentTracks',
+          api_key: await this.settings.getFieldValue("lastfm", "api-key"),
+          method: "user.getRecentTracks",
           user: username,
-          format: 'json',
+          format: "json",
         },
       }),
     );
@@ -68,11 +56,11 @@ export class LastFMService {
 
   async getCurrentlyPlaying(username: string) {
     const data = await this.getRecentTracks(username);
-    const newestTrack = data['recenttracks']['track'][0];
+    const newestTrack = data["recenttracks"]["track"][0];
 
     // see if the track contains an element called @attr and if its got now playing as true,
     // this signifies that the track is playing right now, return it
-    if (newestTrack['@attr']?.nowplaying) {
+    if (newestTrack["@attr"]?.nowplaying) {
       return { data: newestTrack, meta: { isPlaying: true } };
     } else {
       return { data: [], meta: { isPlaying: false } };

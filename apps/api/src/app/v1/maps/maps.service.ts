@@ -1,38 +1,27 @@
-import { Client, LatLngLiteral } from '@googlemaps/google-maps-services-js';
-import { Injectable, Logger } from '@nestjs/common';
-import { Marker } from '@prisma/client';
-import { PrismaService } from '../../common/prisma/prisma.service';
-import { SettingsService } from '../../common/settings/settings.service';
+import { Client, LatLngLiteral } from "@googlemaps/google-maps-services-js";
+import { DB, Marker } from "@itsmillertimedev/data";
+import { Injectable, Logger } from "@nestjs/common";
+import { Insertable, Kysely, Selectable } from "kysely";
+import { InjectKysely } from "nestjs-kysely";
+import { SettingsService } from "../../common/settings/settings.service";
 
 @Injectable()
 export class MapsService {
   constructor(
-    private prisma: PrismaService,
+    @InjectKysely() private readonly db: Kysely<DB>,
     private readonly settings: SettingsService,
-  ) {
-    this.loadSettings().then((settings) => {
-      this.apiKey = settings.apiKey;
-      this._logger.log('Settings loaded successfully');
-    });
-  }
+  ) {}
 
   // Local variables
   private readonly _logger = new Logger(MapsService.name);
   private gmapsClient = new Client({});
-  private apiKey;
 
-  async loadSettings() {
-    const apiKey = await this.settings.getFieldValue('google', 'maps-api-key');
-
-    return { apiKey };
+  findMapMarkers(): Promise<Selectable<Marker>[]> {
+    return this.db.selectFrom("Marker").selectAll().execute();
   }
 
-  findMapMarkers(): Promise<Marker[]> {
-    return this.prisma.marker.findMany();
-  }
-
-  createMapMarker(data: Marker): Promise<Marker> {
-    return this.prisma.marker.create({ data });
+  createMapMarker(data: Marker): Promise<Insertable<Marker>> {
+    return this.db.insertInto("Marker").values([data]).returningAll().execute();
   }
 
   async getGPSCoordinateFromLocation(
@@ -41,7 +30,10 @@ export class MapsService {
     const response = await this.gmapsClient.geocode({
       params: {
         address: place,
-        key: this.apiKey,
+        key: (await this.settings.getFieldValue(
+          "google",
+          "maps-api-key",
+        )) as string,
       },
     });
 

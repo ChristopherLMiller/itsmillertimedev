@@ -1,5 +1,5 @@
-import { RawAppMetaData } from './RawAppMetaData';
-import { RawUserMetaData } from './RawUserMetaData';
+import { RawAppMetaData } from "./RawAppMetaData";
+import { RawUserMetaData } from "./RawUserMetaData";
 
 export interface Record {
   id: string;

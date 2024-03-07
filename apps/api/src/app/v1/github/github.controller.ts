@@ -1,26 +1,26 @@
-import { DataResponse, GithubUser } from '@itsmillertimedev/data';
-import { CacheInterceptor } from '@nestjs/cache-manager';
-import { Controller, Get, Param, UseInterceptors } from '@nestjs/common';
-import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
-import { HttpStatusCode } from 'axios';
-import { GithubService } from './github.service';
-@Controller({ version: '1', path: 'github' })
-@ApiTags('Github')
+import { DataResponse, GithubUser } from "@itsmillertimedev/data";
+import { CacheInterceptor } from "@nestjs/cache-manager";
+import { Controller, Get, Param, UseInterceptors } from "@nestjs/common";
+import { ApiOperation, ApiResponse, ApiTags } from "@nestjs/swagger";
+import { HttpStatusCode } from "axios";
+import { GithubService } from "./github.service";
+@Controller({ version: "1", path: "github" })
+@ApiTags("Github")
 @UseInterceptors(CacheInterceptor)
 export class GithubController {
   constructor(private github: GithubService) {}
 
-  @Get('users/:login')
-  @ApiOperation({ description: 'Gets a Github users profile' })
+  @Get("users/:login")
+  @ApiOperation({ description: "Gets a Github users profile" })
   @ApiResponse({
     status: HttpStatusCode.Ok,
-    description: 'successfully fetched profile',
+    description: "successfully fetched profile",
   })
   @ApiResponse({
     status: HttpStatusCode.BadRequest,
-    description: 'Unable to find the specified user',
+    description: "Unable to find the specified user",
   })
-  async getUser(@Param('login') login: string): DataResponse<GithubUser> {
+  async getUser(@Param("login") login: string): DataResponse<GithubUser> {
     return { data: await this.github.findUser(login) };
   }
 }

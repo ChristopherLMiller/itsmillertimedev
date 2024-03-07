@@ -1,4 +1,10 @@
-import { DataResponse } from "@itsmillertimedev/data";
+import {
+  DataResponse,
+  DiscordUserSetting,
+  Permission,
+  Role,
+  UserProfile,
+} from "@itsmillertimedev/data";
 import {
   Body,
   Controller,
@@ -14,7 +20,7 @@ import {
   ApiTags,
   ApiUnauthorizedResponse,
 } from "@nestjs/swagger";
-import { UserProfile } from "@prisma/client";
+import { Selectable, UpdateResult } from "kysely";
 import { PermissionsNodes } from "../../../../common/decorators/auth.decorator";
 import { SupabaseService } from "../supabase/supabase.service";
 import UsersPermissionsNodes from "./userProfiles.permissions";
@@ -37,16 +43,38 @@ export class UserProfilesController {
   })
   @ApiUnauthorizedResponse({ description: "The user is not authenticated" })
   async getSelf(
-    @Query("perms") includePermissions?: boolean,
+    @Query("role") includeRole?: boolean,
     @Query("discord") includeDiscord?: boolean,
-  ): DataResponse<UserProfile> {
+  ): DataResponse<
+    Partial<
+      Selectable<
+        UserProfile & {
+          role?: Selectable<Role>;
+          discord?: Selectable<DiscordUserSetting>;
+        }
+      >
+    >
+  > {
     const user = await this.supabase.getUserFromRequest();
+
     return {
       data: await this.userProfiles.getUser(
         user.id,
-        includePermissions,
+        includeRole,
         includeDiscord,
       ),
+    };
+  }
+
+  @Get("/me/permissions")
+  @ApiOperation({ description: "Gets the current users permission nodes" })
+  @ApiOkResponse({ description: "Permission nodes array" })
+  @ApiUnauthorizedResponse({ description: "The user is not authenticated" })
+  async getSelfPermissions(): DataResponse<Selectable<Permission>[]> {
+    this._logger.debug("Getting own permissions");
+    const user = await this.supabase.getUserFromRequest();
+    return {
+      data: await this.userProfiles.getUsersPermissions(user.id),
     };
   }
 
@@ -56,7 +84,7 @@ export class UserProfilesController {
   @ApiUnauthorizedResponse({
     description: "Not authenticated, unable to update user profile",
   })
-  async updateSelf(@Body() data: UserProfile): DataResponse<UserProfile> {
+  async updateSelf(@Body() data: UserProfile): DataResponse<UpdateResult[]> {
     const user = await this.supabase.getUserFromRequest();
 
     return {
@@ -64,7 +92,7 @@ export class UserProfilesController {
     };
   }
 
-  @Get(":supabaseId")
+  @Get("user/:supabaseId")
   @ApiOperation({
     description: "Get the specified users profile for the supabaseID supplied",
   })
@@ -75,13 +103,22 @@ export class UserProfilesController {
   @PermissionsNodes(UsersPermissionsNodes.GET_USER)
   async getUser(
     @Param("supabaseId") supabaseId: string,
-    @Query("perms") includePermissions?: boolean,
+    @Query("role") includeRole?: boolean,
     @Query("discord") includeDiscord?: boolean,
-  ): DataResponse<UserProfile> {
+  ): DataResponse<
+    Partial<
+      Selectable<
+        UserProfile & {
+          role?: Selectable<Role>;
+          discord?: Selectable<DiscordUserSetting>;
+        }
+      >
+    >
+  > {
     return {
       data: await this.userProfiles.getUser(
         supabaseId,
-        includePermissions,
+        includeRole,
         includeDiscord,
       ),
     };
@@ -93,14 +130,20 @@ export class UserProfilesController {
   @ApiUnauthorizedResponse({ description: "Forbidden Request" })
   @PermissionsNodes(UsersPermissionsNodes.GET_USER)
   async getUsers(
-    @Query("perms") includePermissions?: boolean,
+    @Query("role") includeRole?: boolean,
     @Query("discord") includeDiscord?: boolean,
-  ): DataResponse<UserProfile[]> {
+  ): DataResponse<
+    Partial<
+      Selectable<
+        UserProfile & {
+          role?: Selectable<Role>;
+          discord?: Selectable<DiscordUserSetting>;
+        }
+      >
+    >[]
+  > {
     return {
-      data: await this.userProfiles.getUsers(
-        includePermissions,
-        includeDiscord,
-      ),
+      data: await this.userProfiles.getUsers(includeRole, includeDiscord),
     };
   }
 }

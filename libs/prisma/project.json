@@ -9,9 +9,7 @@
       "options": {
         "cwd": "libs/prisma",
         "parallel": false,
-        "commands": [
-          "prisma generate --schema schema.prisma"
-        ]
+        "commands": ["prisma generate --schema schema.prisma"]
       }
     },
     "generate-client": {
@@ -34,22 +32,28 @@
         ]
       }
     },
-    "migration": {
+    "generate-kysely": {
       "executor": "nx:run-commands",
       "options": {
         "cwd": "libs/prisma",
         "parallel": false,
         "commands": [
-          "prisma migrate dev --name {args.name}"
+          "prisma generate --schema schema.prisma --generator kysely"
         ]
+      }
+    },
+    "migration": {
+      "executor": "nx:run-commands",
+      "options": {
+        "cwd": "libs/prisma",
+        "parallel": false,
+        "commands": ["prisma migrate dev --name {args.name}"]
       }
     },
     "studio": {
       "executor": "nx:run-commands",
       "options": {
-        "commands": [
-          "npx prisma studio --schema libs/prisma/schema.prisma"
-        ]
+        "commands": ["npx prisma studio --schema libs/prisma/schema.prisma"]
       }
     }
   },

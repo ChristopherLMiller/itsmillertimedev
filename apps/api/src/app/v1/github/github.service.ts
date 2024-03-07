@@ -1,15 +1,13 @@
-import { GithubUser } from '@itsmillertimedev/data';
-import { HttpService } from '@nestjs/axios';
-import { Injectable } from '@nestjs/common';
-import { dataFetcher } from '../../../common/handlers/dataFetcher';
+import { GithubUser } from "@itsmillertimedev/data";
+import { HttpService } from "@nestjs/axios";
+import { Injectable } from "@nestjs/common";
+import { dataFetcher } from "../../../common/handlers/dataFetcher";
 
 @Injectable()
 export class GithubService {
   constructor(private httpService: HttpService) {}
 
   async findUser(login: string): Promise<GithubUser> {
-    return await dataFetcher(
-      this.httpService.get(`https://api.github.com/users/${login}`),
-    );
+    return await dataFetcher(this.httpService.get(`users/${login}`));
   }
 }

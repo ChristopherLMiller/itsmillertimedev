@@ -1,5 +1,6 @@
 import {
   Client,
+  ClockifyTimer,
   DataResponse,
   Project,
   TimeInterval,
@@ -29,9 +30,9 @@ import {
   ApiResponse,
   ApiTags,
 } from "@nestjs/swagger";
-import { ClockifyTimer } from "@prisma/client";
 import { HttpStatusCode } from "axios";
 import { formatDistanceStrict, parseISO } from "date-fns";
+import { DeleteResult, Selectable } from "kysely";
 import { PermissionsNodes } from "../../../common/decorators/auth.decorator";
 import { ResponseTimeLimit } from "../../../common/decorators/responseTime.decorator";
 import { HookdeckGuard } from "../../../common/guards/hookdeck.guard";
@@ -49,29 +50,10 @@ export class ClockifyController {
     private clockify: ClockifyService,
     private discord: DiscordService,
     private settings: SettingsService,
-  ) {
-    this.loadSettings().then((settings) => {
-      this.discordNotificationSettings = settings.discordNotificationSettings;
-      this._logger.log("Settings loaded successfully");
-    });
-  }
+  ) {}
 
   // Variable local to the class
-  private discordNotificationSettings = null;
   private readonly _logger = new Logger(ClockifyController.name);
-
-  async loadSettings() {
-    try {
-      const discordNotificationSettings = await this.settings.getField(
-        "clockify",
-        "discord-notifications",
-      );
-      return { discordNotificationSettings };
-    } catch (error) {
-      this._logger.error(error);
-      throw error;
-    }
-  }
 
   //#region workspaces
   @Get("workspaces")
@@ -351,14 +333,18 @@ export class ClockifyController {
   async clockifyTimeStart(
     @Body("timeInterval") timeInterval: TimeInterval,
     @Body("project") project: Project,
-  ): DataResponse<ClockifyTimer> {
+  ): DataResponse<Selectable<ClockifyTimer>> {
     // short circuit execution if project wasn't provided, it can happen
     if (project === null) {
       return null;
     }
 
     // send a discord notification if its enabled in the settings
-    if (this.discordNotificationSettings["webhook-start"]["value"]) {
+    if (
+      (await this.settings.getFieldValue("clockify", "discord-notifications"))[
+        "webhook-start"
+      ]["value"]
+    ) {
       // send a message to discord
       this.discord.sendDiscordMessage(
         `Clockify timer started for '${project.name}'`,
@@ -383,7 +369,7 @@ export class ClockifyController {
   async webhookClockifyStop(
     @Body("project") project: Project,
     @Body("timeInterval") timeInterval: TimeInterval,
-  ): DataResponse<ClockifyTimer> {
+  ): DataResponse<DeleteResult> {
     // convert the timeInterval to a number
     const timeElapsed = formatDistanceStrict(
       parseISO(timeInterval.end),
@@ -391,7 +377,11 @@ export class ClockifyController {
     );
 
     // send a discord notification if its enabled in the settings
-    if (this.discordNotificationSettings["webhook-stop"]["value"]) {
+    if (
+      (await this.settings.getFieldValue("clockify", "discord-notifications"))[
+        "webhook-stop"
+      ]["value"]
+    ) {
       // send a message to discord
       this.discord.sendDiscordMessage(
         `Clockify timer stopped for '${project.name}'; Elapsed time ${timeElapsed}`,
@@ -399,7 +389,7 @@ export class ClockifyController {
       );
     }
 
-    return { data: await this.clockify.removeClockifyTimer(project.id) };
+    return { data: (await this.clockify.removeClockifyTimer(project.id))[0] };
   }
 
   @Post("webhook/delete")
@@ -410,7 +400,7 @@ export class ClockifyController {
   @UseGuards(HookdeckGuard)
   async webhookClockifyDelete(
     @Body("project") project: Project,
-  ): DataResponse<ClockifyTimer> {
+  ): DataResponse<DeleteResult> {
     // if the projectId is null we just will ignore this
     if (project.id == null) {
       this._logger.error("Must provide projectID");
@@ -418,13 +408,17 @@ export class ClockifyController {
     }
 
     // send a discord notification if its enabled in the settings
-    if (this.discordNotificationSettings["webhook-delete"]["value"]) {
+    if (
+      (await this.settings.getFieldValue("clockify", "discord-notifications"))[
+        "webhook-delete"
+      ]["value"]
+    ) {
       this.discord.sendDiscordMessage(
         `Clockify timer deleted for '${project.name}'`,
         "spam-channel",
       );
     }
-    return { data: await this.clockify.removeClockifyTimer(project.id) };
+    return { data: (await this.clockify.removeClockifyTimer(project.id))[0] };
   }
   //#endregion
 }

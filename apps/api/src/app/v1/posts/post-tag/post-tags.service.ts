@@ -1,36 +1,42 @@
+import { DB, PostTag } from "@itsmillertimedev/data";
 import { Injectable, Logger } from "@nestjs/common";
-import { PostTag } from "@prisma/client";
-import { PostTag as PostTagEntity } from "../../../../lib/prisma/classes/post_tag";
-import { PrismaService } from "../../../common/prisma/prisma.service";
+import { Insertable, Kysely, Selectable, UpdateResult } from "kysely";
+import { InjectKysely } from "nestjs-kysely";
 
 @Injectable()
 export class PostTagsService {
-  constructor(private prisma: PrismaService) {}
+  constructor(@InjectKysely() private readonly db: Kysely<DB>) {}
 
   private readonly _logger = new Logger(PostTagsService.name);
 
-  create(tag: PostTagEntity): Promise<PostTag> {
-    return this.prisma.create<PostTag>("postTag", tag);
+  create(tag: PostTag): Promise<Insertable<PostTag>> {
+    return this.db.insertInto("PostTag").values([tag]).returningAll().execute();
   }
 
-  findAll(): Promise<PostTag[]> {
-    return this.prisma.postTag.findMany();
+  findAll(): Promise<Selectable<PostTag>[]> {
+    return this.db.selectFrom("PostTag").selectAll().execute();
   }
 
   findOne(slug: string) {
-    return this.prisma.postTag.findUnique({
-      where: { slug },
-    });
+    return this.db
+      .selectFrom("PostTag")
+      .where("PostTag.slug", "=", slug)
+      .selectAll()
+      .executeTakeFirst();
   }
 
-  update(slug: string, updatePostTag: PostTag): Promise<PostTag> {
-    return this.prisma.postTag.update({
-      where: { slug: slug },
-      data: { ...updatePostTag },
-    });
+  update(slug: string, updatePostTag: unknown): Promise<UpdateResult[]> {
+    return this.db
+      .updateTable("PostTag")
+      .where("PostTag.slug", "=", slug)
+      .set(updatePostTag)
+      .execute();
   }
 
   remove(slug: string) {
-    return this.prisma.postTag.delete({ where: { slug } });
+    return this.db
+      .deleteFrom("PostTag")
+      .where("PostTag.slug", "=", slug)
+      .execute();
   }
 }

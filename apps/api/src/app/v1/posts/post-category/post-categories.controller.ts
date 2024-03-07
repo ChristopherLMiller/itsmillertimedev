@@ -1,4 +1,4 @@
-import { DataResponse } from "@itsmillertimedev/data";
+import { DB, DataResponse, PostCategory } from "@itsmillertimedev/data";
 import { CacheInterceptor } from "@nestjs/cache-manager";
 import {
   Body,
@@ -11,10 +11,15 @@ import {
   UseInterceptors,
 } from "@nestjs/common";
 import { ApiOperation, ApiParam, ApiResponse, ApiTags } from "@nestjs/swagger";
-import { PostCategory } from "@prisma/client";
 import { HttpStatusCode } from "axios";
+import {
+  DeleteResult,
+  Insertable,
+  Selectable,
+  UpdateObject,
+  UpdateResult,
+} from "kysely";
 import { PermissionsNodes } from "../../../../common/decorators/auth.decorator";
-import { PostCategory as PostcategoryEntity } from "../../../../lib/prisma/classes/post_category";
 import { PostCategoriesService } from "./post-categories.service";
 import { PostCategoryPermissionNodes } from "./post-category.permissions";
 
@@ -36,8 +41,8 @@ export class PostCategoriesController {
   })
   @PermissionsNodes(PostCategoryPermissionNodes.CATEGORY_CREATE)
   async create(
-    @Body() postCategories: PostcategoryEntity,
-  ): DataResponse<PostCategory> {
+    @Body() postCategories: Insertable<PostCategory>,
+  ): DataResponse<Insertable<PostCategory>> {
     return {
       data: await this.postCategoriesService.create(postCategories),
     };
@@ -53,7 +58,7 @@ export class PostCategoriesController {
     status: HttpStatusCode.Unauthorized,
     description: "Forbidden",
   })
-  async findAll(): DataResponse<PostCategory[]> {
+  async findAll(): DataResponse<Selectable<PostCategory>[]> {
     return { data: await this.postCategoriesService.findAll() };
   }
 
@@ -68,7 +73,9 @@ export class PostCategoriesController {
     status: HttpStatusCode.Unauthorized,
     description: "Forbidden",
   })
-  async findOne(@Param("slug") slug: string) {
+  async findOne(
+    @Param("slug") slug: string,
+  ): DataResponse<Selectable<PostCategory>> {
     return {
       data: await this.postCategoriesService.findOne(slug),
       meta: { slug },
@@ -89,8 +96,8 @@ export class PostCategoriesController {
   @PermissionsNodes(PostCategoryPermissionNodes.CATEGORY_UPDATE)
   async update(
     @Param("slug") slug: string,
-    @Body() updatePostCategoryDto: PostCategory,
-  ): DataResponse<PostCategory> {
+    @Body() updatePostCategoryDto: UpdateObject<DB, "PostCategory">,
+  ): DataResponse<UpdateResult[]> {
     return {
       data: await this.postCategoriesService.update(
         slug,
@@ -112,7 +119,7 @@ export class PostCategoriesController {
     description: "Forbidden",
   })
   @PermissionsNodes(PostCategoryPermissionNodes.CATEGORY_DELETE)
-  async remove(@Param("slug") slug: string): DataResponse<PostCategory> {
+  async remove(@Param("slug") slug: string): DataResponse<DeleteResult[]> {
     return {
       data: await this.postCategoriesService.remove(slug),
       meta: { slug },

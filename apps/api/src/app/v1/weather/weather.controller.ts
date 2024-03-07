@@ -4,103 +4,103 @@ import {
   DataResponse,
   HourlyForecast,
   MinutelyForecast,
-} from '@itsmillertimedev/data';
-import { Controller, Get, Query } from '@nestjs/common';
-import { ApiResponse, ApiTags } from '@nestjs/swagger';
-import { HttpStatusCode } from 'axios';
-import { WeatherService } from './weather.service';
+} from "@itsmillertimedev/data";
+import { Controller, Get, Query } from "@nestjs/common";
+import { ApiResponse, ApiTags } from "@nestjs/swagger";
+import { HttpStatusCode } from "axios";
+import { WeatherService } from "./weather.service";
 
-@Controller({ version: '1', path: 'weather' })
-@ApiTags('Weather')
+@Controller({ version: "1", path: "weather" })
+@ApiTags("Weather")
 export class WeatherController {
   constructor(private weatherService: WeatherService) {}
 
-  @Get('current')
-  @ApiResponse({ status: HttpStatusCode.Ok, description: 'Success' })
+  @Get("current")
+  @ApiResponse({ status: HttpStatusCode.Ok, description: "Success" })
   @ApiResponse({
     status: HttpStatusCode.BadRequest,
-    description: 'Must supply valid USA based GPS coordinates',
+    description: "Must supply valid USA based GPS coordinates",
   })
   @ApiResponse({
     status: HttpStatusCode.Unauthorized,
     description:
-      'Forbidden, invalid api key supplied or not authorized to access this resource',
+      "Forbidden, invalid api key supplied or not authorized to access this resource",
   })
   async getCurrentWeather(
-    @Query('lat') lat: string,
-    @Query('lon') lon: string,
+    @Query("lat") lat: string,
+    @Query("lon") lon: string,
   ): DataResponse<CurrentWeather> {
     return await this.weatherService.getCurrentWeather({ lat, lon });
   }
 
-  @Get('minutely')
-  @ApiResponse({ status: HttpStatusCode.Ok, description: 'Success' })
+  @Get("minutely")
+  @ApiResponse({ status: HttpStatusCode.Ok, description: "Success" })
   @ApiResponse({
     status: HttpStatusCode.BadRequest,
-    description: 'Must supply valid USA based GPS coordinates',
+    description: "Must supply valid USA based GPS coordinates",
   })
   @ApiResponse({
     status: HttpStatusCode.Unauthorized,
     description:
-      'Forbidden, invalid api key supplied or not authorized to access this resource',
+      "Forbidden, invalid api key supplied or not authorized to access this resource",
   })
   async getMinutelyForecast(
-    @Query('lat') lat: string,
-    @Query('lon') lon: string,
+    @Query("lat") lat: string,
+    @Query("lon") lon: string,
   ): DataResponse<MinutelyForecast> {
     return await this.weatherService.getMinutelyForecast({ lat, lon });
   }
 
-  @Get('hourly')
-  @ApiResponse({ status: HttpStatusCode.Ok, description: 'Success' })
+  @Get("hourly")
+  @ApiResponse({ status: HttpStatusCode.Ok, description: "Success" })
   @ApiResponse({
     status: HttpStatusCode.BadRequest,
-    description: 'Must supply valid USA based GPS coordinates',
+    description: "Must supply valid USA based GPS coordinates",
   })
   @ApiResponse({
     status: HttpStatusCode.Unauthorized,
     description:
-      'Forbidden, invalid api key supplied or not authorized to access this resource',
+      "Forbidden, invalid api key supplied or not authorized to access this resource",
   })
   async getHourlyForecast(
-    @Query('lat') lat: string,
-    @Query('lon') lon: string,
+    @Query("lat") lat: string,
+    @Query("lon") lon: string,
   ): DataResponse<HourlyForecast> {
     return await this.weatherService.getHourlyForecast({ lat, lon });
   }
 
-  @Get('daily')
-  @ApiResponse({ status: HttpStatusCode.Ok, description: 'Success' })
+  @Get("daily")
+  @ApiResponse({ status: HttpStatusCode.Ok, description: "Success" })
   @ApiResponse({
     status: HttpStatusCode.BadRequest,
-    description: 'Must supply valid USA based GPS coordinates',
+    description: "Must supply valid USA based GPS coordinates",
   })
   @ApiResponse({
     status: HttpStatusCode.Unauthorized,
     description:
-      'Forbidden, invalid api key supplied or not authorized to access this resource',
+      "Forbidden, invalid api key supplied or not authorized to access this resource",
   })
   async getDailyForecast(
-    @Query('lat') lat: string,
-    @Query('lon') lon: string,
+    @Query("lat") lat: string,
+    @Query("lon") lon: string,
   ): DataResponse<DailyForecast> {
     return await this.weatherService.getDailyForecast({ lat, lon });
   }
 
-  @Get('alerts')
-  @ApiResponse({ status: HttpStatusCode.Ok, description: 'Success' })
+  @Get("alerts")
+  @ApiResponse({ status: HttpStatusCode.Ok, description: "Success" })
   @ApiResponse({
     status: HttpStatusCode.BadRequest,
-    description: 'Must supply valid USA based GPS coordinates',
+    description: "Must supply valid USA based GPS coordinates",
   })
   @ApiResponse({
     status: HttpStatusCode.Unauthorized,
     description:
-      'Forbidden, invalid api key supplied or not authorized to access this resource',
+      "Forbidden, invalid api key supplied or not authorized to access this resource",
   })
   async getAlerts(
-    @Query('lat') lat: string,
-    @Query('lon') lon: string,
+    @Query("lat") lat: string,
+    @Query("lon") lon: string,
   ): DataResponse<any> {
     return await this.weatherService.getAlerts({ lat, lon });
   }

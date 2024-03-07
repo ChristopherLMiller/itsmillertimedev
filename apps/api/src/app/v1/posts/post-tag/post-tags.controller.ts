@@ -1,4 +1,4 @@
-import { DataResponse } from "@itsmillertimedev/data";
+import { DataResponse, PostTag } from "@itsmillertimedev/data";
 import { CacheInterceptor, CacheTTL } from "@nestjs/cache-manager";
 import {
   Body,
@@ -11,10 +11,9 @@ import {
   UseInterceptors,
 } from "@nestjs/common";
 import { ApiOperation, ApiParam, ApiResponse, ApiTags } from "@nestjs/swagger";
-import { PostTag } from "@prisma/client";
 import { HttpStatusCode } from "axios";
+import { DeleteResult, Insertable, Selectable, UpdateResult } from "kysely";
 import { PermissionsNodes } from "../../../../common/decorators/auth.decorator";
-import { PostTag as PostTagEntity } from "../../../../lib/prisma/classes/post_tag";
 import { PostsTagsPermissionNodes } from "./post-tag.permissions";
 import { PostTagsService } from "./post-tags.service";
 
@@ -36,7 +35,7 @@ export class PostTagsController {
     description: "Forbidden",
   })
   @PermissionsNodes(PostsTagsPermissionNodes.CREATE_TAG)
-  async create(@Body() postTag: PostTagEntity): DataResponse<PostTag> {
+  async create(@Body() postTag: PostTag): DataResponse<Insertable<PostTag>> {
     return {
       data: await this.postTagService.create(postTag),
       meta: {},
@@ -53,7 +52,7 @@ export class PostTagsController {
     status: HttpStatusCode.Unauthorized,
     description: "Forbidden",
   })
-  async findAll(): DataResponse<PostTag[]> {
+  async findAll(): DataResponse<Selectable<PostTag>[]> {
     return { data: await this.postTagService.findAll(), meta: {} };
   }
 
@@ -68,7 +67,9 @@ export class PostTagsController {
     status: HttpStatusCode.Unauthorized,
     description: "Forbidden",
   })
-  async findOne(@Param("slug") slug: string): DataResponse<PostTag> {
+  async findOne(
+    @Param("slug") slug: string,
+  ): DataResponse<Selectable<PostTag>> {
     return { data: await this.postTagService.findOne(slug), meta: { slug } };
   }
 
@@ -87,7 +88,7 @@ export class PostTagsController {
   async update(
     @Param("slug") slug: string,
     @Body() updatePostTagDto: PostTag,
-  ): DataResponse<PostTag> {
+  ): DataResponse<UpdateResult[]> {
     return {
       data: await this.postTagService.update(slug, updatePostTagDto),
       meta: { slug },
@@ -106,7 +107,7 @@ export class PostTagsController {
     description: "Forbidden",
   })
   @PermissionsNodes(PostsTagsPermissionNodes.DELETE_TAG)
-  async remove(@Param("slug") slug: string): DataResponse<PostTag> {
+  async remove(@Param("slug") slug: string): DataResponse<DeleteResult[]> {
     // first lets dump the cache
     return { data: await this.postTagService.remove(slug), meta: { slug } };
   }

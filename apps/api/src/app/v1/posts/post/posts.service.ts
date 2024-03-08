@@ -72,7 +72,11 @@ export class PostsService {
         .select((eb) => [
           withCategory(eb),
           withTags(eb, "Post.id"),
-          withImage(eb, "Post.imagePublic_id"),
+          withImage<"Post">(eb, "Post.imagePublic_id", [
+            "Image.alt",
+            "Image.public_id",
+            "Image.caption",
+          ]),
         ])
         .selectAll()
         .executeTakeFirst();
@@ -83,7 +87,11 @@ export class PostsService {
         .select((eb) => [
           withCategory(eb),
           withTags(eb, "Post.id"),
-          withImage(eb, "Post.imagePublic_id"),
+          withImage<"Post">(eb, "Post.imagePublic_id", [
+            "Image.alt",
+            "Image.public_id",
+            "Image.caption",
+          ]),
         ])
         .selectAll()
         .executeTakeFirst();

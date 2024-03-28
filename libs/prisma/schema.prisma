@@ -1,13 +1,19 @@
-// Generator for prisma client, for use in the nestjs API
-//generator client {
-//  provider = "prisma-client-js"
-//}
-
 generator kysely {
   provider     = "prisma-kysely"
   output       = "../../libs/data/src/kysely/generated"
   fileName     = "types.ts"
   enumFileName = "enums.ts"
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+generator nestjsDto {
+  provider                        = "prisma-generator-nestjs-dto"
+  output                          = "../../apps/api/src/common/dtos/models"
+  outputToNestJsResourceStructure = "true"
+  classValidation                 = "true"
 }
 
 // The connection to the database itself
@@ -206,7 +212,6 @@ model Post {
   postCategoryId Int
   featuredImage  Image?       @relation(fields: [imagePublic_id], references: [public_id])
   category       PostCategory @relation(fields: [postCategoryId], references: [id])
-  tags           PostTag[]    @relation("PostToTag")
 
   @@index([id])
 }
@@ -216,16 +221,6 @@ model PostCategory {
   slug  String @unique
   title String
   posts Post[]
-
-  @@index([id, slug])
-}
-
-model PostTag {
-  id     Int    @id @default(autoincrement())
-  postId Int?
-  slug   String @unique
-  title  String
-  posts  Post[] @relation("PostToTag")
 
   @@index([id, slug])
 }

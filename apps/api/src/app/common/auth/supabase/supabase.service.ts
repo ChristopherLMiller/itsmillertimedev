@@ -57,7 +57,7 @@ export class SupabaseService {
 
   // Function to extract the users JWT bearer token from the request
   getJWT(): string | null {
-    const authHeader = this.asyncLocalStorage.get("bearer_token");
+    const authHeader = this.asyncLocalStorage.get("BEARER_TOKEN");
     if (authHeader) {
       return authHeader.split(" ")[1];
     }
@@ -67,7 +67,9 @@ export class SupabaseService {
 
   // Function to get the supabse user from the request object
   async getUserFromRequest(): Promise<UserResponse["data"]["user"]> {
-    const supabaseUser = await this.getUser(this.getJWT());
+    const supabaseUser = this.asyncLocalStorage.get("SUPABASE_USER");
+
+    if (supabaseUser === undefined) return null;
 
     if (supabaseUser.error) {
       if (supabaseUser.error instanceof AuthError) {

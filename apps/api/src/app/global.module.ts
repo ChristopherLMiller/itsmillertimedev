@@ -7,6 +7,7 @@ import { ApiKeyAuthGuard } from "../common/guards/apiKeyAuth.guard";
 import { SupabaseAuthGuard } from "../common/guards/supabaseAuth.guard";
 import { LoggingInterceptor } from "../common/interceptors/logging.interceptor";
 import { ResponseInterceptor } from "../common/interceptors/response.interceptor";
+import { SupabaseService } from "./common/auth/supabase/supabase.service";
 import { CommonModule } from "./common/common.module";
 import { V1Module } from "./v1/v1.module";
 
@@ -14,16 +15,23 @@ import { V1Module } from "./v1/v1.module";
   controllers: [],
   imports: [
     CommonModule,
-    ClsModule.forRoot({
+    ClsModule.forRootAsync({
       global: true,
-      middleware: {
-        mount: true,
-        setup: (cls, req) => {
-          if (req.headers["authorization"]) {
-            cls.set("bearer_token", req.headers["authorization"]);
-          }
+      inject: [SupabaseService],
+      useFactory: (supabaseService: SupabaseService) => ({
+        middleware: {
+          mount: true,
+          setup: async (cls, req) => {
+            if (req.headers["authorization"]) {
+              const supabaseUser = await supabaseService.getUser(
+                req.headers["authorization"].split(" ")[1],
+              );
+              cls.set("SUPABASE_USER", supabaseUser);
+              cls.set("BEARER_TOKEN", req.headers["authorization"]);
+            }
+          },
         },
-      },
+      }),
     }),
     V1Module,
   ],

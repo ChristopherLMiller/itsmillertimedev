@@ -26,16 +26,16 @@ export class PagesService {
     };
   }
   async findOne(slug: string): Promise<Selectable<Page>> {
-    const bearerToken = this.asyncLocalStorage.get("bearer_token");
+    const bearerToken = this.asyncLocalStorage.get("BEARER_TOKEN");
 
     // Grab the entry from the DB
-    const page = this.db
+    const page = await this.db
       .selectFrom("Page")
       .selectAll()
       .where("Page.slug", "=", slug)
       .executeTakeFirst();
 
-    if (bearerToken !== undefined && !(await page).isPublic) {
+    if (bearerToken !== undefined && !page.isPublic) {
       throw new UnauthorizedException("Page is not public");
     } else {
       return page;

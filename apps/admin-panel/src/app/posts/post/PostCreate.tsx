@@ -4,7 +4,6 @@ import {
   Create,
   DateInput,
   NumberInput,
-  ReferenceArrayInput,
   ReferenceInput,
   SimpleForm,
   TextInput,
@@ -25,7 +24,6 @@ export const PostCreate = () => (
       <DateInput source="publishedAt" />
       <RichTextInput source="content" />
       <ReferenceInput source="postCategoryId" reference="posts/categories" />
-      <ReferenceArrayInput source="postTags" reference="posts/tags" />
     </SimpleForm>
   </Create>
 );

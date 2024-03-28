@@ -18,6 +18,7 @@ import {
   ApiResponse,
   ApiTags,
 } from "@nestjs/swagger";
+import { Post as PostReturnType } from "../../../../common/dtos/models/post/entities/post.entity";
 
 import { HttpStatusCode } from "axios";
 import { Insertable, Selectable } from "kysely";
@@ -54,9 +55,14 @@ export class PostsController {
     status: HttpStatusCode.Ok,
     description: "All posts",
   })
-  async findAll(@Query() query: unknown): Promise<unknown> {
+  async findAll(@Query() query: any): DataResponse<PostReturnType> {
+    const { data, meta } = await this.postService.findAll(query);
+
     return {
-      data: await this.postService.findAll(query),
+      data: data,
+      meta: {
+        total: meta.total,
+      },
     };
   }
 

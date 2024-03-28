@@ -1,7 +1,8 @@
 import type { ColumnType } from "kysely";
-export type Generated<T> = T extends ColumnType<infer S, infer I, infer U>
-  ? ColumnType<S, I | undefined, U>
-  : ColumnType<T, T | undefined, T>;
+export type Generated<T> =
+  T extends ColumnType<infer S, infer I, infer U>
+    ? ColumnType<S, I | undefined, U>
+    : ColumnType<T, T | undefined, T>;
 export type Timestamp = ColumnType<Date, Date | string, Date | string>;
 
 import type { PublicationStatus, Visibility } from "./enums";
@@ -173,16 +174,6 @@ export type PostCategory = {
   slug: string;
   title: string;
 };
-export type PostTag = {
-  id: Generated<number>;
-  postId: number | null;
-  slug: string;
-  title: string;
-};
-export type PostToTag = {
-  A: number;
-  B: number;
-};
 export type Role = {
   id: Generated<number>;
   name: string;
@@ -214,7 +205,6 @@ export type UserProfile = {
 };
 export type DB = {
   _GalleryToGalleryImage: GalleryToGalleryImage;
-  _PostToTag: PostToTag;
   Alert: Alert;
   ClockifyTimer: ClockifyTimer;
   DiscordUserSetting: DiscordUserSetting;
@@ -234,7 +224,6 @@ export type DB = {
   PermissionsToRoles: PermissionsToRoles;
   Post: Post;
   PostCategory: PostCategory;
-  PostTag: PostTag;
   Role: Role;
   Scale: Scale;
   Session: Session;

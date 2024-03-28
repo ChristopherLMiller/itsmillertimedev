@@ -22,13 +22,13 @@
         ]
       }
     },
-    "generate-classes": {
+    "generate-dto": {
       "executor": "nx:run-commands",
       "options": {
         "cwd": "libs/prisma",
         "parallel": false,
         "commands": [
-          "prisma generate --schema schema.prisma --generator prismaClassGenerator"
+          "prisma generate --schema schema.prisma --generator nestjsDto"
         ]
       }
     },
@@ -39,6 +39,16 @@
         "parallel": false,
         "commands": [
           "prisma generate --schema schema.prisma --generator kysely"
+        ]
+      }
+    },
+    "generate-classes": {
+      "executor": "nx:run-commands",
+      "options": {
+        "cwd": "libs/prisma",
+        "parallel": false,
+        "commands": [
+          "prisma generate --schema schema.prisma --generator prismaClassGenerator"
         ]
       }
     },

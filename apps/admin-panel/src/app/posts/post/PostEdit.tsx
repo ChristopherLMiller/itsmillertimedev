@@ -8,7 +8,6 @@ import {
   Edit,
   NumberInput,
   PrevNextButtons,
-  ReferenceArrayInput,
   ReferenceInput,
   SimpleForm,
   TextInput,
@@ -87,7 +86,6 @@ export const PostEdit = () => {
               source="postCategoryId"
               reference="posts/categories"
             />
-            <ReferenceArrayInput source="postTags" reference="posts/tags" />
           </Grid>
         </SimpleForm>
       </Edit>

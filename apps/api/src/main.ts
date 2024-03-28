@@ -75,9 +75,7 @@ async function bootstrap() {
     .setVersion("1.0")
     .addBearerAuth()
     .build();
-  const swaggerDocument = SwaggerModule.createDocument(app, swaggerOptions, {
-    extraModels: [],
-  });
+  const swaggerDocument = SwaggerModule.createDocument(app, swaggerOptions, {});
   SwaggerModule.setup("/", app, swaggerDocument);
 
   // Start the application

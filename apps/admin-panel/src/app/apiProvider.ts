@@ -1,9 +1,6 @@
 import { GetListParams, GetListResult } from "react-admin";
 
-const apiURL =
-  process.env.NODE_ENV !== "development"
-    ? import.meta.env.VITE_API_URL_LOCAL
-    : import.meta.env.VITE_API_URL_LIVE;
+const apiURL = import.meta.env.VITE_API_URL_LIVE;
 
 const fetchData = (
   input: string | URL | Request,
@@ -24,12 +21,13 @@ export default {
       sort,
       filter,
     } = params;
-    const orderBy = { [sort.field]: sort.order.toLowerCase() };
-    const url = `${apiURL}/${resource}?take=${perPage}&skip=${
+    const url = `${apiURL}/${resource}?limit=${perPage}&skip=${
       (page - 1) * perPage
-    }&orderBy=${JSON.stringify(orderBy)}`;
+    }&orderBy=${sort.field}&orderDirection=${sort.order.toLowerCase()}`;
+    console.log(url);
     const response = await fetchData(url);
     const { data, meta } = await response.json();
+    console.log({ data, meta });
     return { data, total: meta.total };
   },
   getOne: async (resource: string, params: any) => {
@@ -45,30 +43,33 @@ export default {
     console.log({ data });
     return { data };
   },
-  getManyReference: async (resource, params) => {
+  getManyReference: async (resource: string, params: any) => {
     return { data: [], total: 0 };
   },
-  create: async (resource, params) => {
+  create: async (resource: string, params: any) => {
+    const url = `${apiURL}/${resource}`;
+    const response = await fetch(url, {
+      method: "POST",
+      body: params,
+    });
+    return { data: await response.json() };
+  },
+  update: async (resource: string, params: any) => {
     const url = `${apiURL}/${resource}`;
     const response = await fetch(url);
     return { data: await response.json() };
   },
-  update: async (resource, params) => {
+  updateMany: async (resource: string, params: any) => {
     const url = `${apiURL}/${resource}`;
     const response = await fetch(url);
     return { data: await response.json() };
   },
-  updateMany: async (resource, params) => {
+  delete: async (resource: string, params: any) => {
     const url = `${apiURL}/${resource}`;
     const response = await fetch(url);
     return { data: await response.json() };
   },
-  delete: async (resource, params) => {
-    const url = `${apiURL}/${resource}`;
-    const response = await fetch(url);
-    return { data: await response.json() };
-  },
-  deleteMany: async (resource, params) => {
+  deleteMany: async (resource: string, params: any) => {
     const url = `${apiURL}/${resource}`;
     const response = await fetch(url);
     return { data: await response.json() };

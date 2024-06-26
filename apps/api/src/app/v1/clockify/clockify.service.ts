@@ -10,7 +10,7 @@ import { HttpService } from "@nestjs/axios";
 import { BadRequestException, Injectable, Logger } from "@nestjs/common";
 import { DeleteResult, Kysely, Selectable } from "kysely";
 import { InjectKysely } from "nestjs-kysely";
-import { dataFetcher } from "../../../common/handlers/dataFetcher";
+import { dataFetcher } from "../../../global/handlers/dataFetcher";
 import { SettingsService } from "../../common/settings/settings.service";
 
 @Injectable()

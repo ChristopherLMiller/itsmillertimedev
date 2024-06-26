@@ -48,10 +48,10 @@ export class SettingsService implements OnApplicationBootstrap {
     return data["fields"][field];
   }
 
-  async getFieldValue(key: string, field: string): Promise<string | unknown> {
+  async getFieldValue<T>(key: string, field: string): Promise<T> {
     try {
       const setting = await this.getSetting(key);
-      return setting["fields"][field]["value"];
+      return setting["fields"][field]["value"] as T;
     } catch (error) {
       this._logger.error(`Unable to load setting value of ${field} for ${key}`);
     }

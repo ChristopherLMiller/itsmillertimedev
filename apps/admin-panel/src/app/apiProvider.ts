@@ -1,14 +1,15 @@
 import { GetListParams, GetListResult } from "react-admin";
 
-const apiURL = import.meta.env.VITE_API_URL_LIVE;
+const apiURL = import.meta.env.VITE_API_URL_LOCAL;
 
-const fetchData = (
+const fetchData = async (
   input: string | URL | Request,
   init?: any,
-): Promise<Response> => {
+): Promise<any> => {
   const headers = new Headers();
   headers.append("x-api-key", import.meta.env.VITE_API_KEY);
-  return fetch(input, { headers });
+  const response = await fetch(input, { headers });
+  return response.json();
 };
 
 export default {
@@ -21,27 +22,27 @@ export default {
       sort,
       filter,
     } = params;
-    const url = `${apiURL}/${resource}?limit=${perPage}&skip=${
-      (page - 1) * perPage
-    }&orderBy=${sort.field}&orderDirection=${sort.order.toLowerCase()}`;
-    console.log(url);
-    const response = await fetchData(url);
-    const { data, meta } = await response.json();
-    console.log({ data, meta });
-    return { data, total: meta.total };
+    const urlParams = new URLSearchParams();
+    urlParams.append("limit", perPage.toString());
+    urlParams.append("skip", ((page - 1) * perPage).toString());
+    urlParams.append("orderBy", sort.field);
+    urlParams.append("orderDirection", sort.order.toLowerCase());
+    urlParams.append("where", JSON.stringify(filter));
+    const { data, meta } = await fetchData(
+      `${apiURL}/${resource}?${urlParams.toString()}`,
+    );
+    return { data: data, total: meta.total };
   },
   getOne: async (resource: string, params: any) => {
     const url = `${apiURL}/${resource}/${params.id}`;
-    const response = await fetch(url);
-    const { data, meta } = await response.json();
-    return { data, meta };
+    const { data, meta } = await fetchData(url);
+
+    return { data: data[0], meta };
   },
   getMany: async (resource: string, params: any) => {
     const url = `${apiURL}/${resource}`;
-    const response = await fetch(url);
-    const { data } = await response.json();
-    console.log({ data });
-    return { data };
+    const { data, meta } = await fetchData(url);
+    return { data, meta };
   },
   getManyReference: async (resource: string, params: any) => {
     return { data: [], total: 0 };

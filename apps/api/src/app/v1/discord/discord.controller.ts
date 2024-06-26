@@ -12,7 +12,7 @@ import { ApiOperation, ApiResponse, ApiTags } from "@nestjs/swagger";
 import { HttpStatusCode } from "axios";
 import { Collection, User } from "discord.js";
 import { Insertable, Selectable } from "kysely";
-import { PermissionsNodes } from "../../../common/decorators/auth.decorator";
+import { PermissionsNodes } from "../../../global/decorators/auth.decorator";
 import { DiscordPermissionNodes } from "./discord.permissions";
 import { DiscordService } from "./discord.service";
 

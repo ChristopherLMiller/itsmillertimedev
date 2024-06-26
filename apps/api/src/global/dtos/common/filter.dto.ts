@@ -37,16 +37,6 @@ export class FilterDTO {
   })
   public readonly orderDirection?: "asc" | "desc";
 
-  @ApiProperty({
-    required: false,
-  })
-  public readonly include?: any;
-
   @ApiProperty({ required: false })
   public readonly where?: any;
-
-  @ApiProperty({
-    required: false,
-  })
-  public readonly fields?: any;
 }

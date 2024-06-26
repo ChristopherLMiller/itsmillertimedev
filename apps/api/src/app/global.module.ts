@@ -2,11 +2,11 @@
 import { Module } from "@nestjs/common";
 import { APP_GUARD, APP_INTERCEPTOR } from "@nestjs/core";
 import { ClsModule } from "nestjs-cls";
-import { ComboAuthGuard } from "../common/guards/ComboAuth.guard";
-import { ApiKeyAuthGuard } from "../common/guards/apiKeyAuth.guard";
-import { SupabaseAuthGuard } from "../common/guards/supabaseAuth.guard";
-import { LoggingInterceptor } from "../common/interceptors/logging.interceptor";
-import { ResponseInterceptor } from "../common/interceptors/response.interceptor";
+import { ComboAuthGuard } from "../global/guards/ComboAuth.guard";
+import { ApiKeyAuthGuard } from "../global/guards/apiKeyAuth.guard";
+import { SupabaseAuthGuard } from "../global/guards/supabaseAuth.guard";
+import { LoggingInterceptor } from "../global/interceptors/logging.interceptor";
+import { ResponseInterceptor } from "../global/interceptors/response.interceptor";
 import { SupabaseService } from "./common/auth/supabase/supabase.service";
 import { CommonModule } from "./common/common.module";
 import { V1Module } from "./v1/v1.module";
@@ -26,8 +26,12 @@ import { V1Module } from "./v1/v1.module";
               const supabaseUser = await supabaseService.getUser(
                 req.headers["authorization"].split(" ")[1],
               );
+              // Setup Async Local Storage with the supabase user
               cls.set("SUPABASE_USER", supabaseUser);
               cls.set("BEARER_TOKEN", req.headers["authorization"]);
+
+              // Setup ALS with the API-KEY as well if present
+              cls.set("X_API_KEY", req.headers["x-api-key"]);
             }
           },
         },

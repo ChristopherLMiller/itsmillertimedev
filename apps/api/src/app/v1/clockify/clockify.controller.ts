@@ -33,9 +33,9 @@ import {
 import { HttpStatusCode } from "axios";
 import { formatDistanceStrict, parseISO } from "date-fns";
 import { DeleteResult, Selectable } from "kysely";
-import { PermissionsNodes } from "../../../common/decorators/auth.decorator";
-import { ResponseTimeLimit } from "../../../common/decorators/responseTime.decorator";
-import { HookdeckGuard } from "../../../common/guards/hookdeck.guard";
+import { PermissionsNodes } from "../../../global/decorators/auth.decorator";
+import { ResponseTimeLimit } from "../../../global/decorators/responseTime.decorator";
+import { HookdeckGuard } from "../../../global/guards/hookdeck.guard";
 import { SettingsService } from "../../common/settings/settings.service";
 import { DiscordService } from "../discord/discord.service";
 import { ClockifyPermissionNodes } from "./clockify.permissions";

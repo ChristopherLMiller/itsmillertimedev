@@ -21,7 +21,7 @@ import {
   ApiUnauthorizedResponse,
 } from "@nestjs/swagger";
 import { Selectable, UpdateResult } from "kysely";
-import { PermissionsNodes } from "../../../../common/decorators/auth.decorator";
+import { PermissionsNodes } from "../../../../global/decorators/auth.decorator";
 import { SupabaseService } from "../supabase/supabase.service";
 import UsersPermissionsNodes from "./userProfiles.permissions";
 import { UserProfilesService } from "./userProfiles.service";

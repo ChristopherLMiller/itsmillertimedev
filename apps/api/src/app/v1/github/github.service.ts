@@ -1,7 +1,7 @@
 import { GithubUser } from "@itsmillertimedev/data";
 import { HttpService } from "@nestjs/axios";
 import { Injectable } from "@nestjs/common";
-import { dataFetcher } from "../../../common/handlers/dataFetcher";
+import { dataFetcher } from "../../../global/handlers/dataFetcher";
 
 @Injectable()
 export class GithubService {

@@ -3,7 +3,7 @@ import { Controller, Get, Query, UseGuards } from "@nestjs/common";
 import { ApiOperation, ApiResponse, ApiTags } from "@nestjs/swagger";
 import { HttpStatusCode } from "axios";
 import { Selectable } from "kysely";
-import { ApiKeyAuthGuard } from "../../../common/guards/apiKeyAuth.guard";
+import { ApiKeyAuthGuard } from "../../../global/guards/apiKeyAuth.guard";
 import { SettingsService } from "./settings.service";
 
 @Controller({ path: "settings" })

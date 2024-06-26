@@ -5,6 +5,7 @@ import {
   Controller,
   Delete,
   Get,
+  Logger,
   Param,
   Patch,
   Post,
@@ -18,11 +19,12 @@ import {
   ApiResponse,
   ApiTags,
 } from "@nestjs/swagger";
-import { Post as PostReturnType } from "../../../../common/dtos/models/post/entities/post.entity";
+import { Post as PostReturnType } from "../../../../global/dtos/models/post/entities/post.entity";
 
 import { HttpStatusCode } from "axios";
 import { Insertable, Selectable } from "kysely";
-import { PermissionsNodes } from "../../../../common/decorators/auth.decorator";
+import { PermissionsNodes } from "../../../../global/decorators/auth.decorator";
+import { FindPostsDTO } from "../../../../global/dtos/posts/find.dto";
 import { PostPermissionNodes } from "./post.permissions";
 import { PostsService } from "./posts.service";
 
@@ -31,6 +33,8 @@ import { PostsService } from "./posts.service";
 @UseInterceptors(CacheInterceptor)
 export class PostsController {
   constructor(private readonly postService: PostsService) {}
+
+  private readonly _logger = new Logger(PostsController.name);
 
   @Post("/")
   @ApiOperation({ summary: "Creates a new Post" })
@@ -55,7 +59,7 @@ export class PostsController {
     status: HttpStatusCode.Ok,
     description: "All posts",
   })
-  async findAll(@Query() query: any): DataResponse<PostReturnType> {
+  async findAll(@Query() query: FindPostsDTO): DataResponse<PostReturnType> {
     const { data, meta } = await this.postService.findAll(query);
 
     return {

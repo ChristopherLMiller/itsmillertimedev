@@ -1,6 +1,6 @@
 import { HttpService } from "@nestjs/axios";
 import { Injectable, Logger } from "@nestjs/common";
-import { dataFetcher } from "../../../common/handlers/dataFetcher";
+import { dataFetcher } from "../../../global/handlers/dataFetcher";
 import { SettingsService } from "../../common/settings/settings.service";
 
 @Injectable()

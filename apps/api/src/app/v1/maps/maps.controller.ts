@@ -3,7 +3,7 @@ import { CacheInterceptor } from "@nestjs/cache-manager";
 import { Body, Controller, Get, Post, UseInterceptors } from "@nestjs/common";
 import { ApiTags } from "@nestjs/swagger";
 import { Insertable, Selectable } from "kysely";
-import { PermissionsNodes } from "../../../common/decorators/auth.decorator";
+import { PermissionsNodes } from "../../../global/decorators/auth.decorator";
 import { MapsPermissionNodes } from "./maps.permissions";
 import { MapsService } from "./maps.service";
 

@@ -24,12 +24,8 @@ const ListActions = () => (
 );
 
 const postFilters = [
-  <TextInput
-    key="title-filter"
-    label="Title"
-    source="title"
-    defaultValue="Example Title"
-  />,
+  <TextInput key="title-filter" label="Title" source="title" />,
+  <TextInput key="slug-filter" label="Slug" source="slug" />,
 ];
 
 export const PostList = () => {

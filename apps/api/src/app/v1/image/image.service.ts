@@ -4,7 +4,7 @@ import { Injectable, Logger } from "@nestjs/common";
 import { DB, Image } from "@itsmillertimedev/data";
 import { DeleteResult, Kysely, Selectable } from "kysely";
 import { InjectKysely } from "nestjs-kysely";
-import { dataFetcher } from "../../../common/handlers/dataFetcher";
+import { dataFetcher } from "../../../global/handlers/dataFetcher";
 import { SettingsService } from "../../common/settings/settings.service";
 
 // eslint-disable-next-line @typescript-eslint/no-var-requires

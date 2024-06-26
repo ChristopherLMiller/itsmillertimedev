@@ -19,7 +19,7 @@ import {
   UpdateObject,
   UpdateResult,
 } from "kysely";
-import { PermissionsNodes } from "../../../../common/decorators/auth.decorator";
+import { PermissionsNodes } from "../../../../global/decorators/auth.decorator";
 import { PostCategoriesService } from "./post-categories.service";
 import { PostCategoryPermissionNodes } from "./post-category.permissions";
 

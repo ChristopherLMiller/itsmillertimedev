@@ -1,0 +1,58 @@
+{
+  "name": "strapi-itsmillertime",
+  "version": "1.0.1",
+  "private": true,
+  "description": "Strapi instance for itsmillertime websige",
+  "license": "MIT",
+  "author": {
+    "name": "ChristopherLMiller"
+  },
+  "scripts": {
+    "build": "strapi build",
+    "develop": "strapi develop",
+    "production:build": "NODE_ENV=production strapi build",
+    "production:start": "NODE_ENV=production strapi start",
+    "schemas-to-ts": "schemas-to-ts",
+    "start": "strapi start",
+    "strapi": "strapi"
+  },
+  "dependencies": {
+    "@ckeditor/strapi-plugin-ckeditor": "^0.0.11",
+    "@strapi/plugin-documentation": "^4.25.1",
+    "@strapi/plugin-i18n": "4.25.1",
+    "@strapi/plugin-sentry": "^4.25.1",
+    "@strapi/plugin-seo": "^1.9.8",
+    "@strapi/plugin-users-permissions": "4.25.1",
+    "@strapi/strapi": "4.25.1",
+    "@strapi/typescript-utils": "^4.25.1",
+    "@tanstack/react-query": "^5.45.1",
+    "@wordpress/wordcount": "^4.1.0",
+    "better-sqlite3": "11.0.0",
+    "pg": "^8.12.0",
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1",
+    "react-router-dom": "5.3.4",
+    "strapi-blurhash": "1.2.7",
+    "strapi-plugin-clockify": "^1.0.10",
+    "strapi-plugin-comments": "^2.3.0",
+    "strapi-plugin-meilisearch": "^0.12.0",
+    "strapi-plugin-navigation": "^2.5.2",
+    "strapi-plugin-plausible": "^1.0.7",
+    "strapi-plugin-preview-button": "^2.2.2",
+    "strapi-plugin-redis": "^1.1.0",
+    "strapi-plugin-rest-cache": "^4.2.9",
+    "strapi-plugin-transformer": "^3.1.2",
+    "strapi-provider-cloudflare-r2": "^0.3.0",
+    "strapi-provider-email-resend": "^1.0.4",
+    "strapi-provider-rest-cache-redis": "^4.2.9",
+    "strapi-regenerator": "^0.2.1",
+    "styled-components": "5.3.11"
+  },
+  "engines": {
+    "node": ">=18.0.0 <=20.x.x",
+    "npm": ">=6.0.0"
+  },
+  "strapi": {
+    "uuid": "e0c99fac-0a59-4672-af20-a8f125e714c5"
+  }
+}

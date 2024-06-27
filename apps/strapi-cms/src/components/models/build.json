@@ -1,0 +1,24 @@
+{
+  "collectionName": "components_models_builds",
+  "info": {
+    "displayName": "Build",
+    "icon": "car",
+    "description": ""
+  },
+  "options": {},
+  "attributes": {
+    "section": {
+      "type": "string",
+      "required": true
+    },
+    "contents": {
+      "type": "customField",
+      "options": {
+        "output": "Markdown",
+        "preset": "rich"
+      },
+      "customField": "plugin::ckeditor.CKEditor",
+      "required": true
+    }
+  }
+}

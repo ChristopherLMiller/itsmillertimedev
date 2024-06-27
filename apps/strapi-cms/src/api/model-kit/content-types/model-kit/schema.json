@@ -1,0 +1,40 @@
+{
+  "kind": "collectionType",
+  "collectionName": "model_kits",
+  "info": {
+    "singularName": "model-kit",
+    "pluralName": "model-kits",
+    "displayName": "Model Kit",
+    "description": ""
+  },
+  "options": {
+    "draftAndPublish": false
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "title": {
+      "type": "string",
+      "required": true
+    },
+    "manufacturer": {
+      "type": "relation",
+      "relation": "oneToOne",
+      "target": "api::manufacturer.manufacturer"
+    },
+    "scale": {
+      "type": "relation",
+      "relation": "oneToOne",
+      "target": "api::scale.scale"
+    },
+    "kitNumber": {
+      "type": "string",
+      "required": true
+    },
+    "scalematesLink": {
+      "type": "string"
+    },
+    "yearReleased": {
+      "type": "integer"
+    }
+  }
+}

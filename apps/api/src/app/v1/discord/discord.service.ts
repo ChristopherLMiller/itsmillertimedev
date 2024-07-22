@@ -6,7 +6,7 @@ import { DB, DiscordUserSetting } from "@itsmillertimedev/data";
 import { Client, Collection, User } from "discord.js";
 import { Insertable, Kysely, Selectable, Updateable } from "kysely";
 import { InjectKysely } from "nestjs-kysely";
-import { dataFetcher } from "../../../common/handlers/dataFetcher";
+import { dataFetcher } from "../../../global/handlers/dataFetcher";
 import { SettingsService } from "../../common/settings/settings.service";
 
 @Injectable()

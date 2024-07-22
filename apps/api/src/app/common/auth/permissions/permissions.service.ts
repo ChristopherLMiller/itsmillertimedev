@@ -2,12 +2,20 @@ import { DB, Permission } from "@itsmillertimedev/data";
 import { Injectable, Logger } from "@nestjs/common";
 import { glob } from "glob";
 import { Kysely, Selectable } from "kysely";
+import { ClsService } from "nestjs-cls";
 import { InjectKysely } from "nestjs-kysely";
 import { readFileSync } from "node:fs";
+import { SupabaseService } from "../supabase/supabase.service";
+import { UserProfilesService } from "../userProfiles/userProfiles.service";
 
 @Injectable()
 export class PermissionsService {
-  constructor(@InjectKysely() private readonly db: Kysely<DB>) {}
+  constructor(
+    @InjectKysely() private readonly db: Kysely<DB>,
+    private readonly supabaseService: SupabaseService,
+    private readonly userProfiles: UserProfilesService,
+    private readonly asyncLocalStorage: ClsService,
+  ) {}
 
   private readonly _logger = new Logger(PermissionsService.name);
 
@@ -67,6 +75,30 @@ export class PermissionsService {
     if (userPermissionNodes.some((node) => nodesToCheck.includes(node.node))) {
       return true;
     }
+    return false;
+  }
+
+  // Checks to see if the user is an admin user
+  async isAdmin(): Promise<boolean> {
+    this._logger.log("Checking permissions");
+    const user = this.asyncLocalStorage.get("SUPABASE_USER");
+    const apiKey = this.asyncLocalStorage.get("X_API_KEY");
+
+    this._logger.debug({ user, apiKey });
+
+    if (user) {
+      this._logger.debug("User profile found");
+      const role = await this.userProfiles.getUserRole(user.id);
+      if (role === 1) {
+        return true;
+      }
+    }
+
+    if (apiKey) {
+      this._logger.debug("API Key is present");
+      return true;
+    }
+
     return false;
   }
 }

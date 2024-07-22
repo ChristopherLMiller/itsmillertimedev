@@ -1,0 +1,22 @@
+{
+  "kind": "singleType",
+  "collectionName": "site_metas",
+  "info": {
+    "singularName": "site-meta",
+    "pluralName": "site-metas",
+    "displayName": "Site Meta"
+  },
+  "options": {
+    "draftAndPublish": false
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "pages": {
+      "displayName": "page",
+      "type": "component",
+      "repeatable": true,
+      "component": "meta.page",
+      "required": true
+    }
+  }
+}

@@ -1,0 +1,32 @@
+{
+  "name": "strapi-cms",
+  "$schema": "../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "apps/strapi-cms",
+  "projectType": "application",
+  "targets": {
+    "develop": {
+      "executor": "nx:run-commands",
+      "options": {
+        "cwd": "apps/strapi-cms",
+        "parallel": false,
+        "commands": ["npx strapi develop"]
+      }
+    },
+    "build": {
+      "executor": "nx:run-commands",
+      "options": {
+        "cwd": "apps/strapi-cms",
+        "parallel": false,
+        "commands": ["NODE_ENV=production strapi build"]
+      }
+    },
+    "start": {
+      "executor": "nx:run-commands",
+      "options": {
+        "cwd": "apps/strapi-cms",
+        "parallel": false,
+        "commands": ["NODE_ENV=production strapi start"]
+      }
+    }
+  }
+}

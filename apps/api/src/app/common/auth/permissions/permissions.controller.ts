@@ -2,7 +2,7 @@ import { DataResponse, Permission } from "@itsmillertimedev/data";
 import { Controller, Get } from "@nestjs/common";
 import { ApiTags } from "@nestjs/swagger";
 import { Selectable } from "kysely";
-import { PermissionsNodes } from "../../../../common/decorators/auth.decorator";
+import { PermissionsNodes } from "../../../../global/decorators/auth.decorator";
 import { PermissionsPermissionNodes } from "./permissions.permissions";
 import { PermissionsService } from "./permissions.service";
 

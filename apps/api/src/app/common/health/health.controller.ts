@@ -6,7 +6,7 @@ import {
   HttpHealthIndicator,
   MemoryHealthIndicator,
 } from "@nestjs/terminus";
-import { IgnoreLogging } from "../../../common/decorators/logging.decorator";
+import { IgnoreLogging } from "../../../global/decorators/logging.decorator";
 
 @Controller({ path: "health" })
 export class HealthController {

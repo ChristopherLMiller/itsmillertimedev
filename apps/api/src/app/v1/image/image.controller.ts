@@ -11,8 +11,8 @@ import {
 import { ApiOperation, ApiQuery, ApiResponse, ApiTags } from "@nestjs/swagger";
 import { HttpStatusCode } from "axios";
 import { DeleteResult, Selectable } from "kysely";
-import { PermissionsNodes } from "../../../common/decorators/auth.decorator";
-import { CloudinaryTransformInterceptor } from "../../../common/interceptors/cloudinaryTransform.interceptor";
+import { PermissionsNodes } from "../../../global/decorators/auth.decorator";
+import { CloudinaryTransformInterceptor } from "../../../global/interceptors/cloudinaryTransform.interceptor";
 import { ImagePermissionNodes } from "./image.permissions";
 import { ImageService } from "./image.service";
 

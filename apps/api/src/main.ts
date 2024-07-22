@@ -11,7 +11,7 @@ import {
 import * as winston from "winston";
 import { createLogger } from "winston";
 import { GlobalModule } from "./app/global.module";
-import { SentryInterceptor } from "./common/interceptors/sentry.interceptor";
+import { SentryInterceptor } from "./global/interceptors/sentry.interceptor";
 // eslint-disable-next-line @typescript-eslint/no-var-requires
 const packageData = require("../../../package.json");
 
@@ -53,7 +53,7 @@ async function bootstrap() {
 
   //Register global pieces
   app.useGlobalInterceptors(new SentryInterceptor());
-  app.useGlobalPipes(new ValidationPipe({ whitelist: true }));
+  app.useGlobalPipes(new ValidationPipe({ whitelist: false, transform: true }));
 
   // Enable versioning - must be called before setting up swagger
   app.enableVersioning({

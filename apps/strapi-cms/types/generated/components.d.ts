@@ -1,5 +1,19 @@
 import type { Schema, Attribute } from "@strapi/strapi";
 
+export interface MetaPage extends Schema.Component {
+  collectionName: "components_meta_pages";
+  info: {
+    displayName: "page";
+    icon: "archive";
+    description: "";
+  };
+  attributes: {
+    title: Attribute.String & Attribute.Required;
+    description: Attribute.String & Attribute.Required;
+    path: Attribute.String & Attribute.Required & Attribute.Unique;
+  };
+}
+
 export interface ModelsBuild extends Schema.Component {
   collectionName: "components_models_builds";
   info: {
@@ -75,6 +89,7 @@ export interface SharedSeo extends Schema.Component {
 declare module "@strapi/types" {
   export module Shared {
     export interface Components {
+      "meta.page": MetaPage;
       "models.build": ModelsBuild;
       "shared.meta-social": SharedMetaSocial;
       "shared.seo": SharedSeo;

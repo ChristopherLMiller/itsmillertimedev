@@ -1401,6 +1401,35 @@ export interface ApiScaleScale extends Schema.CollectionType {
   };
 }
 
+export interface ApiSiteMetaSiteMeta extends Schema.SingleType {
+  collectionName: "site_metas";
+  info: {
+    singularName: "site-meta";
+    pluralName: "site-metas";
+    displayName: "Site Meta";
+  };
+  options: {
+    draftAndPublish: false;
+  };
+  attributes: {
+    pages: Attribute.Component<"meta.page", true> & Attribute.Required;
+    createdAt: Attribute.DateTime;
+    updatedAt: Attribute.DateTime;
+    createdBy: Attribute.Relation<
+      "api::site-meta.site-meta",
+      "oneToOne",
+      "admin::user"
+    > &
+      Attribute.Private;
+    updatedBy: Attribute.Relation<
+      "api::site-meta.site-meta",
+      "oneToOne",
+      "admin::user"
+    > &
+      Attribute.Private;
+  };
+}
+
 declare module "@strapi/types" {
   export module Shared {
     export interface ContentTypes {
@@ -1433,6 +1462,7 @@ declare module "@strapi/types" {
       "api::post.post": ApiPostPost;
       "api::post-category.post-category": ApiPostCategoryPostCategory;
       "api::scale.scale": ApiScaleScale;
+      "api::site-meta.site-meta": ApiSiteMetaSiteMeta;
     }
   }
 }

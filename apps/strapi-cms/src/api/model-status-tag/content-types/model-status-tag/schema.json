@@ -1,0 +1,33 @@
+{
+  "kind": "collectionType",
+  "collectionName": "model_status_tags",
+  "info": {
+    "singularName": "model-status-tag",
+    "pluralName": "model-status-tags",
+    "displayName": "Model Status Tag",
+    "description": ""
+  },
+  "options": {
+    "draftAndPublish": false
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "label": {
+      "type": "string",
+      "required": true,
+      "unique": true
+    },
+    "color": {
+      "type": "customField",
+      "regex": "^#([A-Fa-f0-9]{6}|[A-Fa-f0-9]{3})$",
+      "required": true,
+      "customField": "plugin::color-picker.color"
+    },
+    "models": {
+      "type": "relation",
+      "relation": "manyToMany",
+      "target": "api::model.model",
+      "mappedBy": "model_status_tags"
+    }
+  }
+}

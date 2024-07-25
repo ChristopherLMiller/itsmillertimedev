@@ -30,14 +30,6 @@
       "relation": "oneToOne",
       "target": "api::model-kit.model-kit"
     },
-    "buildStatus": {
-      "type": "enumeration",
-      "enum": [
-        "UNBUILT",
-        "BUILDING",
-        "COMPLETED"
-      ]
-    },
     "completionDate": {
       "type": "date"
     },
@@ -70,6 +62,17 @@
       "type": "relation",
       "relation": "oneToOne",
       "target": "api::post.post"
+    },
+    "model_status_tags": {
+      "type": "relation",
+      "relation": "manyToMany",
+      "target": "api::model-status-tag.model-status-tag",
+      "inversedBy": "models"
+    },
+    "comments": {
+      "type": "component",
+      "repeatable": true,
+      "component": "models.comments"
     }
   }
 }

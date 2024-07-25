@@ -1,5 +1,5 @@
 {
-  "/manufacturers": {
+  "/model-status-tags": {
     "get": {
       "responses": {
         "200": {
@@ -7,7 +7,7 @@
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/ManufacturerListResponse"
+                "$ref": "#/components/schemas/ModelStatusTagListResponse"
               }
             }
           }
@@ -64,7 +64,7 @@
         }
       },
       "tags": [
-        "Manufacturer"
+        "Model-status-tag"
       ],
       "parameters": [
         {
@@ -170,7 +170,7 @@
           }
         }
       ],
-      "operationId": "get/manufacturers"
+      "operationId": "get/model-status-tags"
     },
     "post": {
       "responses": {
@@ -179,7 +179,7 @@
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/ManufacturerResponse"
+                "$ref": "#/components/schemas/ModelStatusTagResponse"
               }
             }
           }
@@ -236,23 +236,23 @@
         }
       },
       "tags": [
-        "Manufacturer"
+        "Model-status-tag"
       ],
       "parameters": [],
-      "operationId": "post/manufacturers",
+      "operationId": "post/model-status-tags",
       "requestBody": {
         "required": true,
         "content": {
           "application/json": {
             "schema": {
-              "$ref": "#/components/schemas/ManufacturerRequest"
+              "$ref": "#/components/schemas/ModelStatusTagRequest"
             }
           }
         }
       }
     }
   },
-  "/manufacturers/{id}": {
+  "/model-status-tags/{id}": {
     "get": {
       "responses": {
         "200": {
@@ -260,7 +260,7 @@
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/ManufacturerResponse"
+                "$ref": "#/components/schemas/ModelStatusTagResponse"
               }
             }
           }
@@ -317,7 +317,7 @@
         }
       },
       "tags": [
-        "Manufacturer"
+        "Model-status-tag"
       ],
       "parameters": [
         {
@@ -331,7 +331,7 @@
           }
         }
       ],
-      "operationId": "get/manufacturers/{id}"
+      "operationId": "get/model-status-tags/{id}"
     },
     "put": {
       "responses": {
@@ -340,7 +340,7 @@
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/ManufacturerResponse"
+                "$ref": "#/components/schemas/ModelStatusTagResponse"
               }
             }
           }
@@ -397,7 +397,7 @@
         }
       },
       "tags": [
-        "Manufacturer"
+        "Model-status-tag"
       ],
       "parameters": [
         {
@@ -411,13 +411,13 @@
           }
         }
       ],
-      "operationId": "put/manufacturers/{id}",
+      "operationId": "put/model-status-tags/{id}",
       "requestBody": {
         "required": true,
         "content": {
           "application/json": {
             "schema": {
-              "$ref": "#/components/schemas/ManufacturerRequest"
+              "$ref": "#/components/schemas/ModelStatusTagRequest"
             }
           }
         }
@@ -488,7 +488,7 @@
         }
       },
       "tags": [
-        "Manufacturer"
+        "Model-status-tag"
       ],
       "parameters": [
         {
@@ -502,7 +502,7 @@
           }
         }
       ],
-      "operationId": "delete/manufacturers/{id}"
+      "operationId": "delete/model-status-tags/{id}"
     }
   }
 }

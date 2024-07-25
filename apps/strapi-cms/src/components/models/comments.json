@@ -1,0 +1,23 @@
+{
+  "collectionName": "components_models_comments",
+  "info": {
+    "displayName": "Comments",
+    "icon": "discuss"
+  },
+  "options": {},
+  "attributes": {
+    "comment": {
+      "type": "customField",
+      "options": {
+        "output": "Markdown",
+        "preset": "light"
+      },
+      "required": true,
+      "customField": "plugin::ckeditor.CKEditor"
+    },
+    "created": {
+      "type": "datetime",
+      "required": true
+    }
+  }
+}

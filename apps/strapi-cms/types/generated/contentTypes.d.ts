@@ -1166,7 +1166,6 @@ export interface ApiModelModel extends Schema.CollectionType {
       "oneToOne",
       "api::model-kit.model-kit"
     >;
-    buildStatus: Attribute.Enumeration<["UNBUILT", "BUILDING", "COMPLETED"]>;
     completionDate: Attribute.Date;
     projectId: Attribute.Text &
       Attribute.CustomField<"plugin::clockify.clockify_projects">;
@@ -1183,6 +1182,12 @@ export interface ApiModelModel extends Schema.CollectionType {
       "oneToOne",
       "api::post.post"
     >;
+    model_status_tags: Attribute.Relation<
+      "api::model.model",
+      "manyToMany",
+      "api::model-status-tag.model-status-tag"
+    >;
+    comments: Attribute.Component<"models.comments", true>;
     createdAt: Attribute.DateTime;
     updatedAt: Attribute.DateTime;
     publishedAt: Attribute.DateTime;
@@ -1237,6 +1242,44 @@ export interface ApiModelKitModelKit extends Schema.CollectionType {
       Attribute.Private;
     updatedBy: Attribute.Relation<
       "api::model-kit.model-kit",
+      "oneToOne",
+      "admin::user"
+    > &
+      Attribute.Private;
+  };
+}
+
+export interface ApiModelStatusTagModelStatusTag extends Schema.CollectionType {
+  collectionName: "model_status_tags";
+  info: {
+    singularName: "model-status-tag";
+    pluralName: "model-status-tags";
+    displayName: "Model Status Tag";
+    description: "";
+  };
+  options: {
+    draftAndPublish: false;
+  };
+  attributes: {
+    label: Attribute.String & Attribute.Required & Attribute.Unique;
+    color: Attribute.String &
+      Attribute.Required &
+      Attribute.CustomField<"plugin::color-picker.color">;
+    models: Attribute.Relation<
+      "api::model-status-tag.model-status-tag",
+      "manyToMany",
+      "api::model.model"
+    >;
+    createdAt: Attribute.DateTime;
+    updatedAt: Attribute.DateTime;
+    createdBy: Attribute.Relation<
+      "api::model-status-tag.model-status-tag",
+      "oneToOne",
+      "admin::user"
+    > &
+      Attribute.Private;
+    updatedBy: Attribute.Relation<
+      "api::model-status-tag.model-status-tag",
       "oneToOne",
       "admin::user"
     > &
@@ -1457,6 +1500,7 @@ declare module "@strapi/types" {
       "api::manufacturer.manufacturer": ApiManufacturerManufacturer;
       "api::model.model": ApiModelModel;
       "api::model-kit.model-kit": ApiModelKitModelKit;
+      "api::model-status-tag.model-status-tag": ApiModelStatusTagModelStatusTag;
       "api::model-tag.model-tag": ApiModelTagModelTag;
       "api::page.page": ApiPagePage;
       "api::post.post": ApiPostPost;

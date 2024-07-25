@@ -1,16 +1,22 @@
 import type { Schema, Attribute } from "@strapi/strapi";
 
-export interface MetaPage extends Schema.Component {
-  collectionName: "components_meta_pages";
+export interface ModelsComments extends Schema.Component {
+  collectionName: "components_models_comments";
   info: {
-    displayName: "page";
-    icon: "archive";
-    description: "";
+    displayName: "Comments";
+    icon: "discuss";
   };
   attributes: {
-    title: Attribute.String & Attribute.Required;
-    description: Attribute.String & Attribute.Required;
-    path: Attribute.String & Attribute.Required & Attribute.Unique;
+    comment: Attribute.RichText &
+      Attribute.Required &
+      Attribute.CustomField<
+        "plugin::ckeditor.CKEditor",
+        {
+          output: "Markdown";
+          preset: "light";
+        }
+      >;
+    created: Attribute.DateTime & Attribute.Required;
   };
 }
 
@@ -32,29 +38,6 @@ export interface ModelsBuild extends Schema.Component {
           preset: "rich";
         }
       >;
-  };
-}
-
-export interface SharedMetaSocial extends Schema.Component {
-  collectionName: "components_shared_meta_socials";
-  info: {
-    displayName: "metaSocial";
-    icon: "project-diagram";
-  };
-  attributes: {
-    socialNetwork: Attribute.Enumeration<["Facebook", "Twitter"]> &
-      Attribute.Required;
-    title: Attribute.String &
-      Attribute.Required &
-      Attribute.SetMinMaxLength<{
-        maxLength: 60;
-      }>;
-    description: Attribute.String &
-      Attribute.Required &
-      Attribute.SetMinMaxLength<{
-        maxLength: 65;
-      }>;
-    image: Attribute.Media<"images" | "files" | "videos">;
   };
 }
 
@@ -86,13 +69,51 @@ export interface SharedSeo extends Schema.Component {
   };
 }
 
+export interface SharedMetaSocial extends Schema.Component {
+  collectionName: "components_shared_meta_socials";
+  info: {
+    displayName: "metaSocial";
+    icon: "project-diagram";
+  };
+  attributes: {
+    socialNetwork: Attribute.Enumeration<["Facebook", "Twitter"]> &
+      Attribute.Required;
+    title: Attribute.String &
+      Attribute.Required &
+      Attribute.SetMinMaxLength<{
+        maxLength: 60;
+      }>;
+    description: Attribute.String &
+      Attribute.Required &
+      Attribute.SetMinMaxLength<{
+        maxLength: 65;
+      }>;
+    image: Attribute.Media<"images" | "files" | "videos">;
+  };
+}
+
+export interface MetaPage extends Schema.Component {
+  collectionName: "components_meta_pages";
+  info: {
+    displayName: "page";
+    icon: "archive";
+    description: "";
+  };
+  attributes: {
+    title: Attribute.String & Attribute.Required;
+    description: Attribute.String & Attribute.Required;
+    path: Attribute.String & Attribute.Required & Attribute.Unique;
+  };
+}
+
 declare module "@strapi/types" {
   export module Shared {
     export interface Components {
-      "meta.page": MetaPage;
+      "models.comments": ModelsComments;
       "models.build": ModelsBuild;
-      "shared.meta-social": SharedMetaSocial;
       "shared.seo": SharedSeo;
+      "shared.meta-social": SharedMetaSocial;
+      "meta.page": MetaPage;
     }
   }
 }

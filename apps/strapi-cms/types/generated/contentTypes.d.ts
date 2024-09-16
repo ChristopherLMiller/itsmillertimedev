@@ -1450,6 +1450,7 @@ export interface ApiSiteMetaSiteMeta extends Schema.SingleType {
     singularName: "site-meta";
     pluralName: "site-metas";
     displayName: "Site Meta";
+    description: "";
   };
   options: {
     draftAndPublish: false;

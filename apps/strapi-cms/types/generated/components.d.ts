@@ -1,46 +1,5 @@
 import type { Schema, Attribute } from "@strapi/strapi";
 
-export interface ModelsComments extends Schema.Component {
-  collectionName: "components_models_comments";
-  info: {
-    displayName: "Comments";
-    icon: "discuss";
-  };
-  attributes: {
-    comment: Attribute.RichText &
-      Attribute.Required &
-      Attribute.CustomField<
-        "plugin::ckeditor.CKEditor",
-        {
-          output: "Markdown";
-          preset: "light";
-        }
-      >;
-    created: Attribute.DateTime & Attribute.Required;
-  };
-}
-
-export interface ModelsBuild extends Schema.Component {
-  collectionName: "components_models_builds";
-  info: {
-    displayName: "Build";
-    icon: "car";
-    description: "";
-  };
-  attributes: {
-    section: Attribute.String & Attribute.Required;
-    contents: Attribute.RichText &
-      Attribute.Required &
-      Attribute.CustomField<
-        "plugin::ckeditor.CKEditor",
-        {
-          output: "Markdown";
-          preset: "rich";
-        }
-      >;
-  };
-}
-
 export interface SharedSeo extends Schema.Component {
   collectionName: "components_shared_seos";
   info: {
@@ -92,6 +51,47 @@ export interface SharedMetaSocial extends Schema.Component {
   };
 }
 
+export interface ModelsComments extends Schema.Component {
+  collectionName: "components_models_comments";
+  info: {
+    displayName: "Comments";
+    icon: "discuss";
+  };
+  attributes: {
+    comment: Attribute.RichText &
+      Attribute.Required &
+      Attribute.CustomField<
+        "plugin::ckeditor.CKEditor",
+        {
+          output: "Markdown";
+          preset: "light";
+        }
+      >;
+    created: Attribute.DateTime & Attribute.Required;
+  };
+}
+
+export interface ModelsBuild extends Schema.Component {
+  collectionName: "components_models_builds";
+  info: {
+    displayName: "Build";
+    icon: "car";
+    description: "";
+  };
+  attributes: {
+    section: Attribute.String & Attribute.Required;
+    contents: Attribute.RichText &
+      Attribute.Required &
+      Attribute.CustomField<
+        "plugin::ckeditor.CKEditor",
+        {
+          output: "Markdown";
+          preset: "rich";
+        }
+      >;
+  };
+}
+
 export interface MetaPage extends Schema.Component {
   collectionName: "components_meta_pages";
   info: {
@@ -102,17 +102,17 @@ export interface MetaPage extends Schema.Component {
   attributes: {
     title: Attribute.String & Attribute.Required;
     description: Attribute.String & Attribute.Required;
-    path: Attribute.String & Attribute.Required & Attribute.Unique;
+    path: Attribute.String & Attribute.Required;
   };
 }
 
 declare module "@strapi/types" {
   export module Shared {
     export interface Components {
-      "models.comments": ModelsComments;
-      "models.build": ModelsBuild;
       "shared.seo": SharedSeo;
       "shared.meta-social": SharedMetaSocial;
+      "models.comments": ModelsComments;
+      "models.build": ModelsBuild;
       "meta.page": MetaPage;
     }
   }

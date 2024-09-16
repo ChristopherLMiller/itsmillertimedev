@@ -4,7 +4,8 @@
   "info": {
     "singularName": "site-meta",
     "pluralName": "site-metas",
-    "displayName": "Site Meta"
+    "displayName": "Site Meta",
+    "description": ""
   },
   "options": {
     "draftAndPublish": false

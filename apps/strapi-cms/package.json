@@ -37,7 +37,7 @@
     "strapi-plugin-clockify": "^1.0.10",
     "strapi-plugin-comments": "^2.3.0",
     "strapi-plugin-meilisearch": "^0.12.0",
-    "strapi-plugin-navigation": "^2.5.2",
+    "strapi-plugin-menus": "^1.6.1",
     "strapi-plugin-plausible": "^1.0.7",
     "strapi-plugin-preview-button": "^2.2.2",
     "strapi-plugin-redis": "^1.1.0",

@@ -40,11 +40,6 @@ export default ({ env }) => ({
       },
       strategy: {
         contentTypes: [
-          "plugin::comments.comment",
-          "plugin::navigation.audience",
-          "plugin::navigation.navigation",
-          "plugin::navigation.navigation-item",
-          "plugin::navigation.navigations-items-related",
           "api::manufacturer.manufacturer",
           "api::model.model",
           "api::model-kit.model-kit",

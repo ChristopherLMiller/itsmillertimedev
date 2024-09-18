@@ -132,12 +132,9 @@ export default ({ env }) => ({
         removeAttributesKey: true,
         removeDataKey: true,
       },
+      plugins: {
+        ids: { menus: true },
+      },
     },
   },
-  /*"schemas-to-ts": {
-    enabled: true,
-    config: {
-      destinationFolder: "./schema-types/",
-    },
-  },*/
 });

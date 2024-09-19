@@ -591,6 +591,104 @@ export interface PluginContentReleasesReleaseAction
   };
 }
 
+export interface PluginMenusMenu extends Schema.CollectionType {
+  collectionName: "menus";
+  info: {
+    name: "Menu";
+    displayName: "Menu";
+    singularName: "menu";
+    pluralName: "menus";
+    tableName: "menus";
+  };
+  options: {
+    draftAndPublish: false;
+  };
+  pluginOptions: {
+    "content-manager": {
+      visible: false;
+    };
+    "content-type-builder": {
+      visible: false;
+    };
+  };
+  attributes: {
+    title: Attribute.String & Attribute.Required;
+    slug: Attribute.UID<"plugin::menus.menu", "title"> & Attribute.Required;
+    items: Attribute.Relation<
+      "plugin::menus.menu",
+      "oneToMany",
+      "plugin::menus.menu-item"
+    >;
+    createdAt: Attribute.DateTime;
+    updatedAt: Attribute.DateTime;
+    createdBy: Attribute.Relation<
+      "plugin::menus.menu",
+      "oneToOne",
+      "admin::user"
+    > &
+      Attribute.Private;
+    updatedBy: Attribute.Relation<
+      "plugin::menus.menu",
+      "oneToOne",
+      "admin::user"
+    > &
+      Attribute.Private;
+  };
+}
+
+export interface PluginMenusMenuItem extends Schema.CollectionType {
+  collectionName: "menu_items";
+  info: {
+    name: "MenuItem";
+    displayName: "Menu Item";
+    singularName: "menu-item";
+    pluralName: "menu-items";
+    tableName: "menu_items";
+  };
+  options: {
+    draftAndPublish: false;
+  };
+  pluginOptions: {
+    "content-manager": {
+      visible: false;
+    };
+    "content-type-builder": {
+      visible: false;
+    };
+  };
+  attributes: {
+    order: Attribute.Integer;
+    title: Attribute.String & Attribute.Required;
+    url: Attribute.String;
+    target: Attribute.Enumeration<["_blank", "_parent", "_self", "_top"]>;
+    root_menu: Attribute.Relation<
+      "plugin::menus.menu-item",
+      "manyToOne",
+      "plugin::menus.menu"
+    > &
+      Attribute.Required;
+    parent: Attribute.Relation<
+      "plugin::menus.menu-item",
+      "oneToOne",
+      "plugin::menus.menu-item"
+    >;
+    createdAt: Attribute.DateTime;
+    updatedAt: Attribute.DateTime;
+    createdBy: Attribute.Relation<
+      "plugin::menus.menu-item",
+      "oneToOne",
+      "admin::user"
+    > &
+      Attribute.Private;
+    updatedBy: Attribute.Relation<
+      "plugin::menus.menu-item",
+      "oneToOne",
+      "admin::user"
+    > &
+      Attribute.Private;
+  };
+}
+
 export interface PluginI18NLocale extends Schema.CollectionType {
   collectionName: "i18n_locale";
   info: {
@@ -897,104 +995,6 @@ export interface PluginCommentsCommentReport extends Schema.CollectionType {
       Attribute.Private;
     updatedBy: Attribute.Relation<
       "plugin::comments.comment-report",
-      "oneToOne",
-      "admin::user"
-    > &
-      Attribute.Private;
-  };
-}
-
-export interface PluginMenusMenu extends Schema.CollectionType {
-  collectionName: "menus";
-  info: {
-    name: "Menu";
-    displayName: "Menu";
-    singularName: "menu";
-    pluralName: "menus";
-    tableName: "menus";
-  };
-  options: {
-    draftAndPublish: false;
-  };
-  pluginOptions: {
-    "content-manager": {
-      visible: false;
-    };
-    "content-type-builder": {
-      visible: false;
-    };
-  };
-  attributes: {
-    title: Attribute.String & Attribute.Required;
-    slug: Attribute.UID<"plugin::menus.menu", "title"> & Attribute.Required;
-    items: Attribute.Relation<
-      "plugin::menus.menu",
-      "oneToMany",
-      "plugin::menus.menu-item"
-    >;
-    createdAt: Attribute.DateTime;
-    updatedAt: Attribute.DateTime;
-    createdBy: Attribute.Relation<
-      "plugin::menus.menu",
-      "oneToOne",
-      "admin::user"
-    > &
-      Attribute.Private;
-    updatedBy: Attribute.Relation<
-      "plugin::menus.menu",
-      "oneToOne",
-      "admin::user"
-    > &
-      Attribute.Private;
-  };
-}
-
-export interface PluginMenusMenuItem extends Schema.CollectionType {
-  collectionName: "menu_items";
-  info: {
-    name: "MenuItem";
-    displayName: "Menu Item";
-    singularName: "menu-item";
-    pluralName: "menu-items";
-    tableName: "menu_items";
-  };
-  options: {
-    draftAndPublish: false;
-  };
-  pluginOptions: {
-    "content-manager": {
-      visible: false;
-    };
-    "content-type-builder": {
-      visible: false;
-    };
-  };
-  attributes: {
-    order: Attribute.Integer;
-    title: Attribute.String & Attribute.Required;
-    url: Attribute.String;
-    target: Attribute.Enumeration<["_blank", "_parent", "_self", "_top"]>;
-    root_menu: Attribute.Relation<
-      "plugin::menus.menu-item",
-      "manyToOne",
-      "plugin::menus.menu"
-    > &
-      Attribute.Required;
-    parent: Attribute.Relation<
-      "plugin::menus.menu-item",
-      "oneToOne",
-      "plugin::menus.menu-item"
-    >;
-    createdAt: Attribute.DateTime;
-    updatedAt: Attribute.DateTime;
-    createdBy: Attribute.Relation<
-      "plugin::menus.menu-item",
-      "oneToOne",
-      "admin::user"
-    > &
-      Attribute.Private;
-    updatedBy: Attribute.Relation<
-      "plugin::menus.menu-item",
       "oneToOne",
       "admin::user"
     > &
@@ -1375,14 +1375,14 @@ declare module "@strapi/types" {
       "plugin::upload.folder": PluginUploadFolder;
       "plugin::content-releases.release": PluginContentReleasesRelease;
       "plugin::content-releases.release-action": PluginContentReleasesReleaseAction;
+      "plugin::menus.menu": PluginMenusMenu;
+      "plugin::menus.menu-item": PluginMenusMenuItem;
       "plugin::i18n.locale": PluginI18NLocale;
       "plugin::users-permissions.permission": PluginUsersPermissionsPermission;
       "plugin::users-permissions.role": PluginUsersPermissionsRole;
       "plugin::users-permissions.user": PluginUsersPermissionsUser;
       "plugin::comments.comment": PluginCommentsComment;
       "plugin::comments.comment-report": PluginCommentsCommentReport;
-      "plugin::menus.menu": PluginMenusMenu;
-      "plugin::menus.menu-item": PluginMenusMenuItem;
       "api::manufacturer.manufacturer": ApiManufacturerManufacturer;
       "api::model.model": ApiModelModel;
       "api::model-kit.model-kit": ApiModelKitModelKit;

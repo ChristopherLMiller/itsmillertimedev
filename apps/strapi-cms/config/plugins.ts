@@ -19,13 +19,16 @@ export default ({ env }) => ({
   clockify: {
     enabled: true,
   },
-  /*upstash: {
-    enabled: true,
-    resolve: "../../strapi-plugin-upstash",
-  },*/
   plausible: {
     config: {
       sharedLink: env("PLAUSIBLE_SHARED_LINK"),
+    },
+  },
+  documentation: {
+    config: {
+      "x-strapi-config": {
+        plugins: ["menus", "upload", "users-permissions"],
+      },
     },
   },
   "rest-cache": {
@@ -122,6 +125,28 @@ export default ({ env }) => ({
       settings: {
         defaultFrom: env("RESEND_DEFAULT_FROM"),
         defaultReplyTo: env("RESEND_DEFAULT_REPLY_TO"),
+      },
+    },
+  },
+  menus: {
+    config: {
+      layouts: {
+        menuItem: {
+          link: [
+            {
+              input: {
+                label: "Icon",
+                name: "icon",
+                type: "text",
+                description: "Icon to use",
+                placeholder: "Type something...",
+              },
+              grid: {
+                col: 6,
+              },
+            },
+          ],
+        },
       },
     },
   },
